@@ -1,0 +1,702 @@
+/**
+ * 
+ */
+package com.scheques.dao;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import com.scheques.models.UserAccount;
+
+/**
+ * @author Samuel
+ *
+ */
+public class UserDAO {
+	private static final String PERSISTENCE_UNIT_NAME = "scheques";
+    private static EntityManager em;
+    private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+
+    public static UserAccount addUser(UserAccount user) {
+    	user.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+    	user.setEditedOn(new Timestamp(System.currentTimeMillis()));
+    	user.setCreatedBy(user.getEditedBy());
+    	em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(user);
+        em.getTransaction().commit();
+        em.close();
+        return user;
+    }
+    
+    public static void updateUser(UserAccount user) {
+    	em = factory.createEntityManager();
+        em.getTransaction().begin();
+        UserAccount user2 = em.find(UserAccount.class, user.getId());
+        user2.setEditedOn(new Timestamp(System.currentTimeMillis()));
+        user2.setEmailAddress(user.getEmailAddress());
+        user2.setFirstName(user.getFirstName());
+        user2.setLastName(user.getLastName());
+        user2.setUsername(user.getUsername());
+        user2.setEditedBy(user.getEditedBy());
+        em.persist(user2);
+        em.getTransaction().commit();
+        em.close();
+    }
+    
+    public static void updateUserPassword(UserAccount user) {
+    	em = factory.createEntityManager();
+        em.getTransaction().begin();
+        UserAccount user2 = em.find(UserAccount.class, user.getId());
+        user2.setEditedOn(new Timestamp(System.currentTimeMillis()));
+        user2.setPassword(user.getPassword());
+        user2.setResetFlag(user.getResetFlag());
+        em.persist(user2);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    
+    public static UserAccount find(int id) {
+     	em = factory.createEntityManager();
+     	UserAccount user = em.find(UserAccount.class, id);
+     	int passwordAge = (int)(System.currentTimeMillis() - user.getEditedOn().getTime())/(3600*24*1000);
+     	user.setPasswordAge(passwordAge);
+     	em.close();
+     	return user;
+    }
+    
+    public static UserAccount findByUsername(String username) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from UserAccount u WHERE u.username = :username");
+        q.setParameter("username", username);
+     	UserAccount user = (UserAccount) q.getSingleResult();
+     	em.close();
+     	return user;
+    }
+    
+    public static boolean checkExisting(UserAccount user) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from UserAccount u WHERE u.emailAddress = :emailAddress OR u.username = :username");
+    	q.setParameter("emailAddress", user.getEmailAddress());
+        q.setParameter("username", user.getUsername());
+        boolean findUser = (q.getResultList().size() == 0);
+        em.close();
+        return findUser;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public static List<UserAccount> getUserList() {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("SELECT u FROM UserAccount u WHERE u.active=true");
+    	List<UserAccount> userList2 = new ArrayList<UserAccount>();
+    	try {
+    	    List<UserAccount> userList = q.getResultList();
+        	for(UserAccount user : userList) {
+        		int passwordAge = (int)(new Timestamp(System.currentTimeMillis()).getTime() - user.getEditedOn().getTime())/(3600*24*1000);
+             	user.setPasswordAge(passwordAge);
+        		userList2.add(user);
+        	}
+    	} catch(NoResultException e) {
+    		System.out.println("No Results Exception");
+    	}
+    	return userList2;
+    }
+}
+
+
+package com.scheques.controllers;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.crypto.hash.DefaultHashService;
+import org.apache.shiro.crypto.hash.Sha256Hash;
+
+import com.scheques.dao.UserDAO;
+import com.scheques.models.UserAccount;
+import com.scheques.utils.ConfigExtractor;
+import com.scheques.utils.CoreClass;
+import com.scheques.utils.Emailer;
+import com.scheques.utils.SessionManager;
+
+@ManagedBean(name="userController", eager=true)
+@SessionScoped
+public class UserController {
+	
+	private UserAccount user, loggedInUser;
+	private List<UserAccount> userAccountList;
+	private String clearPassword;
+	private UIComponent component;
+	private SessionManager sessionManager;
+	
+	
+	@PostConstruct
+	public void init(ActionEvent event) {
+		user = new UserAccount();
+	}
+	
+	public UserController() {
+		userAccountList = UserDAO.getUserList();
+		CoreClass coreClass = new CoreClass();
+		sessionManager = coreClass.sessionManager;
+		String userId = sessionManager.getAttribute("userId");
+		if(userId != null) {
+		    loggedInUser = UserDAO.find(Integer.parseInt(sessionManager.getAttribute("userId")));
+		}
+	}
+	
+	public void reset(ActionEvent event){
+		user = new UserAccount();
+	}
+	
+	public String addUser() {
+		clearPassword = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
+		user.setPassword(encryptPassword(clearPassword));
+		user.setCreatedBy(loggedInUser.getUsername());
+		user.setEditedBy(loggedInUser.getUsername());
+		user.setResetFlag(true);
+		if(UserDAO.checkExisting(user) == true) {
+			UserDAO.addUser(user);
+			String from = ConfigExtractor.returnConfig("adminemail");;
+			String to = user.getEmailAddress();
+			String subject = ConfigExtractor.returnConfig("systemname") + " User Account Creation";
+			String body = 
+					"Dear " + user.getFirstName() + ", " +
+					"\n\nYour user account on has been successfully created. Use the following " +
+					"credentials: " +
+					"\n\nUsername: " + user.getUsername() +
+					"\nPassword: " + clearPassword +
+					"\n\nYou can access the system from this link: " + ConfigExtractor.returnConfig("appurl") + ConfigExtractor.returnConfig("uri") +
+					"\n\nSystem Admin";
+			Emailer.send(from, to, subject, body);
+		} else {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			FacesMessage msg = new FacesMessage("User Exists!","This user is already in the system.");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			String iuAlertId = component.getClientId();
+	    	fc.addMessage(iuAlertId, msg);
+	    	fc.renderResponse();
+		}
+		userAccountList = UserDAO.getUserList();
+	    user = new UserAccount();
+	    return "admin-list-users.xhtml?faces-redirect=true";
+	}
+	
+	public String updateUser() {
+		user.setEditedBy(loggedInUser.getUsername());
+	    UserDAO.updateUser(user);
+	    userAccountList = UserDAO.getUserList();
+	    user = new UserAccount();
+	    return "admin-list-users.xhtml?faces-redirect=true";
+	}
+	
+	/**
+	 * @return the user
+	 */
+	public UserAccount getUserAccount() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUserAccount(UserAccount user) {
+		this.user = user;
+	}
+
+	public UserAccount getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(UserAccount loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
+
+	/**
+	 * @return the userList
+	 */
+	public List<UserAccount> getUserAccountList() {
+		return userAccountList;
+	}
+
+	/**
+	 * @param userList the userList to set
+	 */
+	public void setUserAccountList(List<UserAccount> userAccountList) {
+		this.userAccountList = userAccountList;
+	}
+	
+	public void resetPassword() throws UnsupportedEncodingException {
+		String newPassword = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
+		user.setResetFlag(true);
+		user.setEditedBy(loggedInUser.getUsername());
+		user.setPassword(encryptPassword(newPassword));
+		user.setActive(false);
+		UserDAO.updateUserPassword(user);
+		
+		String from = ConfigExtractor.returnConfig("adminemail");
+		String to = user.getEmailAddress();
+		String subject = ConfigExtractor.returnConfig("systemname") + " Password Reset";
+		String body = "" +
+				"Dear " + user.getFirstName() + ", " +
+				"\n\nYour password has been reset. Use the following " +
+				"credentials, and then change your password as prompted: " +
+				"\n\nUsername: " + user.getUsername() +
+				"\nPassword: " + newPassword +
+				"\n\nYou can access the system from this link: " + ConfigExtractor.returnConfig("appurl") + ConfigExtractor.returnConfig("uri") + 
+				"\n\nSystem Admin";
+		Emailer.send(from, to, subject, body);
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		FacesMessage msg = new FacesMessage("Reset Successfully","Password has been successfully reset and email sent to " + user.getFirstName() + " " + user.getLastName());
+		msg.setSeverity(FacesMessage.SEVERITY_INFO);
+		String iuAlertId = component.getClientId();
+    	fc.addMessage(iuAlertId, msg);
+    	fc.renderResponse();
+	}
+	
+	public String changePassword() throws IOException {
+		loggedInUser.setEditedBy(loggedInUser.getUsername());
+		loggedInUser.setPassword(encryptPassword(loggedInUser.getPassword()));
+		loggedInUser.setResetFlag(false);
+		UserDAO.updateUserPassword(loggedInUser);
+		return "logout.xhtml?faces-redirect=true";
+	}
+	
+	private static String encryptPassword(String password)
+	{
+		DefaultHashService hashService = new DefaultHashService();
+		hashService.setHashIterations(512);
+		hashService.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
+		//hashService.setPrivateSalt(new SimpleByteSource(PRIVATE_SALT)); // Same salt as in shiro.ini, but NOT base64-encoded.
+		hashService.setGeneratePublicSalt(true);
+		DefaultPasswordService passwordService = new DefaultPasswordService();
+		passwordService.setHashService(hashService);
+		String encryptedPassword = passwordService.encryptPassword(password);
+		return encryptedPassword;
+	}
+
+	public void validatePassword(ComponentSystemEvent event) {
+		String PASSWORD_PATTERN = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+		Pattern pattern;
+		Matcher matcher;
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		UIComponent components = event.getComponent();
+		// get password
+		UIInput uiInputPassword = (UIInput) components.findComponent("password");
+		String password = uiInputPassword.getLocalValue() == null ? ""
+				: uiInputPassword.getLocalValue().toString();
+		String passwordId = uiInputPassword.getClientId();
+		// get confirm password
+		UIInput uiInputConfirmPassword = (UIInput) components.findComponent("confirm-password");
+		String confirmPassword = uiInputConfirmPassword.getLocalValue() == null ? ""
+				: uiInputConfirmPassword.getLocalValue().toString();
+
+		if (password.isEmpty() || confirmPassword.isEmpty()) {
+			FacesMessage msg = new FacesMessage("Required!","Enter password and confirm!");
+			msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        	fc.addMessage(passwordId, msg);
+        	fc.renderResponse();
+		    return;
+		}
+        // Password strengths rules
+		pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+        if(!matcher.matches()){
+        	FacesMessage msg =
+        			new FacesMessage("Weak Password!","Make sure that your password has combination of lower and upper case, a number and a special character");
+        	msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        	fc.addMessage(passwordId, msg);
+        	fc.renderResponse();
+        } else if (!password.equals(confirmPassword)) {
+        	FacesMessage msg = new FacesMessage("Passwords do not match!");
+        	msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        	fc.addMessage(passwordId, msg);
+        	fc.renderResponse();
+        }
+	}
+	
+	public UIComponent getComponent() {
+		return component;
+	}
+
+	public void setComponent(UIComponent component) {
+		this.component = component;
+	}
+}
+
+/**
+ * 
+ */
+package com.scheques.models;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+/**
+ * @author Samuel
+ *
+ */
+@Entity
+public class UserAccount {
+	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
+    private String password;
+	private Timestamp createdOn;
+	private String createdBy;
+	private Timestamp editedOn;
+	private String editedBy;
+	private boolean resetFlag = false;
+	private boolean active = true;
+	@Transient
+	private int passwordAge;
+	
+	@OneToMany(mappedBy = "user", fetch=FetchType.LAZY)
+    @JoinColumn(name="userid", referencedColumnName="id")
+	private List<UserRole> userRoles;
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	
+	public String getFirstName() {
+		return firstName;
+	}
+	
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public Timestamp getCreatedOn() {
+		return createdOn;
+	}
+	
+	public void setCreatedOn(Timestamp createdOn) {
+		this.createdOn = createdOn;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	
+	public Timestamp getEditedOn() {
+		return editedOn;
+	}
+	
+	public void setEditedOn(Timestamp editedOn) {
+		this.editedOn = editedOn;
+	}
+	
+	public String getEditedBy() {
+		return editedBy;
+	}
+	
+	public void setEditedBy(String editedBy) {
+		this.editedBy = editedBy;
+	}
+	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+	public int getPasswordAge() {
+		return passwordAge;
+	}
+
+	public void setPasswordAge(int passwordAge) {
+		this.passwordAge = passwordAge;
+	}
+
+	public boolean getResetFlag() {
+		return resetFlag;
+	}
+
+	public void setResetFlag(boolean resetFlag) {
+		this.resetFlag = resetFlag;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", emailAddress="
+				+ emailAddress + ", password=" + password + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", passwordAge=" + passwordAge
+				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + "]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (active ? 1231 : 1237);
+		result = prime * result + id;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+		result = prime * result + ((createdOn == null) ? 0 : createdOn.hashCode());
+		result = prime * result + ((editedBy == null) ? 0 : editedBy.hashCode());
+		result = prime * result + ((editedOn == null) ? 0 : editedOn.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserAccount other = (UserAccount) obj;
+		if (active != other.active)
+			return false;
+		if (createdBy == null) {
+			if (other.createdBy != null)
+				return false;
+		} else if (!createdBy.equals(other.createdBy))
+			return false;
+		if (createdOn == null) {
+			if (other.createdOn != null)
+				return false;
+		} else if (!createdOn.equals(other.createdOn))
+			return false;
+		if (editedBy == null) {
+			if (other.editedBy != null)
+				return false;
+		} else if (!editedBy.equals(other.editedBy))
+			return false;
+		if (editedOn == null) {
+			if (other.editedOn != null)
+				return false;
+		} else if (!editedOn.equals(other.editedOn))
+			return false;
+		if (emailAddress == null) {
+			if (other.emailAddress != null)
+				return false;
+		} else if (!emailAddress.equals(other.emailAddress))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (id != other.id)
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+}
+
+
+/**
+ * 
+ */
+package com.scheques.models;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+/**
+ * @author Samuel
+ *
+ */
+@Entity
+public class UserRole {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private Timestamp createdOn;
+	private String createdBy;
+	private Timestamp editedOn;
+	private String editedBy;
+	private boolean active = true;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="useraccountid")
+    private UserAccount user;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="roleid")
+    private Role role;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public Timestamp getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(Timestamp createdOn) {
+		this.createdOn = createdOn;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public Timestamp getEditedOn() {
+		return editedOn;
+	}
+	public void setEditedOn(Timestamp editedOn) {
+		this.editedOn = editedOn;
+	}
+	public String getEditedBy() {
+		return editedBy;
+	}
+	public void setEditedBy(String editedBy) {
+		this.editedBy = editedBy;
+	}
+	public boolean getActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public UserAccount getUserAccount() {
+		return user;
+	}
+	public void setUserAccount(UserAccount user) {
+		this.user = user;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	@Override
+	public String toString() {
+		return "UserRole [id=" + id + ", createdOn=" + createdOn
+				+ ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active="
+				+ active + "]";
+	}
+}
+
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="scheques" transaction-type="RESOURCE_LOCAL">
+		<class>com.scheques.models.Role</class>
+		<class>com.scheques.models.UserAccount</class>
+		<class>com.scheques.models.UserRole</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://172.16.2.241:5432/scheques_db" />
+			<property name="javax.persistence.jdbc.user" value="scheques_user" />
+			<property name="javax.persistence.jdbc.password" value="iNt3rn@l" />
+			<!-- EclipseLink should create the database schema automatically -->
+			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode" value="database" />
+		</properties>
+	</persistence-unit>
+</persistence>
+
