@@ -1,5 +1,7 @@
 package com.hcare.controllers;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -24,16 +26,26 @@ public class ProductController {
 	public ProductController() {
 	}
 	
+	public void refresh() {
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String idValue = params.get("id");
+		if(idValue != null) {
+		int productId = Integer.parseInt(idValue);
+		    System.out.println(productId);
+			product = ProductDAO.find(productId);
+		}
+	}
+	
 	public String createProduct() {
 		upload();
 	    ProductDAO.addProduct(product);
-		return "product.xhtml";
+		return "admin-product.xhtml";
 	}
 	
 	public String updateProduct() {
 		upload();
 		ProductDAO.updateProduct(product);
-		return "product.xhtml";
+		return "admin-product.xhtml";
 	}
 	
 	public void upload() {

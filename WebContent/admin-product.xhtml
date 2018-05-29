@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+	<div class="col-lg-8 mb-4">
+		<h:form enctype="multipart/form-data">
+            <p:growl id="messages" showDetail="true" />
+			<label for="productName">Product Name</label>
+			<h:inputText class="col-ls-4" id="productName" name="productName" value="#{productController.product.productName}">
+			  <f:validateRequired />
+			</h:inputText>
+
+            <label for="productName">Short Description</label>
+			<h:inputText class="col-ls-4" id="shortDescription" name="shortDescription" value="#{productController.product.shortDescription}">
+			  <f:validateRequired />
+			</h:inputText>
+			
+            <label for="description">Description</label>
+			<h:inputTextarea class="col-ls-4" id="description" name="description" value="#{productController.product.description}">
+			  <f:validateRequired />
+			</h:inputTextarea>
+			<div id="pic">
+			<p:fileUpload value="#{productController.file}" id="file" mode="simple" skinSimple="true"/>
+			</div>
+			<label for="price">Price</label>
+			<h:inputText class="col-ls-4" id="price" name="price" value="#{productController.product.price}">
+			  <f:validateRequired />
+			</h:inputText>
+			
+			<p:commandButton id="add-submit" value="Submit" 
+                rendered="#{productController.product.id eq '' or productController.product.id eq 0}"
+                action="#{productController.createProduct}" ajax="false" />
+            <p:commandButton id="edit-submit" value="Update" 
+                rendered="#{productController.product.id > 0}"
+                action="#{productController.updateProduct}" ajax="false" />
+                
+   		</h:form>
+   		</div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

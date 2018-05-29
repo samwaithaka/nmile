@@ -17,6 +17,7 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String productName;
+	private String shortDescription;
 	private String description;
 	private String fileName;
 	private int price;
@@ -37,6 +38,12 @@ public class Product {
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+	public String getShortDescription() {
+		return shortDescription;
+	}
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
 	}
 	public String getDescription() {
 		return description;
@@ -88,8 +95,9 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", productName=" + productName + ", description=" + description + ", fileName="
-				+ fileName + ", price=" + price + ", createdOn=" + createdOn + ", createdBy=" + createdBy
-				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + "]";
+		return "Product [id=" + id + ", productName=" + productName + ", shortDescription=" + shortDescription
+				+ ", description=" + description + ", fileName=" + fileName + ", price=" + price + ", createdOn="
+				+ createdOn + ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy
+				+ ", active=" + active + "]";
 	}
 }

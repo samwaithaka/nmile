@@ -32,7 +32,7 @@ public class CustomerDAO {
 	    	em = factory.createEntityManager();
 	        em.getTransaction().begin();
 	        em.persist(customer);
-	        em.getTransaction().commit();
+	        em.getTransaction().commit();	
 	        em.close();
     	}
     	//Get referrer details
