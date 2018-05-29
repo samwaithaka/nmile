@@ -22,6 +22,7 @@ public class Customer {
 	private String customerName;
 	private String phone;
 	private String email;
+	private String password;
 	private int depth;
 	private String path;
 	private Timestamp createdOn;
@@ -104,6 +105,14 @@ public class Customer {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Customer getReferer() {

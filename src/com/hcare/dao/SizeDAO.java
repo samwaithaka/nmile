@@ -33,7 +33,7 @@ public class SizeDAO {
         return size;
     }
     
-    public static void updateSize(Size size) {
+    public static Size updateSize(Size size) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Size size2 = em.find(Size.class, size.getId());
@@ -44,6 +44,7 @@ public class SizeDAO {
         em.persist(size2);
         em.getTransaction().commit();
         em.close();
+        return size2;
     }
     
     public static Size find(int id) {

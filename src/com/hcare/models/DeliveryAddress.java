@@ -15,10 +15,11 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class CustomerGroup {
+public class DeliveryAddress {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	private String addressName;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
@@ -26,12 +27,20 @@ public class CustomerGroup {
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="groupid")
-    private Group group;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="customerid")
     private Customer customer;
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="productid")
+    private Product product;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="colorid")
+    private Color color;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="sizeid")
+    private Size size;
 
 	public int getId() {
 		return id;
@@ -39,6 +48,14 @@ public class CustomerGroup {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getAddressName() {
+		return addressName;
+	}
+
+	public void setAddressName(String addressName) {
+		this.addressName = addressName;
 	}
 
 	public Timestamp getCreatedOn() {
@@ -81,14 +98,6 @@ public class CustomerGroup {
 		this.active = active;
 	}
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
-
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -97,10 +106,34 @@ public class CustomerGroup {
 		this.customer = customer;
 	}
 
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Size getSize() {
+		return size;
+	}
+
+	public void setSize(Size size) {
+		this.size = size;
+	}
+
 	@Override
 	public String toString() {
-		return "CustomerGroup [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", group=" + group + ", customer="
-				+ customer + "]";
+		return "Order [id=" + id + ", addressName=" + addressName + ", createdOn=" + createdOn + ", createdBy="
+				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", customer="
+				+ customer + ", product=" + product + ", color=" + color + ", size=" + size + "]";
 	}
 }

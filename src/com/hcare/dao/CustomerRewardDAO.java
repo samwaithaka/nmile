@@ -34,7 +34,7 @@ public class CustomerRewardDAO {
         return customerReward;
     }
     
-    public static void updateCustomerReward(CustomerReward customerReward) {
+    public static CustomerReward updateCustomerReward(CustomerReward customerReward) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         CustomerReward customerReward2 = em.find(CustomerReward.class, customerReward.getId());
@@ -46,6 +46,7 @@ public class CustomerRewardDAO {
         em.persist(customerReward2);
         em.getTransaction().commit();
         em.close();
+        return customerReward2;
     }
     
     public static CustomerReward find(int id) {

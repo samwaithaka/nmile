@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+	<div class="col-lg-8 mb-4">
+		<h:form>
+			<label for="segmentName">Segment Name</label>
+			<h:inputText class="col-ls-4" id="segmentName" name="segmentName" value="#{segmentController.segment.segmentName}" />
+			
+			<p:commandButton id="add-submit" value="Submit" 
+                rendered="#{segmentController.segment.id eq '' or segmentController.segment.id eq 0}"
+                action="#{segmentController.createSegment}" ajax="false" />
+            <p:commandButton id="edit-submit" value="Update" 
+                rendered="#{segmentController.segment.id > 0}"
+                action="#{segmentController.createSegment}" ajax="false" />
+                
+   		</h:form>
+   		</div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

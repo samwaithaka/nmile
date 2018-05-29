@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.hcare.models.Customer;
-import com.hcare.models.Order;
+import com.hcare.models.CustomerOrder;
 
 /**
  * @author Samuel
@@ -22,7 +22,7 @@ public class OrderDAO {
     private static EntityManager em;
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-    public static Order addOrder(Order order) {
+    public static CustomerOrder addOrder(CustomerOrder order) {
     	order.setCreatedOn(new Timestamp(System.currentTimeMillis()));
     	order.setEditedOn(new Timestamp(System.currentTimeMillis()));
     	order.setCreatedBy(order.getEditedBy());
@@ -34,10 +34,10 @@ public class OrderDAO {
         return order;
     }
     
-    public static void updateOrder(Order order) {
+    public static CustomerOrder updateOrder(CustomerOrder order) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
-        Order order2 = em.find(Order.class, order.getId());
+        CustomerOrder order2 = em.find(CustomerOrder.class, order.getId());
         order2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         order2.setEditedBy(order.getEditedBy());
         order2.setCustomer(order.getCustomer());
@@ -49,24 +49,25 @@ public class OrderDAO {
         em.persist(order2);
         em.getTransaction().commit();
         em.close();
+        return order2;
     }
     
-    public static Order find(int id) {
+    public static CustomerOrder find(int id) {
      	em = factory.createEntityManager();
-     	Order order = em.find(Order.class, id);
+     	CustomerOrder order = em.find(CustomerOrder.class, id);
      	em.close();
      	return order;
     }
     
-    public static List<Order> findByOrdersName(Customer customer) {
+    public static List<CustomerOrder> findByOrdersName(Customer customer) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Order u WHERE u.customer = :customer");
         q.setParameter("customer", customer);
-    	List<Order> orderList2 = new ArrayList<Order>();
+    	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
     	try {
     	    @SuppressWarnings("unchecked")
-			List<Order> orderList = q.getResultList();
-        	for(Order order : orderList) {
+			List<CustomerOrder> orderList = q.getResultList();
+        	for(CustomerOrder order : orderList) {
         		orderList2.add(order);
         	}
     	} catch(NoResultException e) {
@@ -76,13 +77,13 @@ public class OrderDAO {
     }
     
     @SuppressWarnings("unchecked")
-	public static List<Order> getOrderList() {
+	public static List<CustomerOrder> getOrderList() {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("SELECT u FROM Order u WHERE u.active=true");
-    	List<Order> orderList2 = new ArrayList<Order>();
+    	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
     	try {
-    	    List<Order> orderList = q.getResultList();
-        	for(Order order : orderList) {
+    	    List<CustomerOrder> orderList = q.getResultList();
+        	for(CustomerOrder order : orderList) {
         		orderList2.add(order);
         	}
     	} catch(NoResultException e) {

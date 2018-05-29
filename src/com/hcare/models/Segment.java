@@ -12,11 +12,11 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Group {
+public class Segment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String groupName;
+	private String segmentName;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
@@ -29,11 +29,11 @@ public class Group {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getGroupName() {
-		return groupName;
+	public String getSegmentName() {
+		return segmentName;
 	}
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
+	public void setSegmentName(String segmentName) {
+		this.segmentName = segmentName;
 	}
 	public Timestamp getCreatedOn() {
 		return createdOn;
@@ -67,7 +67,7 @@ public class Group {
 	}
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", groupName=" + groupName + ", createdOn=" + createdOn + ", createdBy=" + createdBy
+		return "Segment [id=" + id + ", segmentName=" + segmentName + ", createdOn=" + createdOn + ", createdBy=" + createdBy
 				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + "]";
 	}
 }

@@ -33,7 +33,7 @@ public class ColorDAO {
         return color;
     }
     
-    public static void updateColor(Color color) {
+    public static Color updateColor(Color color) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Color color2 = em.find(Color.class, color.getId());
@@ -44,6 +44,7 @@ public class ColorDAO {
         em.persist(color2);
         em.getTransaction().commit();
         em.close();
+        return color2;
     }
     
     public static Color find(int id) {

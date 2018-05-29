@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.hcare.models.Delivery;
-import com.hcare.models.Order;
+import com.hcare.models.CustomerOrder;
 
 /**
  * @author Samuel
@@ -34,7 +34,7 @@ public class DeliveryDAO {
         return delivery;
     }
     
-    public static void updateDelivery(Delivery delivery) {
+    public static Delivery updateDelivery(Delivery delivery) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Delivery delivery2 = em.find(Delivery.class, delivery.getId());
@@ -48,6 +48,7 @@ public class DeliveryDAO {
         em.persist(delivery2);
         em.getTransaction().commit();
         em.close();
+        return delivery2;
     }
     
     public static Delivery find(int id) {
@@ -57,7 +58,7 @@ public class DeliveryDAO {
      	return delivery;
     }
     
-    public static List<Delivery> findByDeliveriesByCustomer(Order order) {
+    public static List<Delivery> findByDeliveriesByCustomer(CustomerOrder order) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Delivery u WHERE u.customer = :customer");
         q.setParameter("customer", order.getCustomer());

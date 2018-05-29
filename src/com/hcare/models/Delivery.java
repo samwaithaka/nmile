@@ -30,7 +30,7 @@ public class Delivery {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="orderid")
-    private Order order;
+    private CustomerOrder order;
 
 	public int getId() {
 		return id;
@@ -104,11 +104,11 @@ public class Delivery {
 		this.active = active;
 	}
 
-	public Order getOrder() {
+	public CustomerOrder getOrder() {
 		return order;
 	}
 
-	public void setOrder(Order order) {
+	public void setOrder(CustomerOrder order) {
 		this.order = order;
 	}
 

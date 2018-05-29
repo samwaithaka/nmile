@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.hcare.models.Customer;
+import com.hcare.util.MSecurity;
 
 /**
  * @author Samuel
@@ -22,18 +23,37 @@ public class CustomerDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static Customer addCustomer(Customer customer) {
-    	customer.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-    	customer.setEditedOn(new Timestamp(System.currentTimeMillis()));
-    	customer.setCreatedBy(customer.getEditedBy());
-    	em = factory.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(customer);
-        em.getTransaction().commit();
-        em.close();
+    	if(checkExisting(customer) == false) {
+	    	customer.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+	    	customer.setEditedOn(new Timestamp(System.currentTimeMillis()));
+	    	customer.setCreatedBy(customer.getEditedBy());
+	    	String password = MSecurity.createMD5(customer.getPassword());
+		    customer.setPassword(password);
+	    	em = factory.createEntityManager();
+	        em.getTransaction().begin();
+	        em.persist(customer);
+	        em.getTransaction().commit();
+	        em.close();
+    	}
+    	//Get referrer details
+    	Customer referer = customer.getReferer();
+    	String path = "";
+	    int depth = 0;
+    	if(referer != null) {
+    	    if(referer.getId() > 0) {
+    	        // Get path
+    	        path = referer.getPath();
+    	        // Get depth
+    	        depth = referer.getDepth();
+    	    }
+    	}
+    	customer.setDepth(depth + 1);
+	    customer.setPath(customer.getId() + "_" + path);
+	    customer = updateCustomer(customer);
         return customer;
     }
     
-    public static void updateCustomer(Customer customer) {
+    public static Customer updateCustomer(Customer customer) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Customer customer2 = em.find(Customer.class, customer.getId());
@@ -49,6 +69,7 @@ public class CustomerDAO {
         em.persist(customer2);
         em.getTransaction().commit();
         em.close();
+        return customer2;
     }
     
     public static Customer find(int id) {
@@ -58,11 +79,21 @@ public class CustomerDAO {
      	return customer;
     }
     
-    public static Customer findByCustomername(String customername) {
+    public static Customer findByEmail(String email) {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from Customer u WHERE u.customername = :customername");
-        q.setParameter("customername", customername);
+    	Query q = em.createQuery("select u from Customer u WHERE u.email = :email");
+        q.setParameter("email", email);
      	Customer customer = (Customer) q.getSingleResult();
+     	em.close();
+     	return customer;
+    }
+    
+    public static Customer login(Customer customer) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.password = :password");
+        q.setParameter("email", customer.getEmail());
+        q.setParameter("password", MSecurity.createMD5(customer.getPassword()));
+     	customer = (Customer) q.getSingleResult();
      	em.close();
      	return customer;
     }
@@ -71,8 +102,10 @@ public class CustomerDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email");
     	q.setParameter("email", customer.getEmail());
-        boolean findCustomer = (q.getResultList().size() == 0);
+    	System.out.println(q.getResultList() + ": " + customer);
+        boolean findCustomer = (q.getResultList().size() > 0);
         em.close();
+        System.out.println(findCustomer);
         return findCustomer;
     }
     

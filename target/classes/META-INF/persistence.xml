@@ -2,17 +2,19 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-	<persistence-unit name="scheques" transaction-type="RESOURCE_LOCAL">
-		<class>com.hcare.models.Group</class>
+	<persistence-unit name="hcare" transaction-type="RESOURCE_LOCAL">
+		<class>com.hcare.models.Segment</class>
 		<class>com.hcare.models.Customer</class>
-		<class>com.hcare.models.CustomerGroup</class>
+		<class>com.hcare.models.CustomerSegment</class>
 		<class>com.hcare.models.Reward</class>
 		<class>com.hcare.models.CustomerReward</class>
 		<class>com.hcare.models.Product</class>
-		<class>com.hcare.models.Order</class>
+		<class>com.hcare.models.CustomerOrder</class>
 		<class>com.hcare.models.Color</class>
 		<class>com.hcare.models.Size</class>
 		<class>com.hcare.models.Delivery</class>
+		<class>com.hcare.models.DeliveryAddress</class>
+		<class>com.hcare.models.CustomerAddress</class>
 		<class>com.hcare.models.FutureOrder</class>
 		<class>com.hcare.models.Inventory</class>
 		<properties>

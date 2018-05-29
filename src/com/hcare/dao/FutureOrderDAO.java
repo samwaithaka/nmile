@@ -34,7 +34,7 @@ public class FutureOrderDAO {
         return futureOrder;
     }
     
-    public static void updateFutureOrder(FutureOrder futureOrder) {
+    public static FutureOrder updateFutureOrder(FutureOrder futureOrder) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         FutureOrder futureOrder2 = em.find(FutureOrder.class, futureOrder.getId());
@@ -49,6 +49,7 @@ public class FutureOrderDAO {
         em.persist(futureOrder2);
         em.getTransaction().commit();
         em.close();
+        return futureOrder2;
     }
     
     public static FutureOrder find(int id) {

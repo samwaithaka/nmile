@@ -33,7 +33,7 @@ public class InventoryDAO {
         return inventory;
     }
     
-    public static void updateInventory(Inventory inventory) {
+    public static Inventory updateInventory(Inventory inventory) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Inventory inventory2 = em.find(Inventory.class, inventory.getId());
@@ -47,6 +47,7 @@ public class InventoryDAO {
         em.persist(inventory2);
         em.getTransaction().commit();
         em.close();
+        return inventory2;
     }
     
     public static Inventory find(int id) {

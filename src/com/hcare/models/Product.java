@@ -18,6 +18,7 @@ public class Product {
 	private int id;
 	private String productName;
 	private String description;
+	private String fileName;
 	private int price;
 	private Timestamp createdOn;
 	private String createdBy;
@@ -42,6 +43,12 @@ public class Product {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	public int getPrice() {
 		return price;
@@ -81,8 +88,8 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", productName=" + productName + ", description=" + description + ", price="
-				+ price + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn=" + editedOn
-				+ ", editedBy=" + editedBy + ", active=" + active + "]";
+		return "Product [id=" + id + ", productName=" + productName + ", description=" + description + ", fileName="
+				+ fileName + ", price=" + price + ", createdOn=" + createdOn + ", createdBy=" + createdBy
+				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + "]";
 	}
 }

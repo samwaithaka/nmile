@@ -33,7 +33,7 @@ public class ProductDAO {
         return product;
     }
     
-    public static void updateProduct(Product product) {
+    public static Product updateProduct(Product product) {
     	em = factory.createEntityManager();
         em.getTransaction().begin();
         Product product2 = em.find(Product.class, product.getId());
@@ -41,11 +41,13 @@ public class ProductDAO {
         product2.setEditedBy(product.getEditedBy());
         product2.setProductName(product.getProductName());
         product2.setDescription(product.getDescription());
+        product2.setFileName(product.getFileName());
         product2.setPrice(product.getPrice());
         product2.setActive(product.getActive());
         em.persist(product2);
         em.getTransaction().commit();
         em.close();
+        return product2;
     }
     
     public static Product find(int id) {
