@@ -27,6 +27,7 @@ public class CustomerSegmentController {
 	}
 	
 	public String createCustomerSegment() {
+		
 	    CustomerSegmentDAO.addCustomerSegment(customerSegment);
 		return "profile.xhtml";
 	}

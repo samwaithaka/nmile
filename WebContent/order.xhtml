@@ -11,15 +11,29 @@
 	<ui:define name="header" />
 	<ui:define name="content">
 	<div class="col-lg-8 mb-4">
+	<h3>#{orderController.order.product.productName}</h3>
+	<p>#{orderController.order.product.description}</p>
+	<p:graphicImage value="images/#{orderController.order.product.fileName}"
+						width="250" stream="false" />
 		<h:form>
-			<label for="customerOrderName">Order Name</label>
-			
-			<p:commandButton id="add-submit" value="Submit" 
-                rendered="#{orderController.order.id eq '' or orderController.order.id eq 0}"
-                action="#{orderController.createOrder}" ajax="false" />
-            <p:commandButton id="edit-submit" value="Update" 
+		  <label for="color">Quantity</label>
+		  <h:inputText id="quantity" name="quantity" value="#{orderController.order.quantity}" />
+		  
+		  <label for="color">Color</label>
+		  <h:selectOneMenu value="#{orderController.color.id}">
+	          <f:selectItems value="#{orderController.colorList}" var="color"
+	              itemLabel="#{color.colorName}" itemValue="#{color.id}" />
+	      </h:selectOneMenu>
+	      
+	      <label for="color">Size</label>
+		  <h:selectOneMenu value="#{orderController.size.id}">
+	          <f:selectItems value="#{orderController.sizeList}" var="size"
+	              itemLabel="#{size.sizeName}" itemValue="#{size.id}" />
+	      </h:selectOneMenu>
+	     
+            <p:commandButton id="edit-submit" value="Next" 
                 rendered="#{orderController.order.id > 0}"
-                action="#{orderController.createOrder}" ajax="false" />
+                action="#{orderController.updateOrder}" ajax="false" />
                 
    		</h:form>
    		</div>

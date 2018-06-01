@@ -17,9 +17,11 @@
 						listener="#{customerController.refresh}" />
 				</f:metadata>
 			</h:form>
-			<p:dataTable var="orders" value="#{customerController.customerOrderList}">
+			<p:dataTable var="orders"
+				value="#{customerController.customerOrderList}">
 				<p:column headerText="">
-					<p:graphicImage value="images/#{orders.product.fileName}" width="100" stream="false" />
+					<p:graphicImage value="images/#{orders.product.fileName}"
+						width="100" stream="false" />
 				</p:column>
 				<p:column headerText="Product">
 					<h:outputText value="#{orders.product.productName}" />
@@ -28,14 +30,21 @@
 					<h:outputText value="#{orders.product.price}" />
 				</p:column>
 				<p:column headerText="">
-					<p:commandButton value="Complete" action="#{orderController.makeOrder}">
-					    <f:setPropertyActionListener value="#{orders}" target="#{orderController.order}" />
-					</p:commandButton>
+					<h:form>
+						<p:commandButton value="Complete"
+							action="#{orderController.makeOrder}">
+							<f:setPropertyActionListener value="#{orders}"
+								target="#{orderController.order}" />
+						</p:commandButton>
+					</h:form>
 				</p:column>
 				<p:column headerText="">
-					<p:commandButton value="Complete" action="#{orderController.remove}">
-					    <f:setPropertyActionListener value="#{orders}" target="#{orderController.order}" />
-					</p:commandButton>
+					<h:form>
+						<p:commandButton value="Remove" action="#{orderController.remove}">
+							<f:setPropertyActionListener value="#{orders}"
+								target="#{orderController.order}" />
+						</p:commandButton>
+					</h:form>
 				</p:column>
 			</p:dataTable>
 		</div>

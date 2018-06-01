@@ -61,8 +61,6 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			page = "profile.xhtml";
 		}
-		System.out.println(customer);
-		System.out.println(product);
 		if(product.getId() > 0) {
 			CustomerOrder order = new CustomerOrder();
 			order.setCustomer(customer);
@@ -80,7 +78,7 @@ public class CustomerController {
 	public String login() {
 		customer = CustomerDAO.login(customer);
 		if(customer.getId() > 0) {
-		    return "home.xhtml";
+		    return "home.xhtml?faces-redirect=true";
 		} else {
 			return null;
 		}

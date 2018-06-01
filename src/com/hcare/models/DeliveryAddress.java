@@ -19,7 +19,8 @@ public class DeliveryAddress {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String addressName;
+	private String physicalAddress;
+	private String description;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
@@ -50,12 +51,20 @@ public class DeliveryAddress {
 		this.id = id;
 	}
 
-	public String getAddressName() {
-		return addressName;
+	public String getPhysicalAddress() {
+		return physicalAddress;
 	}
 
-	public void setAddressName(String addressName) {
-		this.addressName = addressName;
+	public void setPhysicalAddress(String physicalAddress) {
+		this.physicalAddress = physicalAddress;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Timestamp getCreatedOn() {
@@ -132,8 +141,9 @@ public class DeliveryAddress {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", addressName=" + addressName + ", createdOn=" + createdOn + ", createdBy="
-				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", customer="
-				+ customer + ", product=" + product + ", color=" + color + ", size=" + size + "]";
+		return "DeliveryAddress [id=" + id + ", physicalAddress=" + physicalAddress + ", description=" + description
+				+ ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy="
+				+ editedBy + ", active=" + active + ", customer=" + customer + ", product=" + product + ", color="
+				+ color + ", size=" + size + "]";
 	}
 }

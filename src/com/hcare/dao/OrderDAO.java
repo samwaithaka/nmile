@@ -79,7 +79,7 @@ public class OrderDAO {
     @SuppressWarnings("unchecked")
  	public static List<CustomerOrder> getCustomerOrderList(Customer customer) {
      	em = factory.createEntityManager();
-     	Query q = em.createQuery("SELECT o FROM CustomerOrder o WHERE o.checkout=false and o.customer = :customer");
+     	Query q = em.createQuery("SELECT o FROM CustomerOrder o WHERE o.checkout=false and o.active = true and o.customer = :customer");
      	q.setParameter("customer", customer);
      	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
      	try {
