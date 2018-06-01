@@ -1,5 +1,6 @@
 package com.hcare.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -7,17 +8,23 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 import com.hcare.dao.CustomerDAO;
+import com.hcare.dao.OrderDAO;
 import com.hcare.models.Customer;
+import com.hcare.models.CustomerOrder;
+import com.hcare.models.Product;
 
 @ManagedBean(name = "customerController", eager = true)
 public class CustomerController {
     
 	private Customer customer;
+	private List<CustomerOrder> customerOrderList;
+	private Product product;
 	private int refId = 0;
 	
 	@PostConstruct
 	public void init() {
 		customer = new Customer();
+		product = new Product();
 	}
 
 	public CustomerController() {
@@ -31,6 +38,9 @@ public class CustomerController {
 		if(ref != null) {
 			refId = Integer.parseInt(ref);
 		}
+		if(customer.getId() > 0) {
+			customerOrderList = OrderDAO.getCustomerOrderList(customer);
+		}
 	}
 	
 	public String createCustomer() {
@@ -41,11 +51,20 @@ public class CustomerController {
 	
 	public String queryCustomerEmail() {
 		customer = CustomerDAO.findByEmail(customer.getEmail());
-		if(customer.getId() > 0) {
-			return "login.xhtml";
+		String page = "";
+		if(customer.getId() > 0) {	
+			page = "login.xhtml";
 		} else {
-			return "profile.xhtml";
+			customer = CustomerDAO.addCustomer(customer);
+			page = "profile.xhtml";
 		}
+		if(product.getId() > 0) {
+			CustomerOrder order = new CustomerOrder();
+			order.setCustomer(customer);
+			order.setProduct(product);
+			OrderDAO.addOrder(order);
+		}
+		return page;
 	}
 	
 	public String updateCustomer() {
@@ -68,5 +87,21 @@ public class CustomerController {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public List<CustomerOrder> getCustomerOrderList() {
+		return customerOrderList;
+	}
+
+	public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
+		this.customerOrderList = customerOrderList;
 	}
 }

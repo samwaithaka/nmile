@@ -39,8 +39,8 @@
 							<p:commandButton id="add-submit" value="Order"
 								rendered="#{productController.product.id > 0}"
 								action="#{orderController.makeOrder}" ajax="false">
-								<f:setPropertyActionListener value="#{productController.product}" 
-								    target="#{orderController.product}" />
+								<f:setPropertyActionListener value="#{productController.product}" target="#{orderController.product}" />
+								<f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
 							</p:commandButton>
 						</h:form>
 					</div>

@@ -83,7 +83,13 @@ public class CustomerDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email");
         q.setParameter("email", email);
-     	Customer customer = (Customer) q.getSingleResult();
+        Customer customer = new Customer();
+        customer.setEmail(email);
+        try {
+     	    customer = (Customer) q.getSingleResult();
+        } catch(NoResultException e) {
+        	// No results
+        }
      	em.close();
      	return customer;
     }
@@ -93,7 +99,12 @@ public class CustomerDAO {
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.password = :password");
         q.setParameter("email", customer.getEmail());
         q.setParameter("password", MSecurity.createMD5(customer.getPassword()));
-     	customer = (Customer) q.getSingleResult();
+        customer = new Customer();
+        try {
+     	    customer = (Customer) q.getSingleResult();
+        } catch(NoResultException e) {
+        	// No results
+        }
      	em.close();
      	return customer;
     }

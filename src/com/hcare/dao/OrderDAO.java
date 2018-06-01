@@ -77,18 +77,35 @@ public class OrderDAO {
     }
     
     @SuppressWarnings("unchecked")
-	public static List<CustomerOrder> getOrderList() {
-    	em = factory.createEntityManager();
-    	Query q = em.createQuery("SELECT u FROM Order u WHERE u.active=true");
-    	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
-    	try {
-    	    List<CustomerOrder> orderList = q.getResultList();
-        	for(CustomerOrder order : orderList) {
-        		orderList2.add(order);
-        	}
-    	} catch(NoResultException e) {
-    		System.out.println("No Results Exception");
-    	}
-    	return orderList2;
-    }
+ 	public static List<CustomerOrder> getCustomerOrderList(Customer customer) {
+     	em = factory.createEntityManager();
+     	Query q = em.createQuery("SELECT o FROM CustomerOrder o WHERE o.checkout=false and o.customer = :customer");
+     	q.setParameter("customer", customer);
+     	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
+     	try {
+     	    List<CustomerOrder> orderList = q.getResultList();
+         	for(CustomerOrder order : orderList) {
+         		orderList2.add(order);
+         	}
+     	} catch(NoResultException e) {
+     		System.out.println("No Results Exception");
+     	}
+     	return orderList2;
+     }
+    
+    @SuppressWarnings("unchecked")
+ 	public static List<CustomerOrder> getOrderList() {
+     	em = factory.createEntityManager();
+     	Query q = em.createQuery("SELECT u FROM Order u WHERE u.active=true");
+     	List<CustomerOrder> orderList2 = new ArrayList<CustomerOrder>();
+     	try {
+     	    List<CustomerOrder> orderList = q.getResultList();
+         	for(CustomerOrder order : orderList) {
+         		orderList2.add(order);
+         	}
+     	} catch(NoResultException e) {
+     		System.out.println("No Results Exception");
+     	}
+     	return orderList2;
+     }
 }

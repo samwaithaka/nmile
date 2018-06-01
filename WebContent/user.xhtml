@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+	<div class="col-lg-5 mb-4">
+		<h:form>
+            <label for="email">Enter Email</label>
+			<h:inputText id="email" name="email" value="#{customerController.customer.email}" />
+            <p:commandButton id="edit-submit" value="Login" 
+                action="#{customerController.queryCustomerEmail}" ajax="false" />
+   		</h:form>
+   		</div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>
