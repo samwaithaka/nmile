@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.SegmentDAO;
 import com.hcare.models.Segment;
 
 @ManagedBean(name = "segmentController", eager = true)
+@SessionScoped
 public class SegmentController {
     
 	private Segment segment;

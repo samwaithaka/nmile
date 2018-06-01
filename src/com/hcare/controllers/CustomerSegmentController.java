@@ -2,6 +2,7 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.CustomerSegmentDAO;
 import com.hcare.models.Customer;
@@ -9,6 +10,7 @@ import com.hcare.models.CustomerSegment;
 import com.hcare.models.Segment;
 
 @ManagedBean(name = "customerSegmentController", eager = true)
+@SessionScoped
 public class CustomerSegmentController {
     
 	private CustomerSegment customerSegment;

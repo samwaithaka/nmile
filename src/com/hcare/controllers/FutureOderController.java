@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.FutureOrderDAO;
 import com.hcare.models.FutureOrder;
 
 @ManagedBean(name = "futureOrderController", eager = true)
+@SessionScoped
 public class FutureOderController {
     
 	private FutureOrder futureOrder;

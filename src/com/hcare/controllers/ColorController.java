@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.ColorDAO;
 import com.hcare.models.Color;
 
 @ManagedBean(name = "colorController", eager = true)
+@SessionScoped
 public class ColorController {
     
 	private Color color;

@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.SizeDAO;
 import com.hcare.models.Size;
 
 @ManagedBean(name = "sizeController", eager = true)
+@SessionScoped
 public class SizeController {
     
 	private Size size;

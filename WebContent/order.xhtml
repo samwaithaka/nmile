@@ -13,7 +13,6 @@
 	<div class="col-lg-8 mb-4">
 		<h:form>
 			<label for="customerOrderName">Order Name</label>
-			<h:inputText class="col-ls-4" id="customerOrderName" name="customerOrderName" value="#{orderController.order.orderName}" />
 			
 			<p:commandButton id="add-submit" value="Submit" 
                 rendered="#{orderController.order.id eq '' or orderController.order.id eq 0}"

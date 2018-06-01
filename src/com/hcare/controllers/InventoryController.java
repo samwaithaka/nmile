@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.InventoryDAO;
 import com.hcare.models.Inventory;
 
 @ManagedBean(name = "inventoryController", eager = true)
+@SessionScoped
 public class InventoryController {
     
 	private Inventory inventory;

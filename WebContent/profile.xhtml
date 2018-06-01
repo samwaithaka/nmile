@@ -28,7 +28,7 @@
                 action="#{customerController.createCustomer}" ajax="false" />
             <p:commandButton id="edit-submit" value="Update" 
                 rendered="#{customerController.customer.id > 0}"
-                action="#{customerController.createCustomer}" ajax="false" />
+                action="#{customerController.updateCustomer}" ajax="false" />
    		</h:form>
    		</div>
 	</ui:define>

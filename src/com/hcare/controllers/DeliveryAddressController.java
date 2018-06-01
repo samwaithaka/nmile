@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.hcare.dao.DeliveryAddressDAO;
 import com.hcare.models.DeliveryAddress;
 
 @ManagedBean(name = "deliveryAddressController", eager = true)
+@SessionScoped
 public class DeliveryAddressController {
     
 	private DeliveryAddress deliveryAddress;

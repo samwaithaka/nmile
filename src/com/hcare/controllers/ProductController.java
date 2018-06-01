@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.model.DefaultStreamedContent;
@@ -20,11 +21,13 @@ import com.hcare.dao.ProductDAO;
 import com.hcare.models.Product;
 
 @ManagedBean(name = "productController", eager = true)
+@SessionScoped
 public class ProductController {
     
 	private Product product;
 	private UploadedFile file;
 	private String resourcePath;
+	private String webResourcePath;
 	private StreamedContent image;
 	
 	@PostConstruct
@@ -35,6 +38,8 @@ public class ProductController {
 	public ProductController() {
 		resourcePath = new File(ProductController.class.getClassLoader()
 				.getResource(".").getFile()).getAbsolutePath();
+		webResourcePath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath("/");
 	}
 	
 	public void refresh() {
@@ -44,17 +49,16 @@ public class ProductController {
 		String idValue = params.get("id");
 		if(idValue != null) {
 			int productId = Integer.parseInt(idValue);
-			    //System.out.println(productId);
-				product = ProductDAO.find(productId);
-				if(product != null) {
-					File imageFile = new File(resourcePath + "/images/" + product.getFileName());
-					try {
-						image = new DefaultStreamedContent(new FileInputStream(imageFile),"image/jpeg");
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
+			product = ProductDAO.find(productId);
+			if(product != null) {
+				File imageFile = new File(resourcePath + "/images/" + product.getFileName());
+				try {
+					image = new DefaultStreamedContent(new FileInputStream(imageFile),"image/jpeg");
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
+		}
 	}
 	
 	public String createProduct() {
@@ -87,8 +91,11 @@ public class ProductController {
         		file.getInputstream().read(buffer);
         		fileName = fileName.replace(fileExtension, "");
         		File fileUpload = new File(resourcePath + "/images/" + fileName + product.getId() + fileExtension);
-				FileOutputStream out = new FileOutputStream(fileUpload);
-				out.write(buffer);
+        		File webFileUpload = new File(webResourcePath + "/images/" + fileName + product.getId() + fileExtension);
+        		FileOutputStream out = new FileOutputStream(fileUpload);
+        		FileOutputStream out2 = new FileOutputStream(webFileUpload);
+        		out.write(buffer);
+        		out2.write(buffer);
 				product.setFileName(fileName + product.getId() + fileExtension);
 				ProductDAO.updateProduct(product);
 				System.out.println(file.getFileName() + " Photo uploaded");

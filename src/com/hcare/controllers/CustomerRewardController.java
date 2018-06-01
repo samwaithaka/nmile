@@ -2,11 +2,13 @@ package com.hcare.controllers;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 //import com.hcare.dao.CustomerSegmentDAO;
 import com.hcare.models.CustomerSegment;
 
 @ManagedBean(name = "customerRewardController", eager = true)
+@SessionScoped
 public class CustomerRewardController {
     
 	private CustomerSegment customerReward;

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.hcare.dao.CustomerDAO;
@@ -14,6 +15,7 @@ import com.hcare.models.CustomerOrder;
 import com.hcare.models.Product;
 
 @ManagedBean(name = "customerController", eager = true)
+@SessionScoped
 public class CustomerController {
     
 	private Customer customer;
@@ -55,9 +57,12 @@ public class CustomerController {
 		if(customer.getId() > 0) {	
 			page = "login.xhtml";
 		} else {
+			customer.setPassword("password");
 			customer = CustomerDAO.addCustomer(customer);
 			page = "profile.xhtml";
 		}
+		System.out.println(customer);
+		System.out.println(product);
 		if(product.getId() > 0) {
 			CustomerOrder order = new CustomerOrder();
 			order.setCustomer(customer);
@@ -75,7 +80,7 @@ public class CustomerController {
 	public String login() {
 		customer = CustomerDAO.login(customer);
 		if(customer.getId() > 0) {
-		    return "profile.xhtml";
+		    return "home.xhtml";
 		} else {
 			return null;
 		}
