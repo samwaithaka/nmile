@@ -1,5 +1,7 @@
 package com.hcare.controllers;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -19,15 +21,19 @@ public class CustomerController {
 	}
 
 	public CustomerController() {
-		String ref = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("ref");
-		System.out.println("Ref: " + ref);
+	}
+	
+	public void refresh() {
+		Map<String, String> params = FacesContext.getCurrentInstance()
+				.getExternalContext()
+				.getRequestParameterMap();
+		String ref = params.get("ref");
 		if(ref != null) {
-		    refId = Integer.parseInt(ref);
+			refId = Integer.parseInt(ref);
 		}
 	}
 	
 	public String createCustomer() {
-		refId = 2;
 		customer.setReferer(CustomerDAO.find(refId));
 	    CustomerDAO.addCustomer(customer);
 		return "profile.xhtml";

@@ -19,6 +19,7 @@ public class CustomerOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	private int quantity;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
@@ -142,11 +143,19 @@ public class CustomerOrder {
 		this.size = size;
 	}
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	@Override
 	public String toString() {
-		return "CustomerOrder [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", checkout=" + checkout + ", active=" + active + ", customer="
-				+ customer + ", deliveryAddress=" + deliveryAddress + ", product=" + product + ", color=" + color
-				+ ", size=" + size + "]";
+		return "CustomerOrder [id=" + id + ", quantity=" + quantity + ", createdOn=" + createdOn + ", createdBy="
+				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", checkout=" + checkout
+				+ ", active=" + active + ", customer=" + customer + ", deliveryAddress=" + deliveryAddress
+				+ ", product=" + product + ", color=" + color + ", size=" + size + "]";
 	}
 }
