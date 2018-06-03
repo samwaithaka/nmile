@@ -6,12 +6,18 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.ActionEvent;
 
 import com.hcare.dao.ColorDAO;
+import com.hcare.dao.CustomerAddressDAO;
+import com.hcare.dao.DeliveryAddressDAO;
 import com.hcare.dao.OrderDAO;
 import com.hcare.dao.SizeDAO;
 import com.hcare.models.Color;
+import com.hcare.models.Customer;
+import com.hcare.models.CustomerAddress;
 import com.hcare.models.CustomerOrder;
+import com.hcare.models.DeliveryAddress;
 //import com.hcare.models.Product;
 import com.hcare.models.Size;
 
@@ -20,6 +26,9 @@ import com.hcare.models.Size;
 public class OrderController {
     
 	private CustomerOrder order;
+	private DeliveryAddress deliveryAddress;
+	private CustomerAddress customerAddress;
+	private List<CustomerAddress> customerAddressList;
 	private Color color;
 	private Size size;
 	private List<Color> colorList;
@@ -37,24 +46,38 @@ public class OrderController {
 		order = new CustomerOrder();
 		color = new Color();
 		size = new Size();
+		deliveryAddress = new DeliveryAddress();
+		customerAddress = new CustomerAddress();
 	}
 
+	public void initializeAddress(ActionEvent e) {
+		deliveryAddress = new DeliveryAddress();
+	}
+	
 	public OrderController() {
 		colorList = ColorDAO.getColorList();
 		sizeList = SizeDAO.getSizeList();
 	}
 	
 	public String makeOrder() {
-		if(customerController.getCustomer().getId() == 0) {
+		Customer customer = customerController.getCustomer();
+		if(customer.getId() == 0) {
 			return "user.xhtml";
 		}
-		System.out.println("order here: " + order);
+		
 		if(order.getId() == 0) {
-			order.setCustomer(customerController.getCustomer());
+			order.setCustomer(customer);
 			order.setProduct(productController.getProduct());
-	        OrderDAO.addOrder(order);
+			order = OrderDAO.addOrder(order);
 		}
+		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
+		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
 		return "order.xhtml";
+	}
+	
+	public String makeAddressCurrent() {
+		CustomerAddressDAO.makeCustomerAddressCurrent(customerAddress);
+		return null;
 	}
 	
 	public String remove() {
@@ -68,13 +91,24 @@ public class OrderController {
 	public String updateOrder() {
 		size = SizeDAO.find(size.getId());
 		color = ColorDAO.find(color.getId());
-		System.out.println("size: " + size);
 		order.setSize(size);
 		order.setColor(color);
 		OrderDAO.updateOrder(order);
 		return "checkout.xhtml";
 	}
 	
+	public void createAddress() {
+		deliveryAddress = DeliveryAddressDAO.addDeliveryAddress(deliveryAddress);
+		customerAddress.setDeliveryAddress(deliveryAddress);
+		customerAddress.setCustomer(customerController.getCustomer());
+		customerAddress.setCurrent(true);
+		CustomerAddressDAO.addCustomerAddress(customerAddress);
+	}
+    
+	public void updateAddress() {
+		DeliveryAddressDAO.updateDeliveryAddress(deliveryAddress);
+	}
+
 	public CustomerOrder getOrder() {
 		return order;
 	}
@@ -97,6 +131,22 @@ public class OrderController {
 
 	public void setCustomerController(CustomerController customerController) {
 		this.customerController = customerController;
+	}
+
+	public DeliveryAddress getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public CustomerAddress getCustomerAddress() {
+		return customerAddress;
+	}
+
+	public void setCustomerAddress(CustomerAddress customerAddress) {
+		this.customerAddress = customerAddress;
 	}
 
 	public Color getColor() {
@@ -129,5 +179,13 @@ public class OrderController {
 
 	public void setSizeList(List<Size> sizeList) {
 		this.sizeList = sizeList;
+	}
+
+	public List<CustomerAddress> getCustomerAddressList() {
+		return customerAddressList;
+	}
+
+	public void setCustomerAddressList(List<CustomerAddress> customerAddressList) {
+		this.customerAddressList = customerAddressList;
 	}
 }

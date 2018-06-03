@@ -23,6 +23,7 @@ public class CustomerAddress {
 	private String createdBy;
 	private Timestamp editedOn;
 	private String editedBy;
+	private boolean current = true;
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -81,6 +82,14 @@ public class CustomerAddress {
 		this.active = active;
 	}
 
+	public boolean getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(boolean current) {
+		this.current = current;
+	}
+
 	public DeliveryAddress getDeliveryAddress() {
 		return deliveryAddress;
 	}
@@ -99,8 +108,8 @@ public class CustomerAddress {
 
 	@Override
 	public String toString() {
-		return "CustomerDeliveryAddress [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", deliveryAddress=" + deliveryAddress + ", customer="
-				+ customer + "]";
+		return "CustomerAddress [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
+				+ editedOn + ", editedBy=" + editedBy + ", current=" + current + ", active=" + active
+				+ ", deliveryAddress=" + deliveryAddress + ", customer=" + customer + "]";
 	}
 }

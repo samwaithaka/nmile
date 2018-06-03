@@ -10,7 +10,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import com.hcare.models.Customer;
 import com.hcare.models.DeliveryAddress;
 
 /**
@@ -40,7 +39,8 @@ public class DeliveryAddressDAO {
         DeliveryAddress deliveryAddress2 = em.find(DeliveryAddress.class, deliveryAddress.getId());
         deliveryAddress2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         deliveryAddress2.setEditedBy(deliveryAddress.getEditedBy());
-        deliveryAddress2.setAddressName(deliveryAddress.getAddressName());
+        deliveryAddress2.setPhysicalAddress(deliveryAddress.getPhysicalAddress());
+        deliveryAddress2.setDescription(deliveryAddress.getDescription());
         deliveryAddress2.setActive(deliveryAddress.getActive());
         em.persist(deliveryAddress2);
         em.getTransaction().commit();
@@ -53,23 +53,6 @@ public class DeliveryAddressDAO {
      	DeliveryAddress deliveryAddress = em.find(DeliveryAddress.class, id);
      	em.close();
      	return deliveryAddress;
-    }
-    
-    public static List<DeliveryAddress> findByDeliveryAddresssName(Customer customer) {
-    	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from DeliveryAddress u WHERE u.customer = :customer");
-        q.setParameter("customer", customer);
-    	List<DeliveryAddress> deliveryAddressList2 = new ArrayList<DeliveryAddress>();
-    	try {
-    	    @SuppressWarnings("unchecked")
-			List<DeliveryAddress> deliveryAddressList = q.getResultList();
-        	for(DeliveryAddress deliveryAddress : deliveryAddressList) {
-        		deliveryAddressList2.add(deliveryAddress);
-        	}
-    	} catch(NoResultException e) {
-    		System.out.println("No Results Exception");
-    	}
-    	return deliveryAddressList2;
     }
     
     @SuppressWarnings("unchecked")

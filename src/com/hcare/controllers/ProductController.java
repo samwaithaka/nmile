@@ -75,7 +75,6 @@ public class ProductController {
 	
 	public void upload() {
 		FacesMessage message = null;
-		//System.out.println(imagesPath);
         if(file != null) {
         	try {
         		//create filename string
@@ -96,11 +95,12 @@ public class ProductController {
         		FileOutputStream out2 = new FileOutputStream(webFileUpload);
         		out.write(buffer);
         		out2.write(buffer);
+        		out.close();
+        		out2.close();
 				product.setFileName(fileName + product.getId() + fileExtension);
 				ProductDAO.updateProduct(product);
 				System.out.println(file.getFileName() + " Photo uploaded");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             message = new FacesMessage("Successful", file.getFileName() + " is uploaded.");

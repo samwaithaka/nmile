@@ -30,13 +30,61 @@
 	          <f:selectItems value="#{orderController.sizeList}" var="size"
 	              itemLabel="#{size.sizeName}" itemValue="#{size.id}" />
 	      </h:selectOneMenu>
-	     
-            <p:commandButton id="edit-submit" value="Next" 
-                rendered="#{orderController.order.id > 0}"
-                action="#{orderController.updateOrder}" ajax="false" />
-                
+	      
+	      <h:panelGroup rendered="#{orderController.customerAddress.id > 0}">
+	          <h4>Current Delivery Address</h4>
+	          <b>#{orderController.customerAddress.deliveryAddress.physicalAddress}</b>
+	          <p>#{orderController.customerAddress.deliveryAddress.description}</p>
+	      </h:panelGroup>
+	      <h:panelGroup rendered="#{not empty orderController.customerAddressList}">
+			<p:dataTable var="customerAddress" value="#{orderController.customerAddressList}">
+				<p:column headerText="Address">
+				  <h:outputText value="#{customerAddress.deliveryAddress.physicalAddress}" />
+				</p:column>
+				<p:column headerText="Use This Address">
+				   <h:commandLink action="#{orderController.makeAddressCurrent}" 
+				       rendered="#{customerAddress.current eq false}">
+				       <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
+				       target="#{orderController.deliveryAddress}" />
+				    </h:commandLink>
+				</p:column>
+				<p:column headerText="Edit">
+				    <h:commandLink rendered="#{address.current eq false}" onclick="PF('address-form').show();">
+				      <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
+				      target="#{orderController.deliveryAddress}" />
+				    </h:commandLink>
+				</p:column>
+			</p:dataTable>
+		  </h:panelGroup>
+	      <h:panelGroup>
+	          <p:commandButton value="Add Address" type="button" 
+	              actionListener="#{orderController.initializeAddress}" onclick="PF('address-form').show();" />
+	      </h:panelGroup>
+	      
+          <p:commandButton id="edit-submit" value="Next" 
+              rendered="#{orderController.order.id > 0}"
+              action="#{orderController.updateOrder}" ajax="false" />
    		</h:form>
    		</div>
+		<p:dialog header="Effects" widgetVar="address-form" showEffect="explode"
+			hideEffect="bounce" height="100">
+			<div class="col-lg-8 mb-4">
+				<h:form>
+					<label for="physicalAddress">Physical Address</label>
+					<h:inputText class="col-ls-4" id="physicalAddress" name="physicalAddress"
+						value="#{orderController.deliveryAddress.physicalAddress}" />
+					<label for="description">Description</label>
+					<h:inputText class="col-ls-4" id="description" name="description"
+						value="#{orderController.deliveryAddress.description}" />
+					<p:commandButton id="add-submit" value="Submit"
+						rendered="#{orderController.deliveryAddress.id eq '' or orderController.deliveryAddress.id eq 0}"
+						action="#{orderController.createAddress}" ajax="true" />
+					<p:commandButton id="edit-submit" value="Update"
+						rendered="#{orderController.deliveryAddress.id > 0}"
+						action="#{orderController.updateAddress}" ajax="true" />
+				</h:form>
+			</div>
+		</p:dialog>
 	</ui:define>
 	<ui:define name="footer" />
 </ui:composition>

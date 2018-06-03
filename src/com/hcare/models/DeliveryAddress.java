@@ -3,12 +3,9 @@ package com.hcare.models;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 /**
  * @author Samuel
@@ -26,22 +23,6 @@ public class DeliveryAddress {
 	private Timestamp editedOn;
 	private String editedBy;
 	private boolean active = true;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="customerid")
-    private Customer customer;
-
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="productid")
-    private Product product;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="colorid")
-    private Color color;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="sizeid")
-    private Size size;
 
 	public int getId() {
 		return id;
@@ -107,43 +88,10 @@ public class DeliveryAddress {
 		this.active = active;
 	}
 
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
-	}
-
 	@Override
 	public String toString() {
 		return "DeliveryAddress [id=" + id + ", physicalAddress=" + physicalAddress + ", description=" + description
 				+ ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy="
-				+ editedBy + ", active=" + active + ", customer=" + customer + ", product=" + product + ", color="
-				+ color + ", size=" + size + "]";
+				+ editedBy + ", active=" + active + "]";
 	}
 }
