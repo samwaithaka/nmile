@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 input[type=text],input[type=password],textarea {
-    width: 100%;
+    /*width: 100%;*/
     padding: 10px 10px;
     margin: 0;
     box-sizing: border-box;
@@ -16,9 +16,16 @@ input[type=text]:focus,input[type=password]:focus,textarea:focus {
 }
 
 label {
+	min-width:150px;
+	verticle-align:top;
+	margin:10px 0 10px 0;
 }
 
 #pic {
 	box-sizing: border-box;
 	padding: 20px 10px;
+}
+
+.narrow {
+	wwidth:100%;
 }
