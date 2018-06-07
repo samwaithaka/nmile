@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
   <title><ui:insert name="title">Default title</ui:insert></title>
   <link href="css/forms.css" rel="stylesheet" type="text/css" />
@@ -14,6 +15,9 @@
 <ui:debug hotkey="x" rendered="#{initParam['javax.faces.FACELETS_DEVELOPMENT']}"/>
 
 <div id="header">
+<h:form>
+<p:growl id="growl" showDetail="true" sticky="true" />
+</h:form>
     <ui:insert name="header">
     	Header area.  See comments below this line in the source.
     	<!--  include your header file or uncomment the include below and create header.xhtml in this directory -->
@@ -23,8 +27,7 @@
 
 
 <div id="content">
-  <ui:insert name="content">
-  </ui:insert>
+  <ui:insert name="content" />
 </div>
 
 <div id="footer">

@@ -6,7 +6,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.event.ActionEvent;
 
 import com.hcare.dao.ColorDAO;
 import com.hcare.dao.CustomerAddressDAO;
@@ -50,7 +49,7 @@ public class OrderController {
 		customerAddress = new CustomerAddress();
 	}
 
-	public void initializeAddress(ActionEvent e) {
+	public void initializeAddress() {
 		deliveryAddress = new DeliveryAddress();
 	}
 	
@@ -72,7 +71,7 @@ public class OrderController {
 		}
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
 		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
-		return "order.xhtml";
+		return "order.xhtml?faces-redirect=true";
 	}
 	
 	public String makeAddressCurrent() {
@@ -101,7 +100,6 @@ public class OrderController {
 		deliveryAddress = DeliveryAddressDAO.addDeliveryAddress(deliveryAddress);
 		customerAddress.setDeliveryAddress(deliveryAddress);
 		customerAddress.setCustomer(customerController.getCustomer());
-		customerAddress.setCurrent(true);
 		CustomerAddressDAO.addCustomerAddress(customerAddress);
 	}
     

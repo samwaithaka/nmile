@@ -23,14 +23,19 @@ public class OrderDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static CustomerOrder addOrder(CustomerOrder order) {
-    	order.setCreatedOn(new Timestamp(System.currentTimeMillis()));
-    	order.setEditedOn(new Timestamp(System.currentTimeMillis()));
-    	order.setCreatedBy(order.getEditedBy());
-    	em = factory.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(order);
-        em.getTransaction().commit();
-        em.close();
+    	CustomerOrder order2 = findOrder(order);
+    	if(order2.getId() == 0) {
+	    	order.setCreatedOn(new Timestamp(System.currentTimeMillis()));
+	    	order.setEditedOn(new Timestamp(System.currentTimeMillis()));
+	    	order.setCreatedBy(order.getEditedBy());
+	    	em = factory.createEntityManager();
+	        em.getTransaction().begin();
+	        em.persist(order);
+	        em.getTransaction().commit();
+	        em.close();
+    	} else {
+    		order = order2;
+    	}
         return order;
     }
     
@@ -92,6 +97,20 @@ public class OrderDAO {
      	}
      	return orderList2;
      }
+    
+    public static CustomerOrder findOrder(CustomerOrder customerOrder) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from CustomerOrder u WHERE u.customer = :customer and u.product = :product and u.checkout = false");
+    	q.setParameter("customer", customerOrder.getCustomer());
+    	q.setParameter("product", customerOrder.getProduct());
+    	try {
+    	    customerOrder = (CustomerOrder) q.getSingleResult();
+    	} catch(NoResultException e) {
+    		//
+    	}
+        em.close();
+        return customerOrder;
+    }
     
     @SuppressWarnings("unchecked")
  	public static List<CustomerOrder> getOrderList() {

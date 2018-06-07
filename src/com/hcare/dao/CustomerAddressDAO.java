@@ -31,6 +31,7 @@ public class CustomerAddressDAO {
         em.persist(customerAddress);
         em.getTransaction().commit();
         em.close();
+        makeCustomerAddressCurrent(customerAddress);
         return customerAddress;
     }
     
@@ -40,7 +41,7 @@ public class CustomerAddressDAO {
     		customerAddress2.setCurrent(false);
     		updateCustomerAddress(customerAddress2);
     	}
-    	customerAddress.setCurrent(true);
+        customerAddress.setCurrent(true);
     	updateCustomerAddress(customerAddress);
     }
     
@@ -51,6 +52,7 @@ public class CustomerAddressDAO {
         customerAddress2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         customerAddress2.setEditedBy(customerAddress.getEditedBy());
         customerAddress2.setCustomer(customerAddress.getCustomer());
+        customerAddress2.setCurrent(customerAddress.getCurrent());
         customerAddress2.setDeliveryAddress(customerAddress.getDeliveryAddress());
         customerAddress2.setActive(customerAddress.getActive());
         em.persist(customerAddress2);

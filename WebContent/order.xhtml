@@ -33,38 +33,40 @@
 	      </p:selectOneMenu>
 	      
 	      <h:panelGroup rendered="#{orderController.customerAddress.id > 0}">
-	          <h4>Current Delivery Address</h4>
+	          <div class="border textbox">
+	          <h5>Current Delivery Address</h5>
 	          <b>#{orderController.customerAddress.deliveryAddress.physicalAddress}</b>
 	          <p>#{orderController.customerAddress.deliveryAddress.description}</p>
+	          </div>
 	      </h:panelGroup>
 	      <h:panelGroup rendered="#{not empty orderController.customerAddressList}">
 			<p:dataTable var="customerAddress" value="#{orderController.customerAddressList}">
 				<p:column headerText="Address">
 				  <h:outputText value="#{customerAddress.deliveryAddress.physicalAddress}" />
 				</p:column>
-				<p:column headerText="Use This Address">
-				   <h:commandLink action="#{orderController.makeAddressCurrent}" 
+				<p:column headerText="">
+				   <p:commandButton value="Use this" action="#{orderController.makeAddressCurrent}" 
 				       rendered="#{customerAddress.current eq false}">
 				       <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
 				       target="#{orderController.deliveryAddress}" />
-				    </h:commandLink>
+				    </p:commandButton>
+				    <h:outputText id="current" value="Current" rendered="#{customerAddress.current eq true}" />
 				</p:column>
 				<p:column headerText="Edit">
-				    <h:commandLink rendered="#{address.current eq false}" onclick="PF('address-form').show();">
-				      <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
+				    <p:commandButton value="Edit" update="@form" onclick="PF('addressform').show();">
+	                <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
 				      target="#{orderController.deliveryAddress}" />
-				    </h:commandLink>
+	                </p:commandButton>
 				</p:column>
 			</p:dataTable>
 		  </h:panelGroup>
 		  <br />
 	      <h:panelGroup>
 	          <label for="color" />
-	          <p:commandButton value="Add Address" type="button" 
+	          <p:commandButton value="Add Address"
 	              actionListener="#{orderController.initializeAddress}" onclick="PF('addressform').show();" />
 	      </h:panelGroup>
 	      
-	      <label for="color" />
           <p:commandButton id="edit-submit" value="Next" 
               rendered="#{orderController.order.id > 0}"
               action="#{orderController.updateOrder}" ajax="false" />

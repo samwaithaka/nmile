@@ -46,8 +46,9 @@ public class CustomerController {
 	}
 	
 	public String createCustomer() {
+		System.out.println(customer);
 		customer.setReferer(CustomerDAO.find(refId));
-	    CustomerDAO.addCustomer(customer);
+	    //CustomerDAO.addCustomer(customer);
 		return "profile.xhtml";
 	}
 	

@@ -11,9 +11,13 @@
 	<ui:define name="header" />
 	<ui:define name="content">
 	<div class="col-lg-8 mb-4">
-		<h:form>
+		<h:form id="profile">
+		<p:growl id="growl" showDetail="true" sticky="true" />
 			<label for="customerName">Customer Name</label>
-			<h:inputText class="col-ls-4" id="customerName" name="customerName" value="#{customerController.customer.customerName}" />
+			<h:inputText class="col-ls-4" id="customerName" name="customerName" value="#{customerController.customer.customerName}">
+			    <f:validateRequired />
+			</h:inputText>
+			<h:message for="customerName" style="color:red" />
 			
             <label for="email">Email</label>
 			<h:inputText id="email" name="email" value="#{customerController.customer.email}" />
