@@ -7,6 +7,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.primefaces.PrimeFaces;
+
 import com.hcare.dao.ColorDAO;
 import com.hcare.dao.CustomerAddressDAO;
 import com.hcare.dao.DeliveryAddressDAO;
@@ -32,6 +34,7 @@ public class OrderController {
 	private Size size;
 	private List<Color> colorList;
 	private List<Size> sizeList;
+	private String addressText;
 	
 	@ManagedProperty(value = "#{productController}")
 	private ProductController productController;
@@ -51,6 +54,11 @@ public class OrderController {
 
 	public void initializeAddress() {
 		deliveryAddress = new DeliveryAddress();
+		PrimeFaces.current().ajax().update("addressform");
+	}
+	
+	public void edit() {
+		PrimeFaces.current().ajax().update("addressform");
 	}
 	
 	public OrderController() {
@@ -71,11 +79,21 @@ public class OrderController {
 		}
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
 		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
+		if(customerAddressList.size() > 0) {
+			addressText = "Alternative address? ";
+		} else {
+			addressText = "Tell us where to deliver: ";
+		}
 		return "order.xhtml?faces-redirect=true";
 	}
 	
 	public String makeAddressCurrent() {
-		CustomerAddressDAO.makeCustomerAddressCurrent(customerAddress);
+		customerAddress.setDeliveryAddress(deliveryAddress);
+		CustomerAddress currentCustomerAddress = new CustomerAddress();
+		currentCustomerAddress.setCustomer(customerAddress.getCustomer());
+		currentCustomerAddress.setDeliveryAddress(deliveryAddress);
+		CustomerAddressDAO.makeCustomerAddressCurrent(currentCustomerAddress);
+		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customerAddress.getCustomer());
 		return null;
 	}
 	
@@ -101,6 +119,7 @@ public class OrderController {
 		customerAddress.setDeliveryAddress(deliveryAddress);
 		customerAddress.setCustomer(customerController.getCustomer());
 		CustomerAddressDAO.addCustomerAddress(customerAddress);
+		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customerAddress.getCustomer());
 	}
     
 	public void updateAddress() {
@@ -145,6 +164,14 @@ public class OrderController {
 
 	public void setCustomerAddress(CustomerAddress customerAddress) {
 		this.customerAddress = customerAddress;
+	}
+
+	public String getAddressText() {
+		return addressText;
+	}
+
+	public void setAddressText(String addressText) {
+		this.addressText = addressText;
 	}
 
 	public Color getColor() {

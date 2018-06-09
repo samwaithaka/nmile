@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.hcare.models.Customer;
 import com.hcare.models.CustomerAddress;
+import com.hcare.models.DeliveryAddress;
 
 /**
  * @author Samuel
@@ -36,6 +37,7 @@ public class CustomerAddressDAO {
     }
     
     public static void makeCustomerAddressCurrent(CustomerAddress customerAddress) {
+    	customerAddress = findCustomerAddressByDeliveryAddress(customerAddress.getDeliveryAddress());
     	List<CustomerAddress> customerAddressList = findAddressByCustomer(customerAddress.getCustomer());
     	for(CustomerAddress customerAddress2 : customerAddressList) {
     		customerAddress2.setCurrent(false);
@@ -81,9 +83,22 @@ public class CustomerAddressDAO {
     	return customerAddress;
     }
     
+    public static CustomerAddress findCustomerAddressByDeliveryAddress(DeliveryAddress deliveryAddress) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from CustomerAddress u WHERE u.deliveryAddress = :deliveryAddress");
+        q.setParameter("deliveryAddress", deliveryAddress);
+    	CustomerAddress customerAddress = new CustomerAddress();
+    	try {
+			customerAddress = (CustomerAddress) q.getSingleResult();
+    	} catch(NoResultException e) {
+    		System.out.println("No Results Exception");
+    	}
+    	return customerAddress;
+    }
+    
     public static List<CustomerAddress> findAddressByCustomer(Customer customer) {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from CustomerAddress u WHERE u.customer = :customer and  u.active=true");
+    	Query q = em.createQuery("select u from CustomerAddress u WHERE u.customer = :customer and  u.active=true order by u.deliveryAddress");
         q.setParameter("customer", customer);
     	List<CustomerAddress> customerAddressList2 = new ArrayList<CustomerAddress>();
     	try {
