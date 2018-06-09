@@ -67,6 +67,7 @@ public class CustomerController {
 			order.setCustomer(customer);
 			order.setProduct(product);
 			OrderDAO.addOrder(order);
+			page = "order.xhtml";
 		}
 		return page;
 	}

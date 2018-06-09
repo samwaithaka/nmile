@@ -44,14 +44,12 @@
 			<p:dataTable var="customerAddress" value="#{orderController.customerAddressList}">
 				<p:column headerText="Address">
 				  <h:outputText value="#{customerAddress.deliveryAddress.physicalAddress}" />
-				</p:column>
-				<p:column headerText="">
-				   <p:commandButton value="Use this" action="#{orderController.makeAddressCurrent}" update="@all"
+				   [<p:commandLink style="color:red;" value="Use&nbsp;this" action="#{orderController.makeAddressCurrent}" update="@all"
 				       rendered="#{customerAddress.current eq false}">
 				       <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
 				       target="#{orderController.deliveryAddress}" />
-				    </p:commandButton>
-				    <h:outputText id="current" value="Current" rendered="#{customerAddress.current eq true}" />
+				    </p:commandLink>
+				    <h:outputText class="green" id="current" value="Current" rendered="#{customerAddress.current eq true}" />]
 				</p:column>
 				<p:column headerText="Edit">
 				    <p:commandButton value="Edit" action="#{orderController.edit}" onclick="PF('addressform').show();">
