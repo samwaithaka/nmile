@@ -54,8 +54,6 @@ public class CustomerController {
 	
 	public String queryCustomerEmail() {
 		customer = CustomerDAO.findByEmail(customer.getEmail());
-		System.out.println(customer);
-		System.out.println(product);
 		String page = "";
 		if(customer.getId() > 0) {	
 			page = "login.xhtml?faces-redirect=true";
@@ -69,7 +67,7 @@ public class CustomerController {
 			order.setCustomer(customer);
 			order.setProduct(product);
 			OrderDAO.addOrder(order);
-			page = "profile.xhtml?faces-redirect=true";
+			//page = "profile.xhtml?faces-redirect=true";
 		}
 		return page;
 	}
