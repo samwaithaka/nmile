@@ -40,8 +40,17 @@
 	          <p>#{orderController.customerAddress.deliveryAddress.description}</p>
 	          </div>
 	      </h:panelGroup>
+	      <br />
+	      <h:panelGroup>
+	          #{orderController.addressText} <p:commandButton value="Click Here"
+	              actionListener="#{orderController.initializeAddress}" onclick="PF('addressform').show();" />
+	      </h:panelGroup>
+	      <br /><br />
 	      <h:panelGroup rendered="#{not empty orderController.customerAddressList}">
-			<p:dataTable var="customerAddress" value="#{orderController.customerAddressList}">
+			<p:dataTable class="customerAddress" 
+			    tableStyle="width:auto"
+			    var="customerAddress" 
+			    value="#{orderController.customerAddressList}">
 				<p:column headerText="Address">
 				  <h:outputText value="#{customerAddress.deliveryAddress.physicalAddress}" />
 				   [<p:commandLink style="color:red;" value="Use&nbsp;this" action="#{orderController.makeAddressCurrent}" update="@all"
@@ -51,7 +60,7 @@
 				    </p:commandLink>
 				    <h:outputText class="green" id="current" value="Current" rendered="#{customerAddress.current eq true}" />]
 				</p:column>
-				<p:column headerText="Edit">
+				<p:column headerText="">
 				    <p:commandButton value="Edit" action="#{orderController.edit}" onclick="PF('addressform').show();">
 	                <f:setPropertyActionListener value="#{customerAddress.deliveryAddress}" 
 				      target="#{orderController.deliveryAddress}" />
@@ -59,16 +68,13 @@
 				</p:column>
 			</p:dataTable>
 		  </h:panelGroup>
-		  <br />
+		  
 	      <h:panelGroup>
-	          <label for="color" />
-	          #{orderController.addressText} <p:commandButton value="Click to Add"
-	              actionListener="#{orderController.initializeAddress}" onclick="PF('addressform').show();" />
-	      </h:panelGroup>
-	      
-          <p:commandButton id="edit-submit" value="Next" 
+	      <br />
+          <p:commandButton id="edit-submit" value="Continue" 
               rendered="#{orderController.order.id > 0}"
               action="#{orderController.updateOrder}" ajax="false" />
+          </h:panelGroup>
    		</h:form>
    		</div>
 		<p:dialog header="Delivery Address" widgetVar="addressform" showEffect="explode"
@@ -76,10 +82,10 @@
 			<h:panelGroup id="addressform">
 			<div class="col-lg-12 mb-4">
 				<h:form>
-					<label for="physicalAddress">Physical Address</label>
+					<label for="physicalAddress">Your Physical Address</label>
 					<h:inputText class="col-ls-4" id="physicalAddress" name="physicalAddress"
 						value="#{orderController.deliveryAddress.physicalAddress}" />
-					<label for="description">Description</label>
+					<label for="description">Describe Your Address</label>
 					<h:inputTextarea class="col-ls-4" id="description" name="description"
 						value="#{orderController.deliveryAddress.description}" />
 					<label />

@@ -49,6 +49,8 @@ public class OrderDAO {
         order2.setProduct(order.getProduct());
         order2.setColor(order.getColor());
         order2.setSize(order.getSize());
+        order2.setQuantity(order.getQuantity());
+        order2.setCheckout(order.getCheckout());
         order2.setDeliveryAddress(order.getDeliveryAddress());
         order2.setActive(order.getActive());
         em.persist(order2);

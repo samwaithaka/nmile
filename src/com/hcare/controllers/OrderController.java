@@ -69,7 +69,7 @@ public class OrderController {
 	public String makeOrder() {
 		Customer customer = customerController.getCustomer();
 		if(customer.getId() == 0) {
-			return "user.xhtml";
+			return "user.xhtml?faces-redirect=true";
 		}
 		
 		if(order.getId() == 0) {
@@ -80,11 +80,30 @@ public class OrderController {
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
 		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
 		if(customerAddressList.size() > 0) {
-			addressText = "Alternative address? ";
+			addressText = "Different Address?";
 		} else {
-			addressText = "Tell us where to deliver: ";
+			addressText = "Tell us where you are:";
 		}
 		return "order.xhtml?faces-redirect=true";
+	}
+	
+	public String updateOrder() {
+		size = SizeDAO.find(size.getId());
+		color = ColorDAO.find(color.getId());
+		order.setSize(size);
+		order.setColor(color);
+		Customer customer = customerController.getCustomer();
+		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
+		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
+		OrderDAO.updateOrder(order);
+		return "checkout.xhtml";
+	}
+
+	public String checkout() {
+		order.setCheckout(true);
+		OrderDAO.updateOrder(order);
+		order = new CustomerOrder();
+		return "successful.xhtml";
 	}
 	
 	public String makeAddressCurrent() {
@@ -103,15 +122,6 @@ public class OrderController {
 	        OrderDAO.updateOrder(order);
 		}
 		return "home.xhtml?faces-redirect=true";
-	}
-	
-	public String updateOrder() {
-		size = SizeDAO.find(size.getId());
-		color = ColorDAO.find(color.getId());
-		order.setSize(size);
-		order.setColor(color);
-		OrderDAO.updateOrder(order);
-		return "checkout.xhtml";
 	}
 	
 	public void createAddress() {

@@ -48,33 +48,35 @@ public class CustomerController {
 	public String createCustomer() {
 		System.out.println(customer);
 		customer.setReferer(CustomerDAO.find(refId));
-	    //CustomerDAO.addCustomer(customer);
-		return "profile.xhtml";
+	    CustomerDAO.addCustomer(customer);
+		return "home.xhtml?faces-redirect=true";
 	}
 	
 	public String queryCustomerEmail() {
 		customer = CustomerDAO.findByEmail(customer.getEmail());
+		System.out.println(customer);
+		System.out.println(product);
 		String page = "";
 		if(customer.getId() > 0) {	
-			page = "login.xhtml";
+			page = "login.xhtml?faces-redirect=true";
 		} else {
 			customer.setPassword("password");
 			customer = CustomerDAO.addCustomer(customer);
-			page = "profile.xhtml";
+			page = "profile.xhtml?faces-redirect=true";
 		}
 		if(product.getId() > 0) {
 			CustomerOrder order = new CustomerOrder();
 			order.setCustomer(customer);
 			order.setProduct(product);
 			OrderDAO.addOrder(order);
-			page = "order.xhtml";
+			page = "profile.xhtml?faces-redirect=true";
 		}
 		return page;
 	}
 	
 	public String updateCustomer() {
 		CustomerDAO.updateCustomer(customer);
-		return "profile.xhtml";
+		return "home.xhtml?faces-redirect=true";
 	}
 	
 	public String login() {

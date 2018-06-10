@@ -30,7 +30,7 @@ label {
 }
 
 .narrow {
-	width:20%;
+	width:20% !important;
 }
 
 .red {
