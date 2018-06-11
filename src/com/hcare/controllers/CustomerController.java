@@ -33,10 +33,18 @@ public class CustomerController {
 	}
 	
 	public void refresh() {
+		String view = null;
 		Map<String, String> params = FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRequestParameterMap();
 		String ref = params.get("ref");
+		String email = params.get("e");
+		String token = params.get("t");
+		if(email != null) customer.setEmail(email);
+		if(token != null) {
+			customer.setEmail(token);
+			reset();
+		}
 		if(ref != null) {
 			refId = Integer.parseInt(ref);
 		}
@@ -86,6 +94,41 @@ public class CustomerController {
 		}
 	}
 
+    public void generatePasswordResetToken() {
+		String token = "fdfajfwejiro445348954895435345";
+		String url = "reset.xhtml?t=" + token + "&e=" + customer.getEmail();
+		String subject = "Password Reset";
+		String message = "Hello " + customer.getCustomerName() + ",\n\n" +
+				"You have requested to reset your password. Click on the link below "
+				+ "to proceed with reset. Incase you didn't initiate reset, just ignore the email.\n\n"
+				+ "Reset link: " + url;
+		customer.setPasswordResetToken(token);
+		CustomerDAO.updateCustomer(customer);
+		//Emailer.send(customer.getEmail(), subject, message);
+	}
+    
+	public void reset() {
+		customer = CustomerDAO.getCustomerByToken(customer);
+		String view = null;
+	    if(customer.getResetStatusMessage().equalsIgnoreCase("expired")) {
+	    	// Token expired message
+	    } else if(customer.getId() > 0) {
+	    	// Enter password and confirm message
+	    }
+	}
+	
+	public String changePassword() {
+		String view = null;
+		if(customer.getPassword().equals(customer.getPasswordConfirm())) {
+			CustomerDAO.updateCustomer(customer);
+			view = "home.xhtml?faces-redirect=true";
+			// Success message
+		} else {
+			// Password mismatch message
+		}
+		return view;
+	}
+	
 	public Customer getCustomer() {
 		return customer;
 	}

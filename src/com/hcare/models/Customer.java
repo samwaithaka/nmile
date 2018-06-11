@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  * @author Samuel
@@ -23,6 +24,11 @@ public class Customer {
 	private String phone;
 	private String email;
 	private String password;
+	@Transient
+	private String passwordConfirm;
+	@Transient
+	private String resetStatusMessage;
+	private String passwordResetToken;
 	private int depth;
 	private String path;
 	private Timestamp createdOn;
@@ -113,6 +119,30 @@ public class Customer {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPasswordResetToken() {
+		return passwordResetToken;
+	}
+
+	public void setPasswordResetToken(String passwordResetToken) {
+		this.passwordResetToken = passwordResetToken;
+	}
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getResetStatusMessage() {
+		return resetStatusMessage;
+	}
+
+	public void setResetStatusMessage(String resetStatusMessage) {
+		this.resetStatusMessage = resetStatusMessage;
 	}
 
 	public Customer getReferer() {

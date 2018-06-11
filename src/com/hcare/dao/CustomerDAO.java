@@ -60,6 +60,7 @@ public class CustomerDAO {
         customer2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         customer2.setEditedBy(customer.getEditedBy());
         customer2.setEmail(customer.getEmail());
+        customer2.setPasswordResetToken(customer.getPasswordResetToken());
         customer2.setCustomerName(customer.getCustomerName());
         customer2.setPhone(customer.getPhone());
         customer2.setReferer(customer.getReferer());
@@ -94,6 +95,29 @@ public class CustomerDAO {
      	return customer;
     }
     
+    public static Customer getCustomerByToken(Customer customer) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.passwordResetToken = :token");
+    	q.setParameter("email", customer.getEmail());
+    	q.setParameter("token", customer.getPasswordResetToken());
+        customer = new Customer();
+        try {
+     	    customer = (Customer) q.getSingleResult();
+     	    Timestamp lastEdited = customer.getEditedOn();
+     	    Timestamp now = new Timestamp(System.currentTimeMillis());
+     	    Long diff = now.getTime() - lastEdited.getTime();
+     	    Long diffHours = diff / (60 * 60 * 1000);
+     	    if(diffHours > 1) {
+     	        // Use path field to store expired value
+     	    	customer.setResetStatusMessage("expired");
+     	    }
+        } catch(NoResultException e) {
+        	// No results
+        }
+     	em.close();
+     	return customer;
+    }
+    
     public static Customer login(Customer customer) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.password = :password");
@@ -108,7 +132,7 @@ public class CustomerDAO {
      	em.close();
      	return customer;
     }
-    
+
     public static boolean checkExisting(Customer customer) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email");
