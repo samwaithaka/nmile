@@ -73,6 +73,20 @@ public class CustomerDAO {
         return customer2;
     }
     
+    public static Customer changePassword(Customer customer) {
+    	em = factory.createEntityManager();
+        em.getTransaction().begin();
+        Customer customer2 = em.find(Customer.class, customer.getId());
+        customer2.setEditedOn(new Timestamp(System.currentTimeMillis()));
+        customer2.setEditedBy(customer.getEditedBy());
+        String password = MSecurity.createMD5(customer.getPassword());
+        customer2.setPassword(password);
+        em.persist(customer2);
+        em.getTransaction().commit();
+        em.close();
+        return customer2;
+    }
+    
     public static Customer find(int id) {
      	em = factory.createEntityManager();
      	Customer customer = em.find(Customer.class, id);
@@ -103,14 +117,6 @@ public class CustomerDAO {
         customer = new Customer();
         try {
      	    customer = (Customer) q.getSingleResult();
-     	    Timestamp lastEdited = customer.getEditedOn();
-     	    Timestamp now = new Timestamp(System.currentTimeMillis());
-     	    Long diff = now.getTime() - lastEdited.getTime();
-     	    Long diffHours = diff / (60 * 60 * 1000);
-     	    if(diffHours > 1) {
-     	        // Use path field to store expired value
-     	    	customer.setResetStatusMessage("expired");
-     	    }
         } catch(NoResultException e) {
         	// No results
         }

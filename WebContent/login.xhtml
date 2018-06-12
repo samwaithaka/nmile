@@ -18,6 +18,9 @@
 			<h:inputSecret id="password" name="password" value="#{customerController.customer.password}" />
             <p:commandButton id="edit-submit" value="Login" 
                 action="#{customerController.login}" ajax="false" />
+            <label for="reset">Forgot password?</label>
+            <p:commandLink id="reset" value="Click Here" 
+                action="#{customerController.generatePasswordResetToken}" />
    		</h:form>
    		</div>
 	</ui:define>

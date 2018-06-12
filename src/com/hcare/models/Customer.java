@@ -26,8 +26,6 @@ public class Customer {
 	private String password;
 	@Transient
 	private String passwordConfirm;
-	@Transient
-	private String resetStatusMessage;
 	private String passwordResetToken;
 	private int depth;
 	private String path;
@@ -137,14 +135,6 @@ public class Customer {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public String getResetStatusMessage() {
-		return resetStatusMessage;
-	}
-
-	public void setResetStatusMessage(String resetStatusMessage) {
-		this.resetStatusMessage = resetStatusMessage;
-	}
-
 	public Customer getReferer() {
 		return referer;
 	}
@@ -172,8 +162,9 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", customerName=" + customerName + ", phone=" + phone + ", email=" + email
-				+ ", depth=" + depth + ", path=" + path + ", createdOn=" + createdOn + ", createdBy=" + createdBy
-				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", referer=" + referer
-				+ "]";
+				+ ", password=" + password + ", passwordConfirm=" + passwordConfirm + ", passwordResetToken="
+				+ passwordResetToken + ", depth=" + depth + ", path=" + path + ", createdOn=" + createdOn
+				+ ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active="
+				+ active + ", referer=" + referer + "]";
 	}
 }
