@@ -13,6 +13,7 @@
 	<div class="col-lg-8 mb-4">
 		<h:form id="profile">
 		<p:growl id="growl" showDetail="true" sticky="true" />
+		Referer: #{customerController.customer.referer.customerName}<br />
 			<label for="customerName">Customer Name</label>
 			<h:inputText class="col-ls-4" id="customerName" name="customerName" value="#{customerController.customer.customerName}">
 			    <f:validateRequired />

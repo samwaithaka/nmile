@@ -17,6 +17,7 @@
 		<class>com.hcare.models.CustomerAddress</class>
 		<class>com.hcare.models.FutureOrder</class>
 		<class>com.hcare.models.Inventory</class>
+		<class>com.hcare.models.Blog</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/hcare_db" />

@@ -30,6 +30,7 @@ public class CustomerController {
 	private Customer customer;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
+	private boolean resetFlag = false;
 	private int refId = 0;
 
 	@PostConstruct
@@ -48,14 +49,16 @@ public class CustomerController {
 		String ref = params.get("ref");
 		String token = null;
 		String email = null;
-		if(customer.getPasswordResetToken() == null) {
-			try {
-				email = URLDecoder.decode(params.get("e"), "UTF-8");
-				token = URLDecoder.decode(params.get("t"), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+
+		email = params.get("e");
+		token = params.get("t");
+		try {
+			if(email != null) email = URLDecoder.decode(email, "UTF-8");
+			if(token != null) token = URLDecoder.decode(token, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
+		
 		if(email != null) customer.setEmail(email);
 		if(token != null) {
 			customer.setPasswordResetToken(token);
@@ -138,7 +141,7 @@ public class CustomerController {
 	public void reset() {
 		System.out.println(customer);
 		FacesContext context = FacesContext.getCurrentInstance();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		try {
 			Date parsedDate = dateFormat.parse(customer.getPasswordResetToken());
 			Timestamp resetTime = new java.sql.Timestamp(parsedDate.getTime());
@@ -178,6 +181,14 @@ public class CustomerController {
 			context.getCurrentInstance().addMessage(null, message);
 		}
 		return view;
+	}
+
+	public boolean isResetFlag() {
+		return resetFlag;
+	}
+
+	public void setResetFlag(boolean resetFlag) {
+		this.resetFlag = resetFlag;
 	}
 
 	public Customer getCustomer() {
