@@ -162,7 +162,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", customerName=" + customerName + ", phone=" + phone + ", email=" + email
-				+ ", password=" + password + ", passwordConfirm=" + passwordConfirm + ", passwordResetToken="
+				+ ", passwordConfirm=" + passwordConfirm + ", passwordResetToken="
 				+ passwordResetToken + ", depth=" + depth + ", path=" + path + ", createdOn=" + createdOn
 				+ ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active="
 				+ active + ", referer=" + referer + "]";

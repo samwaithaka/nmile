@@ -12,16 +12,18 @@
 	<ui:define name="content">
 	<div class="col-lg-8 mb-4">
 		<h:form>
+		<div class="form-group">
 			<label for="colorName">Color Name</label>
-			<h:inputText class="col-ls-4" id="colorName" name="colorName" value="#{colorController.color.colorName}" />
-			
-			<p:commandButton id="add-submit" value="Submit" 
+			<h:inputText class="col-ls-4 form-control narrow" id="colorName" name="colorName" value="#{colorController.color.colorName}" />
+			</div>
+			<div class="form-group">
+			<p:commandButton class="btn btn-default" id="add-submit" value="Submit" 
                 rendered="#{colorController.color.id eq '' or colorController.color.id eq 0}"
                 action="#{colorController.createColor}" ajax="false" />
-            <p:commandButton id="edit-submit" value="Update" 
+            <p:commandButton class="btn btn-default" id="edit-submit" value="Update" 
                 rendered="#{colorController.color.id > 0}"
                 action="#{colorController.createColor}" ajax="false" />
-                
+                </div>
    		</h:form>
    		</div>
 	</ui:define>

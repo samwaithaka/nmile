@@ -30,7 +30,7 @@ public class CustomerController {
 	private Customer customer;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
-	private boolean resetFlag = false;
+	private String form = "check";
 	private int refId = 0;
 
 	@PostConstruct
@@ -59,7 +59,10 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 		
-		if(email != null) customer.setEmail(email);
+		if(email != null) {
+			customer = new Customer();
+			customer.setEmail(email);
+		}
 		if(token != null) {
 			customer.setPasswordResetToken(token);
 			reset();
@@ -79,15 +82,16 @@ public class CustomerController {
 		return "home.xhtml?faces-redirect=true";
 	}
 
-	public String queryCustomerEmail() {
-		customer = CustomerDAO.findByEmail(customer.getEmail());
-		String page = "";
+	public void queryCustomerEmail() {
+		customer = CustomerDAO.findByEmail(customer.getEmail());		
 		if(customer.getId() > 0) {	
-			page = "login.xhtml?faces-redirect=true";
+			//page = "login.xhtml?faces-redirect=true";
+			form = "login";
 		} else {
 			customer.setPassword("password");
 			customer = CustomerDAO.addCustomer(customer);
-			page = "profile.xhtml?faces-redirect=true";
+			//page = "profile.xhtml?faces-redirect=true";
+			form = "signup";
 		}
 		if(product.getId() > 0) {
 			CustomerOrder order = new CustomerOrder();
@@ -96,7 +100,7 @@ public class CustomerController {
 			OrderDAO.addOrder(order);
 			//page = "profile.xhtml?faces-redirect=true";
 		}
-		return page;
+		//return page;
 	}
 
 	public String updateCustomer() {
@@ -121,7 +125,11 @@ public class CustomerController {
 		try {
 			url = "http://localhost:8080/hcare/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
 			String subject = "Password Reset";
-			String message = "Hello " + customer.getCustomerName() + ",\n\n" +
+			String salutation = null;
+			if(customer.getCustomerName() != null) {
+				salutation = "Hello " + customer.getCustomerName() + ",\n\n";
+			}
+			String message = salutation +
 					"You have requested to reset your password. Click on the link below "
 					+ "to proceed with reset. Incase you didn't initiate reset, just ignore the email.\n\n"
 					+ "Reset link: " + url;
@@ -130,8 +138,7 @@ public class CustomerController {
 			customer.setPasswordResetToken(null);
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
 			context.getCurrentInstance().addMessage(null, fm);
-			System.out.println(url);
-			//Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
+			Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -183,12 +190,12 @@ public class CustomerController {
 		return view;
 	}
 
-	public boolean isResetFlag() {
-		return resetFlag;
+	public String getForm() {
+		return form;
 	}
 
-	public void setResetFlag(boolean resetFlag) {
-		this.resetFlag = resetFlag;
+	public void setForm(String form) {
+		this.form = form;
 	}
 
 	public Customer getCustomer() {

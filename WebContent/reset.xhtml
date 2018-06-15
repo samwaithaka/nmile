@@ -10,24 +10,32 @@
 <ui:composition template="template.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
-	<div class="col-lg-5 mb-4">
-		<h:form>
-			<f:metadata>
-				<f:event type="preRenderView"
-					listener="#{customerController.refresh}" />
-			</f:metadata>
-		</h:form>
-		<h:panelGroup rendered="#{customerController.customer.id > 0}">
-		<h:form>
-            <label for="password">Password</label>
-			<h:inputSecret id="password" name="password" value="#{customerController.customer.password}" />
-			<label for="passwordConfirm">Confirm Password</label>
-			<h:inputSecret id="passwordConfirm" name="passwordConfirm" value="#{customerController.customer.passwordConfirm}" />
-            <p:commandButton id="edit-submit" value="Submit" 
-                action="#{customerController.changePassword}" ajax="false" />
-   		</h:form>
-   		</h:panelGroup>
-   		</div>
+		<div class="col-lg-5 mb-4">
+			<h:form>
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{customerController.refresh}" />
+				</f:metadata>
+			</h:form>
+			<h:panelGroup rendered="#{customerController.customer.id > 0}">
+				<h:form>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<h:inputSecret class="form-control" id="password" name="password"
+							value="#{customerController.customer.password}" />
+					</div>
+					<div class="form-group">
+						<label for="passwordConfirm">Confirm Password</label>
+						<h:inputSecret class="form-control" id="passwordConfirm" name="passwordConfirm"
+							value="#{customerController.customer.passwordConfirm}" />
+					</div>
+					<div class="form-group">
+						<p:commandButton class="btn btn-default" id="edit-submit" value="Submit"
+							action="#{customerController.changePassword}" ajax="false" />
+					</div>
+				</h:form>
+			</h:panelGroup>
+		</div>
 	</ui:define>
 	<ui:define name="footer" />
 </ui:composition>

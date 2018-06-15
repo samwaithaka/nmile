@@ -23,6 +23,7 @@ public class SizeController {
 	
 	public String createSize() {
 	    SizeDAO.addSize(size);
+	    size = new Size();
 		return "size.xhtml";
 	}
 	

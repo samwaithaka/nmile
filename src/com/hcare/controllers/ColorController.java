@@ -23,6 +23,7 @@ public class ColorController {
 	
 	public String createColor() {
 	    ColorDAO.addColor(color);
+	    color = new Color();
 		return "color.xhtml";
 	}
 	

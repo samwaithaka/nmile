@@ -1,8 +1,9 @@
 package com.hcare.controllers;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+//import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +12,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.model.DefaultStreamedContent;
+//import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -25,6 +26,7 @@ import com.hcare.models.Customer;
 public class BlogController {
     
 	private Blog blog;
+	private List<Blog> blogList;
 	private UploadedFile file;
 	private String resourcePath;
 	private String webResourcePath;
@@ -43,6 +45,7 @@ public class BlogController {
 				.getResource(".").getFile()).getAbsolutePath();
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
+		blogList = BlogDAO.getBlogList();
 	}
 	
 	public void refresh() {
@@ -71,16 +74,15 @@ public class BlogController {
 	}
 	
 	public String createBlog() {
-		System.out.println(blog.getLongText());
 		String slug = blog.getTitle().replace(" ", "-").toLowerCase();
 		blog.setSlug(slug);
 	    BlogDAO.addBlog(blog);
-		return "blog.xhtml";
+		return "blog-list.xhtml";
 	}
 	
 	public String updateBlog() {
 		BlogDAO.updateBlog(blog);
-		return "blog.xhtml";
+		return "blog-list.xhtml";
 	}
 
 	public Blog getBlog() {
@@ -89,6 +91,14 @@ public class BlogController {
 
 	public void setBlog(Blog blog) {
 		this.blog = blog;
+	}
+
+	public List<Blog> getBlogList() {
+		return blogList;
+	}
+
+	public void setBlogList(List<Blog> blogList) {
+		this.blogList = blogList;
 	}
 
 	public UploadedFile getFile() {

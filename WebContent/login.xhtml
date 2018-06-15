@@ -10,19 +10,27 @@
 <ui:composition template="template.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
-	<div class="col-lg-5 mb-4">
-		<h:form>
-            <label for="email">Email</label>
-			<h:inputText id="email" name="email" value="#{customerController.customer.email}" />
-			<label for="password">Password</label>
-			<h:inputSecret id="password" name="password" value="#{customerController.customer.password}" />
-            <p:commandButton id="edit-submit" value="Login" 
-                action="#{customerController.login}" ajax="false" />
-            <label for="reset">Forgot password?</label>
-            <p:commandLink id="reset" value="Click Here" 
-                action="#{customerController.generatePasswordResetToken}" />
-   		</h:form>
-   		</div>
+		<div class="col-lg-5 mb-4">
+			<h:form>
+				<div class="form-group">
+					<label for="email">Email</label>
+					<h:inputText class="form-control" id="email" name="email"
+						value="#{customerController.customer.email}" />
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<h:inputSecret class="form-control" id="password" name="password"
+						value="#{customerController.customer.password}" />
+				</div>
+				<div class="form-group">
+					<p:commandButton class="btn btn-default" id="edit-submit" value="Login"
+						action="#{customerController.login}" ajax="false" />
+					<label for="reset">Forgot password?</label>
+					<p:commandLink id="reset" value="Click Here"
+						action="#{customerController.generatePasswordResetToken}" />
+				</div>
+			</h:form>
+		</div>
 	</ui:define>
 	<ui:define name="footer" />
 </ui:composition>
