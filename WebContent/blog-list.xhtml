@@ -11,6 +11,9 @@
 	<ui:define name="header" />
 	<ui:define name="content">
 	  <div class="col-lg-8 mb-4">
+	    <h:form>
+	      <h:commandLink action="blog" value="Create Blog Post" />
+	    </h:form>
 		<p:dataTable var="blog" value="#{blogController.blogList}" tableStyle="width:auto">
 		  <p:column headerText="Title">
 		    <h:outputText value="#{blog.title}" />

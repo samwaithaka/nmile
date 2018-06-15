@@ -77,11 +77,13 @@ public class BlogController {
 		String slug = blog.getTitle().replace(" ", "-").toLowerCase();
 		blog.setSlug(slug);
 	    BlogDAO.addBlog(blog);
+	    blogList = BlogDAO.getBlogList();
 		return "blog-list.xhtml";
 	}
 	
 	public String updateBlog() {
 		BlogDAO.updateBlog(blog);
+		blogList = BlogDAO.getBlogList();
 		return "blog-list.xhtml";
 	}
 

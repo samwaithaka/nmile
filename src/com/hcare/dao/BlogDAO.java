@@ -23,6 +23,7 @@ public class BlogDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static Blog addBlog(Blog blog) {
+    	blog.setSlug(createUniqueSlug(blog));
     	blog.setCreatedOn(new Timestamp(System.currentTimeMillis()));
     	blog.setEditedOn(new Timestamp(System.currentTimeMillis()));
     	blog.setCreatedBy(blog.getEditedBy());
@@ -52,6 +53,27 @@ public class BlogDAO {
         em.getTransaction().commit();
         em.close();
         return blog2;
+    }
+    
+    
+    private static String createUniqueSlug(Blog blog) {
+    	blog = findBySlug(blog.getSlug());
+    	if(blog.getId() > 0) {
+    		String slug = blog.getSlug();
+    		String suffix = slug.substring(slug.lastIndexOf("-")+1);
+        	String subSlug = slug.replace(suffix, "");
+        	try {
+        		int value = Integer.parseInt(suffix);
+        	    value = value + 1;
+        	    suffix = "" + value;
+        	} catch(NumberFormatException e) {
+        		suffix = suffix + "-1";
+        	}
+        	slug = subSlug + suffix;
+        	return slug;
+    	} else {
+    		return blog.getSlug();
+    	}
     }
     
     public static Blog find(int id) {
