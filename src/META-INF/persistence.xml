@@ -3,21 +3,21 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="hcare" transaction-type="RESOURCE_LOCAL">
-		<class>com.hcare.models.Segment</class>
-		<class>com.hcare.models.Customer</class>
-		<class>com.hcare.models.CustomerSegment</class>
-		<class>com.hcare.models.Reward</class>
-		<class>com.hcare.models.CustomerReward</class>
-		<class>com.hcare.models.Product</class>
-		<class>com.hcare.models.CustomerOrder</class>
-		<class>com.hcare.models.Color</class>
-		<class>com.hcare.models.Size</class>
-		<class>com.hcare.models.Delivery</class>
-		<class>com.hcare.models.DeliveryAddress</class>
-		<class>com.hcare.models.CustomerAddress</class>
-		<class>com.hcare.models.FutureOrder</class>
-		<class>com.hcare.models.Inventory</class>
-		<class>com.hcare.models.Blog</class>
+		<class>com.nextramile.models.Segment</class>
+		<class>com.nextramile.models.Customer</class>
+		<class>com.nextramile.models.CustomerSegment</class>
+		<class>com.nextramile.models.Reward</class>
+		<class>com.nextramile.models.CustomerReward</class>
+		<class>com.nextramile.models.Product</class>
+		<class>com.nextramile.models.CustomerOrder</class>
+		<class>com.nextramile.models.Color</class>
+		<class>com.nextramile.models.Size</class>
+		<class>com.nextramile.models.Delivery</class>
+		<class>com.nextramile.models.DeliveryAddress</class>
+		<class>com.nextramile.models.CustomerAddress</class>
+		<class>com.nextramile.models.FutureOrder</class>
+		<class>com.nextramile.models.Inventory</class>
+		<class>com.nextramile.models.Blog</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/hcare_db" />
