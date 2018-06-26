@@ -1,0 +1,165 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]><html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.vs2.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+		<div class="row">
+		<h:form>
+				<f:metadata>
+					<f:event type="preRenderView"
+						listener="#{productController.refresh}" />
+				</f:metadata>
+			</h:form>
+			<div class="col-sm-9 padding-right">
+				<div class="product-details">
+					<!--product-details-->
+					<div class="col-sm-5">
+						<div class="view-product">
+							<p:graphicImage value="#{productController.image}" width="450"
+							stream="false" />
+						</div>
+					</div>
+					<div class="col-sm-7">
+						<div class="product-information">
+							<!--/product-information-->
+							<h2>#{productController.product.productName}</h2>
+							<p>#{productController.product.shortDescription}</p>
+							<h:form>
+				<div class="form-group">
+					<label for="color">Color</label>
+					<p:selectOneMenu class="form-control narrow" value="#{orderController.color.id}">
+						<f:selectItems value="#{orderController.colorList}" var="color"
+							itemLabel="#{color.colorName}" itemValue="#{color.id}" />
+					</p:selectOneMenu>
+				</div></h:form>
+							<span>
+								<span>KSH.#{productController.product.price}</span> 
+								<label>Quantity:</label> 
+								<h:inputText id="quantity" name="quantity"
+						value="#{orderController.order.quantity}" />
+								<p:commandLink class="fa fa-shopping-cart btn btn-default" value=" Add to cart" name="add-submit" id="add-submit"
+							    rendered="#{productController.product.id > 0}"
+								action="#{orderController.makeOrder}" ajax="true">
+								<f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
+							</p:commandLink>
+							</span>
+						</div>
+						<!--/product-information-->
+					</div>
+				</div>
+				<!--/product-details-->
+			</div>
+			<!-- Category -->
+			<!-- Category -->
+			<div class="col-sm-3">
+				<div class="left-sidebar">
+					<h2>Category</h2>
+					<div class="panel-group category-products" id="accordian">
+						<!--category-productsr-->
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a href="#">Kids</a>
+								</h4>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a href="#">Fashion</a>
+								</h4>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a href="#">Households</a>
+								</h4>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a href="#">Interiors</a>
+								</h4>
+							</div>
+						</div>
+					</div>
+					<!--/category-products-->
+				</div>
+			</div>
+		</div>
+		<!-- recommended -->
+		<div class="recommended_items">
+			<!--recommended_items-->
+			<h2 class="title text-center">recommended items</h2>
+
+			<div id="recommended-item-carousel" class="carousel slide"
+				data-ride="carousel">
+				<div class="carousel-inner">
+					<div class="item active">
+						<div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="images/home/recommend1.jpg" alt="" />
+										<h2>$56</h2>
+										<p>Easy Polo Black Edition</p>
+										<button type="button" class="btn btn-default add-to-cart">
+											<i class="fa fa-shopping-cart"></i>Add to cart
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="images/home/recommend2.jpg" alt="" />
+										<h2>$56</h2>
+										<p>Easy Polo Black Edition</p>
+										<button type="button" class="btn btn-default add-to-cart">
+											<i class="fa fa-shopping-cart"></i>Add to cart
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="images/home/recommend3.jpg" alt="" />
+										<h2>$56</h2>
+										<p>Easy Polo Black Edition</p>
+										<button type="button" class="btn btn-default add-to-cart">
+											<i class="fa fa-shopping-cart"></i>Add to cart
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<a class="left recommended-item-control"
+					href="#recommended-item-carousel" data-slide="prev"> <i
+					class="fa fa-angle-left"></i>
+				</a> <a class="right recommended-item-control"
+					href="#recommended-item-carousel" data-slide="next"> <i
+					class="fa fa-angle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!--/recommended_items-->
+		<!-- end recommended -->
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>
