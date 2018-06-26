@@ -17,7 +17,7 @@ import com.nextramile.models.Segment;
  *
  */
 public class SegmentDAO {
-	private static final String PERSISTENCE_UNIT_NAME = "hcare";
+	private static final String PERSISTENCE_UNIT_NAME = "nextramile";
     private static EntityManager em;
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 

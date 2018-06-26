@@ -18,7 +18,7 @@ import com.nextramile.models.CustomerOrder;
  *
  */
 public class OrderDAO {
-	private static final String PERSISTENCE_UNIT_NAME = "hcare";
+	private static final String PERSISTENCE_UNIT_NAME = "nextramile";
     private static EntityManager em;
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 

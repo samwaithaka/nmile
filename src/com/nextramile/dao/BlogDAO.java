@@ -18,7 +18,7 @@ import com.nextramile.models.Blog;
  *
  */
 public class BlogDAO {
-	private static final String PERSISTENCE_UNIT_NAME = "hcare";
+	private static final String PERSISTENCE_UNIT_NAME = "nextramile";
     private static EntityManager em;
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
