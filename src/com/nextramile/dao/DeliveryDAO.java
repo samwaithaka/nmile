@@ -61,7 +61,7 @@ public class DeliveryDAO {
     public static List<Delivery> findByDeliveriesByCustomer(CustomerOrder order) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Delivery u WHERE u.customer = :customer");
-        q.setParameter("customer", order.getCustomer());
+        q.setParameter("customer", order.getShoppingCart().getCustomer());
     	List<Delivery> deliveryList2 = new ArrayList<Delivery>();
     	try {
     	    @SuppressWarnings("unchecked")

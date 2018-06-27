@@ -15,15 +15,15 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class CustomerOrder {
+public class ShoppingCartItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	private int quantity;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
 	private String editedBy;
-	private boolean checkout = false;
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -31,9 +31,9 @@ public class CustomerOrder {
     private ShoppingCart shoppingCart;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="deliveryaddressid")
-    private DeliveryAddress deliveryAddress;
-
+	@JoinColumn(name="productid")
+    private Product product;
+	
 	public int getId() {
 		return id;
 	}
@@ -82,14 +82,6 @@ public class CustomerOrder {
 		this.active = active;
 	}
 
-	public boolean getCheckout() {
-		return checkout;
-	}
-
-	public void setCheckout(boolean checkout) {
-		this.checkout = checkout;
-	}
-
 	public ShoppingCart getShoppingCart() {
 		return shoppingCart;
 	}
@@ -98,18 +90,26 @@ public class CustomerOrder {
 		this.shoppingCart = shoppingCart;
 	}
 
-	public DeliveryAddress getDeliveryAddress() {
-		return deliveryAddress;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	@Override
 	public String toString() {
-		return "CustomerOrder [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", checkout=" + checkout + ", active=" + active
-				+ ", shoppingCart=" + shoppingCart + ", deliveryAddress=" + deliveryAddress + "]";
+		return "ShoppingCartItem [id=" + id + ", quantity=" + quantity + ", createdOn=" + createdOn + ", createdBy="
+				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active
+				+ ", shoppingCart=" + shoppingCart + ", product=" + product + "]";
 	}
 }

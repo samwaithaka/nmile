@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class CustomerOrder {
+public class ShoppingCart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -23,16 +23,11 @@ public class CustomerOrder {
 	private String createdBy;
 	private Timestamp editedOn;
 	private String editedBy;
-	private boolean checkout = false;
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="shoppingcartid")
-    private ShoppingCart shoppingCart;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="deliveryaddressid")
-    private DeliveryAddress deliveryAddress;
+	@JoinColumn(name="customerid")
+    private Customer customer;
 
 	public int getId() {
 		return id;
@@ -82,34 +77,18 @@ public class CustomerOrder {
 		this.active = active;
 	}
 
-	public boolean getCheckout() {
-		return checkout;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setCheckout(boolean checkout) {
-		this.checkout = checkout;
-	}
-
-	public ShoppingCart getShoppingCart() {
-		return shoppingCart;
-	}
-
-	public void setShoppingCart(ShoppingCart shoppingCart) {
-		this.shoppingCart = shoppingCart;
-	}
-
-	public DeliveryAddress getDeliveryAddress() {
-		return deliveryAddress;
-	}
-
-	public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
-		this.deliveryAddress = deliveryAddress;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Override
 	public String toString() {
-		return "CustomerOrder [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", checkout=" + checkout + ", active=" + active
-				+ ", shoppingCart=" + shoppingCart + ", deliveryAddress=" + deliveryAddress + "]";
+		return "ShoppingCart [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
+				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", customer="
+				+ customer + "]";
 	}
 }

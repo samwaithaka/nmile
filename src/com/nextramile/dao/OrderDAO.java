@@ -45,11 +45,7 @@ public class OrderDAO {
         CustomerOrder order2 = em.find(CustomerOrder.class, order.getId());
         order2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         order2.setEditedBy(order.getEditedBy());
-        order2.setCustomer(order.getCustomer());
-        order2.setProduct(order.getProduct());
-        order2.setColor(order.getColor());
-        order2.setSize(order.getSize());
-        order2.setQuantity(order.getQuantity());
+        order2.setShoppingCart(order.getShoppingCart());
         order2.setCheckout(order.getCheckout());
         order2.setDeliveryAddress(order.getDeliveryAddress());
         order2.setActive(order.getActive());
@@ -103,8 +99,7 @@ public class OrderDAO {
     public static CustomerOrder findOrder(CustomerOrder customerOrder) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from CustomerOrder u WHERE u.customer = :customer and u.product = :product and u.checkout = false");
-    	q.setParameter("customer", customerOrder.getCustomer());
-    	q.setParameter("product", customerOrder.getProduct());
+    	q.setParameter("customer", customerOrder.getShoppingCart().getCustomer());
     	try {
     	    customerOrder = (CustomerOrder) q.getSingleResult();
     	} catch(NoResultException e) {
