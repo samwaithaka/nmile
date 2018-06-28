@@ -31,24 +31,19 @@
 							<h2>#{productController.product.productName}</h2>
 							<p>#{productController.product.shortDescription}</p>
 							<h:form>
-				<div class="form-group">
-					<label for="color">Color</label>
-					<p:selectOneMenu class="form-control narrow" value="#{orderController.color.id}">
-						<f:selectItems value="#{orderController.colorList}" var="color"
-							itemLabel="#{color.colorName}" itemValue="#{color.id}" />
-					</p:selectOneMenu>
-				</div></h:form>
 							<span>
 								<span>KSH.#{productController.product.price}</span> 
 								<label>Quantity:</label> 
 								<h:inputText id="quantity" name="quantity"
-						value="#{orderController.order.quantity}" />
+						            value="#{shoppingCartController.quantity}" />
 								<p:commandLink class="fa fa-shopping-cart btn btn-default" value=" Add to cart" name="add-submit" id="add-submit"
-							    rendered="#{productController.product.id > 0}"
-								action="#{orderController.makeOrder}" ajax="true">
+							        rendered="#{productController.product.id > 0}"
+								    action="#{shoppingCartController.addToShoppingCart}" ajax="true">
 								<f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
+								<f:setPropertyActionListener value="#{shoppingCartController.quantity}" target="#{customerController.quantity}" />
 							</p:commandLink>
 							</span>
+							</h:form>
 						</div>
 						<!--/product-information-->
 					</div>

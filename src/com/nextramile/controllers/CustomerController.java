@@ -16,11 +16,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import com.nextramile.dao.CartDAO;
+import com.nextramile.dao.CartItemDAO;
 import com.nextramile.dao.CustomerDAO;
-import com.nextramile.dao.OrderDAO;
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.Product;
+import com.nextramile.models.ShoppingCart;
+import com.nextramile.models.ShoppingCartItem;
 import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "customerController", eager = true)
@@ -30,6 +33,7 @@ public class CustomerController {
 	private Customer customer;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
+	private int quantity;
 	private String form = "check";
 	private int refId = 0;
 
@@ -71,7 +75,7 @@ public class CustomerController {
 			refId = Integer.parseInt(ref);
 		}
 		if(customer.getId() > 0) {
-			customerOrderList = OrderDAO.getCustomerOrderList(customer);
+			//customerOrderList = OrderDAO.getCustomerOrderList(customer);
 		}
 	}
 
@@ -83,24 +87,26 @@ public class CustomerController {
 	}
 
 	public void queryCustomerEmail() {
+		System.out.println("C - Quantity: " + quantity);
+		
 		customer = CustomerDAO.findByEmail(customer.getEmail());		
 		if(customer.getId() > 0) {	
-			//page = "login.xhtml?faces-redirect=true";
 			form = "login";
 		} else {
 			customer.setPassword("password");
 			customer = CustomerDAO.addCustomer(customer);
-			//page = "profile.xhtml?faces-redirect=true";
 			form = "signup";
 		}
 		if(product.getId() > 0) {
-			CustomerOrder order = new CustomerOrder();
-			order.setCustomer(customer);
-			order.setProduct(product);
-			OrderDAO.addOrder(order);
-			//page = "profile.xhtml?faces-redirect=true";
+			ShoppingCart shoppingCart = new ShoppingCart();
+			shoppingCart.setCustomer(customer);
+			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
+			ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+			shoppingCartItem.setShoppingCart(shoppingCart);
+			shoppingCartItem.setProduct(product);
+			shoppingCartItem.setQuantity(quantity);
+			CartItemDAO.addShoppingCartItem(shoppingCartItem);
 		}
-		//return page;
 	}
 
 	public String updateCustomer() {
@@ -118,8 +124,6 @@ public class CustomerController {
 	}
 
 	public void generatePasswordResetToken() {
-		System.out.println(customer);
-		FacesContext context = FacesContext.getCurrentInstance();
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		String url;
 		try {
@@ -137,7 +141,7 @@ public class CustomerController {
 			CustomerDAO.updateCustomer(customer);
 			customer.setPasswordResetToken(null);
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
-			context.getCurrentInstance().addMessage(null, fm);
+			FacesContext.getCurrentInstance().addMessage(null, fm);
 			Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -146,8 +150,6 @@ public class CustomerController {
 	}
 
 	public void reset() {
-		System.out.println(customer);
-		FacesContext context = FacesContext.getCurrentInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		try {
 			Date parsedDate = dateFormat.parse(customer.getPasswordResetToken());
@@ -158,15 +160,15 @@ public class CustomerController {
 			Long diffHours = diff / (60 * 60 * 1000);
 			if(diffHours > 1) {
 				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Expired","Token is expired. Request reset again");
-				context.getCurrentInstance().addMessage(null, message);
+				FacesContext.getCurrentInstance().addMessage(null, message);
 			} else {
 				customer = CustomerDAO.getCustomerByToken(customer);
 				if(customer.getId() > 0) {
 					FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Change","Go ahead and change password");
-					context.getCurrentInstance().addMessage(null, message);
+					FacesContext.getCurrentInstance().addMessage(null, message);
 				} else {
 					FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","Error Occured. Make sure you copied the right link from your email");
-					context.getCurrentInstance().addMessage(null, message);
+					FacesContext.getCurrentInstance().addMessage(null, message);
 				}
 			}
 		} catch (ParseException e) {
@@ -175,17 +177,16 @@ public class CustomerController {
 	}
 
 	public String changePassword() {
-		FacesContext context = FacesContext.getCurrentInstance();
 		String view = null;
 		System.out.println(customer);
 		if(customer.getPassword().equals(customer.getPasswordConfirm())) {
 			CustomerDAO.changePassword(customer);
 			view = "home.xhtml?faces-redirect=true";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful","Password Successully changed");
-			context.getCurrentInstance().addMessage(null, message);
+			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Mismatch","The passwords did not match, please try again");
-			context.getCurrentInstance().addMessage(null, message);
+			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 		return view;
 	}
@@ -212,6 +213,14 @@ public class CustomerController {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}	
+	
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public List<CustomerOrder> getCustomerOrderList() {

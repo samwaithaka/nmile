@@ -9,17 +9,13 @@ import javax.faces.bean.SessionScoped;
 
 import org.primefaces.PrimeFaces;
 
-import com.nextramile.dao.ColorDAO;
 import com.nextramile.dao.CustomerAddressDAO;
 import com.nextramile.dao.DeliveryAddressDAO;
 import com.nextramile.dao.OrderDAO;
-import com.nextramile.dao.SizeDAO;
-import com.nextramile.models.Color;
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerAddress;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.DeliveryAddress;
-import com.nextramile.models.Size;
 
 @ManagedBean(name = "orderController", eager = true)
 @SessionScoped
@@ -29,10 +25,6 @@ public class OrderController {
 	private DeliveryAddress deliveryAddress;
 	private CustomerAddress customerAddress;
 	private List<CustomerAddress> customerAddressList;
-	private Color color;
-	private Size size;
-	private List<Color> colorList;
-	private List<Size> sizeList;
 	private String addressText;
 	
 	@ManagedProperty(value = "#{productController}")
@@ -45,8 +37,6 @@ public class OrderController {
 	@PostConstruct
 	public void init() {
 		order = new CustomerOrder();
-		color = new Color();
-		size = new Size();
 		deliveryAddress = new DeliveryAddress();
 		customerAddress = new CustomerAddress();
 	}
@@ -61,8 +51,6 @@ public class OrderController {
 	}
 	
 	public OrderController() {
-		colorList = ColorDAO.getColorList();
-		sizeList = SizeDAO.getSizeList();
 	}
 	
 	public String makeOrder() {
@@ -72,8 +60,8 @@ public class OrderController {
 		}
 		
 		if(order.getId() == 0) {
-			order.setCustomer(customer);
-			order.setProduct(productController.getProduct());
+			//order.setCustomer(customer);
+			//order.setProduct(productController.getProduct());
 			order = OrderDAO.addOrder(order);
 		}
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
@@ -87,10 +75,6 @@ public class OrderController {
 	}
 	
 	public String updateOrder() {
-		size = SizeDAO.find(size.getId());
-		color = ColorDAO.find(color.getId());
-		order.setSize(size);
-		order.setColor(color);
 		Customer customer = customerController.getCustomer();
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
 		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
@@ -181,38 +165,6 @@ public class OrderController {
 
 	public void setAddressText(String addressText) {
 		this.addressText = addressText;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
-	}
-
-	public List<Color> getColorList() {
-		return colorList;
-	}
-
-	public void setColorList(List<Color> colorList) {
-		this.colorList = colorList;
-	}
-
-	public List<Size> getSizeList() {
-		return sizeList;
-	}
-
-	public void setSizeList(List<Size> sizeList) {
-		this.sizeList = sizeList;
 	}
 
 	public List<CustomerAddress> getCustomerAddressList() {

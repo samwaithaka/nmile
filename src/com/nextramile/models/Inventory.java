@@ -32,11 +32,7 @@ public class Inventory {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="colorid")
-    private Color color;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="sizeid")
-    private Size size;
+    private BlogCategory color;
 
 	public int getId() {
 		return id;
@@ -94,22 +90,6 @@ public class Inventory {
 		this.product = product;
 	}
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
-	public Size getSize() {
-		return size;
-	}
-
-	public void setSize(Size size) {
-		this.size = size;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
@@ -122,6 +102,6 @@ public class Inventory {
 	public String toString() {
 		return "Inventory [id=" + id + ", quantity=" + quantity + ", createdOn=" + createdOn + ", createdBy="
 				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", product="
-				+ product + ", color=" + color + ", size=" + size + "]";
+				+ product + "]";
 	}
 }

@@ -12,11 +12,11 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Size {
+public class BlogCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String sizeName;
+	private String blogCategoryName;
 	private Timestamp createdOn;
 	private String createdBy;
 	private Timestamp editedOn;
@@ -29,11 +29,11 @@ public class Size {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getSizeName() {
-		return sizeName;
+	public String getBlogCategoryName() {
+		return blogCategoryName;
 	}
-	public void setSizeName(String sizeName) {
-		this.sizeName = sizeName;
+	public void setBlogCategoryName(String blogCategoryName) {
+		this.blogCategoryName = blogCategoryName;
 	}
 	public Timestamp getCreatedOn() {
 		return createdOn;
@@ -67,7 +67,7 @@ public class Size {
 	}
 	@Override
 	public String toString() {
-		return "Size [id=" + id + ", sizeName=" + sizeName + ", createdOn=" + createdOn + ", createdBy=" + createdBy
+		return "BlogCategory [id=" + id + ", blogCategoryName=" + blogCategoryName + ", createdOn=" + createdOn + ", createdBy=" + createdBy
 				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + "]";
 	}
 }

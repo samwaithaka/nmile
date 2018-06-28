@@ -40,8 +40,6 @@ public class InventoryDAO {
         inventory2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         inventory2.setEditedBy(inventory.getEditedBy());
         inventory2.setProduct(inventory.getProduct());
-        inventory2.setSize(inventory.getSize());
-        inventory2.setColor(inventory.getColor());
         inventory2.setQuantity(inventory.getQuantity());
         inventory2.setActive(inventory.getActive());
         em.persist(inventory2);

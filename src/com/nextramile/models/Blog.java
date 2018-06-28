@@ -3,9 +3,12 @@ package com.nextramile.models;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * @author Samuel
@@ -28,11 +31,27 @@ public class Blog {
 	private Timestamp editedOn;
 	private String editedBy;
 	private boolean active = true;
-	
+
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="blogcategoryid")
+    private BlogCategory blogCategory;
+
 	public int getId() {
 		return id;
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
+	public BlogCategory getBlogCategory() {
+		return blogCategory;
+	}
+
+	public void setBlogCategory(BlogCategory blogCategory) {
+		this.blogCategory = blogCategory;
+	}
+
 	public String getSlug() {
 		return slug;
 	}
@@ -41,10 +60,6 @@ public class Blog {
 		this.slug = slug;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public String getTitle() {
 		return title;
 	}
@@ -137,7 +152,8 @@ public class Blog {
 	public String toString() {
 		return "Blog [id=" + id + ", title=" + title + ", slug=" + slug + ", descriptionMeta=" + descriptionMeta
 				+ ", keywordsMeta=" + keywordsMeta + ", shortText=" + shortText + ", longText=" + longText
-				+ ", imageFileName=" + imageFileName + ", createdBy=" + createdBy + ", editedOn=" + editedOn
-				+ ", editedBy=" + editedBy + ", active=" + active + "]";
+				+ ", imageFileName=" + imageFileName + ", createdOn=" + createdOn + ", createdBy=" + createdBy
+				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", blogCategory="
+				+ blogCategory + "]";
 	}
 }

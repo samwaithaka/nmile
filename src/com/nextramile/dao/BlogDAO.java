@@ -42,6 +42,7 @@ public class BlogDAO {
         blog2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         blog2.setEditedBy(blog.getEditedBy());
         blog2.setTitle(blog.getTitle());
+        blog2.setBlogCategory(blog.getBlogCategory());
         blog2.setDescriptionMeta(blog.getDescriptionMeta());
         blog2.setKeywordsMeta(blog.getKeywordsMeta());
         blog2.setSlug(blog.getSlug());
