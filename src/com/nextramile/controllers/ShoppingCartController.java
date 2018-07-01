@@ -27,14 +27,16 @@ public class ShoppingCartController {
 	
 	@PostConstruct
 	public void init() {
-		shoppingCart = new ShoppingCart();
 	}
 	
 	public ShoppingCartController() {
 	}
 	
+	public void refresh() {
+		shoppingCart = CartDAO.findPendingShoppingCart(customerController.getCustomer());
+		//System.out.println(shoppingCart);
+	}
 	public String addToShoppingCart() {
-		System.out.println("S.C. Quantity: " + quantity);
 		Customer customer = customerController.getCustomer();
 		if(customer.getId() == 0) {
 			return "user.xhtml?faces-redirect=true";
@@ -43,8 +45,8 @@ public class ShoppingCartController {
 		if(shoppingCart.getId() == 0) {
 			shoppingCart.setCustomer(customer);
 			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
+			shoppingCart.getShoppingCartItems();
 		}
-		System.out.println(shoppingCart);
 		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
 		shoppingCartItem.setShoppingCart(shoppingCart);
 		shoppingCartItem.setProduct(productController.getProduct());

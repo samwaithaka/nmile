@@ -1,6 +1,7 @@
 package com.nextramile.models;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * @author Samuel
@@ -23,11 +26,16 @@ public class ShoppingCart {
 	private String createdBy;
 	private Timestamp editedOn;
 	private String editedBy;
+	@Transient
+	private int total;
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="customerid")
     private Customer customer;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="shoppingCart")
+    private List<ShoppingCartItem> shoppingCartItems;
 
 	public int getId() {
 		return id;
@@ -77,6 +85,14 @@ public class ShoppingCart {
 		this.active = active;
 	}
 
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -85,10 +101,18 @@ public class ShoppingCart {
 		this.customer = customer;
 	}
 
+	public List<ShoppingCartItem> getShoppingCartItems() {
+		return shoppingCartItems;
+	}
+
+	public void setShoppingCartItems(List<ShoppingCartItem> shoppingCartItems) {
+		this.shoppingCartItems = shoppingCartItems;
+	}
+
 	@Override
 	public String toString() {
 		return "ShoppingCart [id=" + id + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", customer="
-				+ customer + "]";
+				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", customer=" + customer
+				+ ", shoppingCartItems=" + shoppingCartItems + "]";
 	}
 }

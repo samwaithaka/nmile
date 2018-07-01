@@ -353,6 +353,7 @@ ul.sub-menu{
 	background: rgba(0, 0, 0, 0.5);
     padding-top: 15px;
 	padding-bottom: 0;
+	margin-left:-15px;
 }
 
 .mainmenu ul li:last-child{

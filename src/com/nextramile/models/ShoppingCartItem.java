@@ -110,6 +110,6 @@ public class ShoppingCartItem {
 	public String toString() {
 		return "ShoppingCartItem [id=" + id + ", quantity=" + quantity + ", createdOn=" + createdOn + ", createdBy="
 				+ createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active
-				+ ", shoppingCart=" + shoppingCart + ", product=" + product + "]";
+				+ ", shoppingCart=" + ", product=" + product + "]";
 	}
 }

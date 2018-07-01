@@ -221,8 +221,8 @@ a#scrollUp i{
 
 
 .header-bottom {
-  padding-bottom: 30px;
-  padding-top: 30px;
+  padding-bottom: 15px;
+  padding-top: 15px;
 }
 
 .navbar-collapse.collapse{
@@ -235,7 +235,7 @@ a#scrollUp i{
 }
 
 .mainmenu ul li:first-child{
-  padding-left: 0px;
+  /*padding-left: 0px;*/
 }
 
 .mainmenu ul li a {
@@ -1219,7 +1219,7 @@ h2.title {
   border: 1px solid #F7F7F0;
   overflow: hidden;
   padding-bottom: 60px;
-  padding-left: 60px;
+  padding-left: 20px;
   padding-top: 20px;
   position: relative;
 }
@@ -1253,7 +1253,7 @@ h2.title {
   color: #FE980F;
   float: left;
   font-family: 'Roboto', sans-serif;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 700;
   margin-right: 20px;
   margin-top: 0px;
@@ -1262,12 +1262,12 @@ h2.title {
   border: 1px solid #DEDEDC;
   color: #696763;
   font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  height: 33px;
+  height: 32px;
   outline: medium none;
   text-align: center;
-  width: 50px;
+  width: 45px;
 }
 
 .product-information span label {
@@ -1289,9 +1289,11 @@ h2.title {
   color: #FFFFFF;
   font-size: 15px;
   margin-bottom: 10px;
-  margin-left: 20px;
 }
 
+.product-information .btn-default {
+    margin-left: 10px;
+}
 
 .shop-details-tab {
   border: 1px solid #F7F7F0;
@@ -2520,4 +2522,36 @@ h2.title {
   color: #FE980F;
 }
 
+/* Custom */
+.logo img {
+	width:180px;
+}
 
+.caption {
+	margin:5px auto;
+	border:solid 1px #eee;
+	border-radius:0px;
+	background: linear-gradient(#fff,#eee);
+	color:#58ad07;
+	color:#f7a723;
+	color:#777;
+	font-family: 'Galada', cursive;
+}
+
+.border {
+	border:solid 1px #ccc;
+	padding:5px;
+}
+
+.amount {
+	text-align:right;
+	color:#f7a723;
+}
+
+.bold {
+	font-weight:bold;
+}
+
+.left-sidebar {
+	margin:10px 0 0 0;
+}

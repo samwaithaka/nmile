@@ -16,7 +16,7 @@
 						listener="#{productController.refresh}" />
 				</f:metadata>
 			</h:form>
-			<div class="col-sm-9 padding-right">
+			<div class="col-lg-9 mb-4 padding-right">
 				<div class="product-details">
 					<!--product-details-->
 					<div class="col-sm-5">
@@ -32,7 +32,7 @@
 							<p>#{productController.product.shortDescription}</p>
 							<h:form>
 							<span>
-								<span>KSH.#{productController.product.price}</span> 
+								<span>KES.#{productController.product.price}</span> 
 								<label>Quantity:</label> 
 								<h:inputText id="quantity" name="quantity"
 						            value="#{shoppingCartController.quantity}" />
@@ -52,11 +52,11 @@
 			</div>
 			<!-- Category -->
 			<!-- Category -->
-			<div class="col-sm-3">
+			<div class="col-lg-3 mb-4 col-sm-3">
 				<div class="left-sidebar">
-					<h2>Category</h2>
-					<div class="panel-group category-products" id="accordian">
-						<!--category-productsr-->
+				     <ui:include src="cart.xhtml" />
+					<!--h2>Category</h2-->
+					<!--div class="panel-group category-products" id="accordian">
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h4 class="panel-title">
@@ -85,7 +85,7 @@
 								</h4>
 							</div>
 						</div>
-					</div>
+					</div-->
 					<!--/category-products-->
 				</div>
 			</div>

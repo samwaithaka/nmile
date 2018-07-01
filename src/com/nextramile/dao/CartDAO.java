@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.nextramile.models.Customer;
 import com.nextramile.models.ShoppingCart;
+import com.nextramile.models.ShoppingCartItem;
 
 /**
  * @author Samuel
@@ -67,6 +68,11 @@ public class CartDAO {
     	ShoppingCart shoppingCart = new ShoppingCart();
     	try {
     	    shoppingCart = (ShoppingCart) q.getSingleResult();
+    	    int total = 0;
+    	    for(ShoppingCartItem cartItem : shoppingCart.getShoppingCartItems()) {
+    	    	total += cartItem.getQuantity() * cartItem.getProduct().getPrice();
+    	    }
+    	    shoppingCart.setTotal(total);
     	} catch(NoResultException e) {
     		//
     	}
