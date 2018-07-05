@@ -26,11 +26,13 @@ public class DeliveryAddressController {
 	
 	public String createDeliveryAddress() {
 	    DeliveryAddressDAO.addDeliveryAddress(deliveryAddress);
+	    deliveryAddress = new DeliveryAddress();
 		return "delivery-address-list.xhtml";
 	}
 	
 	public String updateDeliveryAddress() {
 		DeliveryAddressDAO.updateDeliveryAddress(deliveryAddress);
+		deliveryAddress = new DeliveryAddress();
 		return "delivery-address-list.xhtml";
 	}
 	

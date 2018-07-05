@@ -16,6 +16,7 @@ import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerAddress;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.DeliveryAddress;
+import com.nextramile.models.ShoppingCart;
 
 @ManagedBean(name = "orderController", eager = true)
 @SessionScoped
@@ -26,6 +27,7 @@ public class OrderController {
 	private CustomerAddress customerAddress;
 	private List<CustomerAddress> customerAddressList;
 	private String addressText;
+	private ShoppingCart shoppingCart;
 	private boolean showAddressForm;
 	
 	@ManagedProperty(value = "#{productController}")
@@ -54,7 +56,7 @@ public class OrderController {
 	}
 
 	public void initializeAddress() {
-		deliveryAddress = new DeliveryAddress();
+		//deliveryAddress = new DeliveryAddress();
 		showAddressForm = true;
 		Customer customer = customerController.getCustomer();
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
@@ -75,6 +77,15 @@ public class OrderController {
 	}
 	
 	public OrderController() {
+	}
+	
+	public String completePurchase() {
+		System.out.println(shoppingCart);
+		CustomerOrder order = new CustomerOrder();
+		order.setShoppingCart(shoppingCart);
+		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
+		OrderDAO.addOrder(order);
+		return "successful.xhtml?faces-redirect=true";
 	}
 	
 	public String makeOrder() {
@@ -202,11 +213,21 @@ public class OrderController {
 		this.customerAddressList = customerAddressList;
 	}
 
-	public boolean isShowAddressForm() {
+	public boolean getShowAddressForm() {
 		return showAddressForm;
 	}
 
 	public void setShowAddressForm(boolean showAddressForm) {
 		this.showAddressForm = showAddressForm;
 	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+	
+	
 }

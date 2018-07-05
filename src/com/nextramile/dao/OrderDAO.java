@@ -12,6 +12,7 @@ import javax.persistence.Query;
 
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerOrder;
+import com.nextramile.models.ShoppingCart;
 
 /**
  * @author Samuel
@@ -36,6 +37,9 @@ public class OrderDAO {
     	} else {
     		order = order2;
     	}
+    	ShoppingCart shoppingCart = order.getShoppingCart();
+    	shoppingCart.setActive(false);
+    	CartDAO.updateShoppingCart(shoppingCart);
         return order;
     }
     

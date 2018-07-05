@@ -80,15 +80,16 @@
 				<!-- End form here -->
 				<h:panelGroup
 					rendered="#{not empty orderController.customerAddressList}">
+					
 					<ui:repeat var="address" value="#{orderController.customerAddressList}">
-	                <div class="col-xs-4">
+	                <div class="col-xs-6 border">
 	                <h:outputText
 								value="#{address.deliveryAddress.physicalAddress}" />
 	                </div>
-	                <div class="col-xs-3">
-	                    <p:commandLink class="btn btn-default" value="Use&nbsp;this"
+	                <div class="col-xs-3 border">
+	                <p:commandLink class="btn btn-default" value="Use&nbsp;this"
 								action="#{orderController.makeAddressCurrent}" update="@all"
-								rendered="#{address.current eq false}">
+								rendered="#{customerAddress.current eq false}">
 								<f:setPropertyActionListener
 									value="#{address.deliveryAddress}"
 									target="#{orderController.deliveryAddress}" />
@@ -96,7 +97,7 @@
 							<h:outputText class="green" id="current" value="Current"
 								rendered="#{address.current eq true}" />
 	                </div>
-                    <div class="col-xs-5">
+                    <div class="col-xs-3 amount border">
 						<p:commandButton value="Edit"
 							action="#{orderController.initializeAddress}"
 							name="initializeAddress" update="@all">
@@ -105,10 +106,37 @@
 								target="#{orderController.deliveryAddress}" />
 						</p:commandButton>
 					</div>
-					<div class="cols-sm-12">&nbsp;</div>
 	                </ui:repeat>
+					
+					<p:dataTable class="customerAddress" tableStyle="width:auto"
+						var="customerAddress"
+						value="#{orderController.customerAddressList}">
+						<p:column headerText="Your Address List">
+							<h:outputText
+								value="#{customerAddress.deliveryAddress.physicalAddress}" />
+						</p:column>
+						<p:column headerText="">
+							<p:commandLink class="btn btn-default" value="Use&nbsp;this"
+								action="#{orderController.makeAddressCurrent}" update="@all"
+								rendered="#{customerAddress.current eq false}">
+								<f:setPropertyActionListener
+									value="#{customerAddress.deliveryAddress}"
+									target="#{orderController.deliveryAddress}" />
+							</p:commandLink>
+							<h:outputText class="green" id="current" value="Current"
+								rendered="#{customerAddress.current eq true}" />
+						</p:column>#{customerAddress.deliveryAddress}
+						<p:column headerText="">
+							<p:commandButton value="Edit"
+								action="#{orderController.initializeAddress}"
+								name="initializeAddress" update="@all">
+								<f:setPropertyActionListener
+									value="#{customerAddress.deliveryAddress}"
+									target="#{orderController.deliveryAddress}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
 				</h:panelGroup>
-				<div class="cols-sm-12">&nbsp;</div>
                 <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}">
                     <div class="payment-details">
                       <h4>Payment Details</h4>
@@ -120,10 +148,7 @@
 						action="#{orderController.updateOrder}" ajax="false" />
 					<div class="col-sm-12 border">
 						<p:commandLink class="btn btn-default" value="Complete Checkout"
-							name="checkout" id="checkout">
-							<f:setPropertyActionListener value="#{shoppingCartController.shoppingCart}" 
-							    target="#{orderController.shoppingCart}" />
-					</p:commandLink>
+							name="checkout" id="checkout" />
 					</div>
 				</h:panelGroup>
 			</div>

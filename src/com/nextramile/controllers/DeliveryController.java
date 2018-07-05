@@ -23,11 +23,13 @@ public class DeliveryController {
 	
 	public String createDelivery() {
 	    DeliveryDAO.addDelivery(delivery);
+	    delivery = new Delivery();
 		return "delivery.xhtml";
 	}
 	
 	public String updateDelivery() {
 		DeliveryDAO.updateDelivery(delivery);
+		delivery = new Delivery();
 		return "delivery.xhtml";
 	}
 
