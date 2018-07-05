@@ -2555,3 +2555,25 @@ h2.title {
 .left-sidebar {
 	margin:10px 0 0 0;
 }
+
+.fa {
+	color:#58ad07;
+}
+
+.fa-shopping-cart {
+	color:#555;
+}
+
+h3,h4,h5 {
+	color:#777;
+	border-bottom:solid 1px #58ad07;
+}
+
+.background-grey {
+	background:#eee;
+}
+
+.payment-details {
+	margin: 20px 0 20px 0;
+	background:efefef;
+}

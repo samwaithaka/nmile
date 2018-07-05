@@ -26,6 +26,7 @@ public class OrderController {
 	private CustomerAddress customerAddress;
 	private List<CustomerAddress> customerAddressList;
 	private String addressText;
+	private boolean showAddressForm;
 	
 	@ManagedProperty(value = "#{productController}")
 	private ProductController productController;
@@ -33,17 +34,40 @@ public class OrderController {
 	@ManagedProperty(value = "#{customerController}")
 	private CustomerController customerController;
 
+	public void refresh() {
+		Customer customer = customerController.getCustomer();
+		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
+		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
+		if(customerAddress.getId() > 0) {
+			addressText = "New delivery address?";
+			showAddressForm = showAddressForm == true ? showAddressForm : false;
+		} else {
+			addressText = "Tell us where you are:";
+		}
+	}
 	
 	@PostConstruct
 	public void init() {
-		order = new CustomerOrder();
+		//order = new CustomerOrder();
 		deliveryAddress = new DeliveryAddress();
-		customerAddress = new CustomerAddress();
+		//customerAddress = new CustomerAddress();
 	}
 
 	public void initializeAddress() {
 		deliveryAddress = new DeliveryAddress();
-		PrimeFaces.current().ajax().update("addressform");
+		showAddressForm = true;
+		Customer customer = customerController.getCustomer();
+		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
+		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
+		if(customerAddressList.size() > 0) {
+			addressText = "New delivery Address?";
+		} else {
+			addressText = "Tell us where you are:";
+		}
+  	}
+	
+	public void revertAddress() { 
+		showAddressForm = false;
 	}
 	
 	public void edit() {
@@ -113,10 +137,13 @@ public class OrderController {
 		customerAddress.setCustomer(customerController.getCustomer());
 		CustomerAddressDAO.addCustomerAddress(customerAddress);
 		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customerAddress.getCustomer());
+		addressText = "Different Address?";
+		showAddressForm = false;
 	}
     
 	public void updateAddress() {
 		DeliveryAddressDAO.updateDeliveryAddress(deliveryAddress);
+		showAddressForm = false;
 	}
 
 	public CustomerOrder getOrder() {
@@ -173,5 +200,13 @@ public class OrderController {
 
 	public void setCustomerAddressList(List<CustomerAddress> customerAddressList) {
 		this.customerAddressList = customerAddressList;
+	}
+
+	public boolean isShowAddressForm() {
+		return showAddressForm;
+	}
+
+	public void setShowAddressForm(boolean showAddressForm) {
+		this.showAddressForm = showAddressForm;
 	}
 }

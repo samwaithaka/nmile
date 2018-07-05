@@ -23,7 +23,7 @@ public class CartItemDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static ShoppingCartItem addShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-    	ShoppingCartItem shoppingCartItem2 = findPendingShoppingCartItem(shoppingCartItem.getProduct());
+    	ShoppingCartItem shoppingCartItem2 = findPendingShoppingCartItem(shoppingCartItem);
     	if(shoppingCartItem2.getId() == 0) {
 	    	shoppingCartItem.setCreatedOn(new Timestamp(System.currentTimeMillis()));
 	    	shoppingCartItem.setEditedOn(new Timestamp(System.currentTimeMillis()));
@@ -62,11 +62,12 @@ public class CartItemDAO {
      	return shoppingCartItem;
     }
     
-    public static ShoppingCartItem findPendingShoppingCartItem(Product product) {
+    public static ShoppingCartItem findPendingShoppingCartItem(ShoppingCartItem shoppingCartItem) {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from ShoppingCartItem u WHERE u.product = :product and u.active = true");
-    	q.setParameter("product", product);
-    	ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+    	Query q = em.createQuery("select u from ShoppingCartItem u WHERE u.shoppingCart = :shoppingCart and u.product = :product and u.active = true");
+    	q.setParameter("shoppingCart", shoppingCartItem.getShoppingCart());
+    	q.setParameter("product", shoppingCartItem.getProduct());
+    	shoppingCartItem = new ShoppingCartItem();
     	try {
     	    shoppingCartItem = (ShoppingCartItem) q.getSingleResult();
     	} catch(NoResultException e) {

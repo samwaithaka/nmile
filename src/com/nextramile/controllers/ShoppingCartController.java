@@ -34,7 +34,7 @@ public class ShoppingCartController {
 	
 	public void refresh() {
 		shoppingCart = CartDAO.findPendingShoppingCart(customerController.getCustomer());
-		//System.out.println(shoppingCart);
+		shoppingCart.getShoppingCartItems();
 	}
 	public String addToShoppingCart() {
 		Customer customer = customerController.getCustomer();

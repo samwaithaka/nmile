@@ -86,9 +86,7 @@ public class CustomerController {
 		return "home.xhtml?faces-redirect=true";
 	}
 
-	public void queryCustomerEmail() {
-		System.out.println("C - Quantity: " + quantity);
-		
+	public void queryCustomerEmail() {		
 		customer = CustomerDAO.findByEmail(customer.getEmail());		
 		if(customer.getId() > 0) {	
 			form = "login";
@@ -105,6 +103,7 @@ public class CustomerController {
 			shoppingCartItem.setShoppingCart(shoppingCart);
 			shoppingCartItem.setProduct(product);
 			shoppingCartItem.setQuantity(quantity);
+			System.out.println("shoppingCartItem: " + shoppingCartItem);
 			CartItemDAO.addShoppingCartItem(shoppingCartItem);
 		}
 	}
