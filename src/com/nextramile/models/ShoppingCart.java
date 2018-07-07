@@ -3,6 +3,7 @@ package com.nextramile.models;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -18,20 +20,26 @@ import javax.persistence.Transient;
  *
  */
 @Entity
+@Table(name = "shopping_cart")
 public class ShoppingCart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")
 	private String editedBy;
+	@Column(name = "active")
+	private boolean active = true;
 	@Transient
 	private int total;
-	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="customerid")
+	@JoinColumn(name="customer_id")
     private Customer customer;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="shoppingCart")

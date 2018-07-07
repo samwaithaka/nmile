@@ -2577,3 +2577,23 @@ h3,h4,h5 {
 	margin: 20px 0 20px 0;
 	background:efefef;
 }
+
+.bottom-border {
+	bottom-border: solid 1px #777;
+}
+
+.custom-btn1 {
+	border:solid 1px #f7a723;
+	border-radius:2px;
+	margin:3px 0 0 0;
+	padding:4px;
+	color:#555;
+	background:#eee;
+	width:130px;
+}
+
+.custom-btn1:hover {
+	border:solid 1px #999;
+    background:#fff;
+    color:#f7a723;
+}

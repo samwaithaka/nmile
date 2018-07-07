@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +26,7 @@ import com.nextramile.models.Product;
 public class ProductController {
     
 	private Product product;
+	private List<Product> productList;
 	private UploadedFile file;
 	private String resourcePath;
 	private String webResourcePath;
@@ -33,6 +35,7 @@ public class ProductController {
 	@PostConstruct
 	public void init() {
 		product = new Product();
+		productList = ProductDAO.getProductList();
 	}
 
 	public ProductController() {
@@ -64,13 +67,15 @@ public class ProductController {
 	public String createProduct() {
 	    product = ProductDAO.addProduct(product);
 	    upload();
-		return "admin-product.xhtml";
+	    productList = ProductDAO.getProductList();
+		return "admin-product-list.xhtml";
 	}
 	
 	public String updateProduct() {
 		upload();
 		ProductDAO.updateProduct(product);
-		return "admin-product.xhtml";
+		productList = ProductDAO.getProductList();
+		return "admin-product-list.xhtml";
 	}
 	
 	public void upload() {
@@ -125,6 +130,14 @@ public class ProductController {
 
 	public void setProduct(Product product) {
 		this.product = product;
+	}
+
+	public List<Product> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<Product> productList) {
+		this.productList = productList;
 	}
 
 	public UploadedFile getFile() {

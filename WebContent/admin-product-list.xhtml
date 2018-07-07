@@ -10,8 +10,34 @@
 <ui:composition template="template.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
+	<div class="col-lg-8 mb-4">
+	  <h:form>
+	    <p:commandLink value="Add Product" 
+	        action="admin-product.xhtml?faces-redirect=true"
+	        ajax="false" />
+	  </h:form>
+	  </div>
 	  <div class="col-lg-8 mb-4">
-	  <p:dataTable>
+	  <p:dataTable value="#{productController.productList}" var="product"
+	      tableStyle="width:auto">
+	    <p:column>
+	      <f:facet name="header">Product Name</f:facet>
+	      #{product.productName}
+	    </p:column>
+	    <p:column>
+	      <f:facet name="header">Price</f:facet>
+	      #{product.price}
+	    </p:column>
+	    <p:column>
+	      <f:facet name="header" />
+	      <h:form>
+	      <p:commandLink value="Edit" 
+	        action="admin-product.xhtml?faces-redirect=true"
+	        ajax="false">
+	        <f:setPropertyActionListener value="#{product}" target="#{productController.product}" />
+	      </p:commandLink>
+	      </h:form>
+	    </p:column>
 	  </p:dataTable>
    	  </div>
 	</ui:define>

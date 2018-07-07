@@ -2,6 +2,7 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,29 +10,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "customer_order")
 public class CustomerOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "checkout")
 	private boolean checkout = false;
+	@Column(name = "active")
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="shoppingcartid")
+	@JoinColumn(name="shopping_cart_id")
     private ShoppingCart shoppingCart;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="deliveryaddressid")
+	@JoinColumn(name="delivery_address_id")
     private DeliveryAddress deliveryAddress;
 
 	public int getId() {

@@ -19,13 +19,17 @@
 			     class="col-sm-12">
 			    <div class="col-xs-12" style="color:#58ad07;"><i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b></div>
 				<ui:repeat var="cartItem" value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
-	               <div class="col-xs-7 border">#{cartItem.product.productName}</div>
-	               <div class="col-xs-2 border">#{cartItem.quantity}</div>
-	               <div class="col-xs-3 amount border">#{cartItem.product.price}</div>
+	               <div class="col-xs-12">
+	               <div class="col-xs-7 bottom-border">#{cartItem.product.productName}</div>
+	               <div class="col-xs-2">#{cartItem.quantity}</div>
+	               <div class="col-xs-3 amount">#{cartItem.product.price}</div>
+	               </div>
 	            </ui:repeat>
-	            <div class="col-xs-9 border bold">Total</div>
+	            <div class="col-xs-12">
+	            <div class="col-xs-9 bold">Total</div>
 	            <div class="col-xs-3 border amount bold">#{shoppingCartController.shoppingCart.total}</div>
-	            <div class="col-sm-12 border">
+	            </div>
+	            <div class="col-sm-12">
 	                <p:commandLink class="btn btn-default" value="Checkout" name="checkout" id="checkout" />
 			    </div>
 	            </h:panelGroup>

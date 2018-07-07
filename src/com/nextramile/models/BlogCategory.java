@@ -2,25 +2,34 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "blog_category")
 public class BlogCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "blog_category_name")
 	private String blogCategoryName;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "active")
 	private boolean active = true;
 	
 	public int getId() {

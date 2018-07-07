@@ -16,7 +16,7 @@ import com.nextramile.models.ShoppingCartItem;
 public class ShoppingCartController {
     
 	private ShoppingCart shoppingCart;
-	private int quantity;
+	private int quantity = 1;
 	
 	@ManagedProperty(value = "#{productController}")
 	private ProductController productController;

@@ -10,7 +10,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import com.nextramile.models.Product;
 import com.nextramile.models.ShoppingCartItem;
 
 /**
@@ -34,7 +33,8 @@ public class CartItemDAO {
 	        em.getTransaction().commit();
 	        em.close();
     	} else {
-    		shoppingCartItem = shoppingCartItem2;
+    		shoppingCartItem.setId(shoppingCartItem2.getId());
+    		shoppingCartItem = updateShoppingCartItem(shoppingCartItem);
     	}
         return shoppingCartItem;
     }

@@ -2,6 +2,7 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -16,27 +18,40 @@ import javax.persistence.Transient;
  *
  */
 @Entity
+@Table(name = "customer")
 public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "customer_name")
 	private String customerName;
+	@Column(name = "phone")
 	private String phone;
+	@Column(name = "email")
 	private String email;
+	@Column(name = "password")
 	private String password;
 	@Transient
 	private String passwordConfirm;
+	@Column(name = "password_reset_token")
 	private String passwordResetToken;
+	@Column(name = "depth")
 	private int depth;
+	@Column(name = "path")
 	private String path;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "active")
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="refererid")
+	@JoinColumn(name="referer_id")
     private Customer referer;
 
 	public int getId() {

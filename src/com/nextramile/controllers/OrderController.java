@@ -55,17 +55,21 @@ public class OrderController {
 		//customerAddress = new CustomerAddress();
 	}
 
-	public void initializeAddress() {
-		//deliveryAddress = new DeliveryAddress();
+	public void clearForm() {
 		showAddressForm = true;
-		Customer customer = customerController.getCustomer();
-		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
-		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
-		if(customerAddressList.size() > 0) {
-			addressText = "New delivery Address?";
-		} else {
-			addressText = "Tell us where you are:";
-		}
+		deliveryAddress = new DeliveryAddress();
+	}
+	
+	public void initializeAddress() {
+		showAddressForm = true;
+		//Customer customer = customerController.getCustomer();
+		//customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
+		//customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
+		//if(customerAddressList.size() > 0) {
+		//	addressText = "New delivery Address?";
+		//} else {
+		//	addressText = "Tell us where you are:";
+		//}
   	}
 	
 	public void revertAddress() { 

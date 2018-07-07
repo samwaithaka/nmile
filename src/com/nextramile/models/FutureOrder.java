@@ -3,6 +3,7 @@ package com.nextramile.models;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,31 +11,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "future_order")
 public class FutureOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "order_date")
 	private Date orderDate;
+	@Column(name = "remark")
 	private String remark;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "taken")
 	private boolean taken = false;
+	@Column(name = "active")
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="customerid")
+	@JoinColumn(name="customer_id")
     private Customer customer;
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="productid")
+	@JoinColumn(name="product_id")
     private Product product;
 
 	public int getId() {

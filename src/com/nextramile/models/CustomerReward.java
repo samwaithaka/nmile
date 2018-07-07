@@ -2,6 +2,7 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,28 +10,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "customer_reward")
 public class CustomerReward {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "active")
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="rewardid")
+	@JoinColumn(name="reward_id")
     private Reward reward;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="customerid")
+	@JoinColumn(name="customer_id")
     private Customer customer;
 
 	public int getId() {

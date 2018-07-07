@@ -2,6 +2,7 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,31 +10,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "inventory")
 public class Inventory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "quantity")
 	private int quantity;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "active")
 	private boolean active = true;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="productid")
-    private Product product;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Product product;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="colorid")
-    private BlogCategory color;
-
 	public int getId() {
 		return id;
 	}
@@ -74,14 +79,6 @@ public class Inventory {
 		this.editedBy = editedBy;
 	}
 
-	public boolean getActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public Product getProduct() {
 		return product;
 	}
@@ -96,6 +93,14 @@ public class Inventory {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	@Override

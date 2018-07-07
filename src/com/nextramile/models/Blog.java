@@ -2,6 +2,7 @@ package com.nextramile.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,31 +10,45 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author Samuel
  *
  */
 @Entity
+@Table(name = "blog")
 public class Blog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "title")
 	private String title;
+	@Column(name = "slug")
 	private String slug;
+	@Column(name = "description_meta")
 	private String descriptionMeta;
+	@Column(name = "keywords_meta")
 	private String keywordsMeta;
+	@Column(name = "short_text")
 	private String shortText;
+	@Column(name = "long_text")
 	private String longText;
+	@Column(name = "imageFile_name")
 	private String imageFileName;
+	@Column(name = "created_on")
 	private Timestamp createdOn;
+	@Column(name = "created_by")
 	private String createdBy;
+	@Column(name = "edited_on")
 	private Timestamp editedOn;
+	@Column(name = "edited_by")	
 	private String editedBy;
+	@Column(name = "active")
 	private boolean active = true;
 
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="blogcategoryid")
+	@JoinColumn(name="blog_category_id")
     private BlogCategory blogCategory;
 
 	public int getId() {

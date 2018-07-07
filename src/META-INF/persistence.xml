@@ -21,8 +21,8 @@
 		<class>com.nextramile.models.ShoppingCartItem</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/hcare_db" />
-			<property name="javax.persistence.jdbc.user" value="hcare_user" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nextramile_db" />
+			<property name="javax.persistence.jdbc.user" value="nextramile_user" />
 			<property name="javax.persistence.jdbc.password" value="@uToma7ically" />
 			<!-- EclipseLink should create the database schema automatically -->
 			<property name="eclipselink.ddl-generation" value="create-tables" />
