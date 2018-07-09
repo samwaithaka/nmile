@@ -3,9 +3,11 @@ package com.nextramile.controllers;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
@@ -50,7 +52,7 @@ public class OrderController {
 	
 	@PostConstruct
 	public void init() {
-		//order = new CustomerOrder();
+		order = new CustomerOrder();
 		deliveryAddress = new DeliveryAddress();
 		//customerAddress = new CustomerAddress();
 	}
@@ -76,6 +78,19 @@ public class OrderController {
 		showAddressForm = false;
 	}
 	
+	public void deleteAddress() { 
+		customerAddress = CustomerAddressDAO.findCustomerAddressByDeliveryAddress(deliveryAddress);
+		if(customerAddress.getCurrent() == false) {
+			customerAddress.setActive(false);
+			deliveryAddress.setActive(false);
+			CustomerAddressDAO.updateCustomerAddress(customerAddress);
+			DeliveryAddressDAO.updateDeliveryAddress(deliveryAddress);
+		} else {
+			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Address in Use","You can't delete current address");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+		}
+	}
+	
 	public void edit() {
 		PrimeFaces.current().ajax().update("addressform");
 	}
@@ -84,10 +99,9 @@ public class OrderController {
 	}
 	
 	public String completePurchase() {
-		System.out.println(shoppingCart);
-		CustomerOrder order = new CustomerOrder();
 		order.setShoppingCart(shoppingCart);
 		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
+		order.setCheckout(true);
 		OrderDAO.addOrder(order);
 		return "successful.xhtml?faces-redirect=true";
 	}

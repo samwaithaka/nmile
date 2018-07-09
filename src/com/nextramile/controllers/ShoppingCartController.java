@@ -8,6 +8,7 @@ import javax.faces.bean.SessionScoped;
 import com.nextramile.dao.CartDAO;
 import com.nextramile.dao.CartItemDAO;
 import com.nextramile.models.Customer;
+import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
 
@@ -16,7 +17,8 @@ import com.nextramile.models.ShoppingCartItem;
 public class ShoppingCartController {
     
 	private ShoppingCart shoppingCart;
-	private int quantity = 1;
+	private ShoppingCartItem shoppingCartItem;
+	private boolean itemAdded = false;
 	
 	@ManagedProperty(value = "#{productController}")
 	private ProductController productController;
@@ -30,11 +32,12 @@ public class ShoppingCartController {
 	}
 	
 	public ShoppingCartController() {
+		shoppingCartItem = new ShoppingCartItem();
 	}
 	
 	public void refresh() {
 		shoppingCart = CartDAO.findPendingShoppingCart(customerController.getCustomer());
-		shoppingCart.getShoppingCartItems();
+		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
 	}
 	public String addToShoppingCart() {
 		Customer customer = customerController.getCustomer();
@@ -47,12 +50,23 @@ public class ShoppingCartController {
 			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
 			shoppingCart.getShoppingCartItems();
 		}
-		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+		//shoppingCartItem = new ShoppingCartItem();
 		shoppingCartItem.setShoppingCart(shoppingCart);
 		shoppingCartItem.setProduct(productController.getProduct());
-		shoppingCartItem.setQuantity(quantity);
+		//shoppingCartItem.setQuantity(quantity);
 		CartItemDAO.addShoppingCartItem(shoppingCartItem);
+		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+		itemAdded = true;
 		return null;
+	}
+	
+	public String removeItem() {
+		if(shoppingCartItem.getId() > 0) {
+			shoppingCartItem.setActive(false);
+	        CartItemDAO.updateShoppingCartItem(shoppingCartItem);
+		}
+		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+		return "checkout.xhtml?faces-redirect=true";
 	}
 	
 	public String remove() {
@@ -63,12 +77,9 @@ public class ShoppingCartController {
 		return "home.xhtml?faces-redirect=true";
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public String proceed() {
+		itemAdded = false;
+		return "checkout.xhtml?faces-redirect=true";
 	}
 
 	public ShoppingCart getShoppingCart() {
@@ -77,6 +88,14 @@ public class ShoppingCartController {
 
 	public void setShoppingCart(ShoppingCart shoppingCart) {
 		this.shoppingCart = shoppingCart;
+	}
+
+	public ShoppingCartItem getShoppingCartItem() {
+		return shoppingCartItem;
+	}
+
+	public void setShoppingCartItem(ShoppingCartItem shoppingCartItem) {
+		this.shoppingCartItem = shoppingCartItem;
 	}
 
 	public ProductController getProductController() {
@@ -93,5 +112,13 @@ public class ShoppingCartController {
 
 	public void setCustomerController(CustomerController customerController) {
 		this.customerController = customerController;
+	}
+
+	public boolean getItemAdded() {
+		return itemAdded;
+	}
+
+	public void setItemAdded(boolean itemAdded) {
+		this.itemAdded = itemAdded;
 	}
 }

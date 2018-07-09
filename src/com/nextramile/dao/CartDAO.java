@@ -69,7 +69,7 @@ public class CartDAO {
     	try {
     	    shoppingCart = (ShoppingCart) q.getSingleResult();
     	    int total = 0;
-    	    for(ShoppingCartItem cartItem : shoppingCart.getShoppingCartItems()) {
+    	    for(ShoppingCartItem cartItem : CartItemDAO.getCartItems(shoppingCart)) {
     	    	total += cartItem.getQuantity() * cartItem.getProduct().getPrice();
     	    }
     	    shoppingCart.setTotal(total);

@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
 
 /**
@@ -34,6 +35,7 @@ public class CartItemDAO {
 	        em.close();
     	} else {
     		shoppingCartItem.setId(shoppingCartItem2.getId());
+    		shoppingCartItem.setActive(true);
     		shoppingCartItem = updateShoppingCartItem(shoppingCartItem);
     	}
         return shoppingCartItem;
@@ -64,7 +66,7 @@ public class CartItemDAO {
     
     public static ShoppingCartItem findPendingShoppingCartItem(ShoppingCartItem shoppingCartItem) {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from ShoppingCartItem u WHERE u.shoppingCart = :shoppingCart and u.product = :product and u.active = true");
+    	Query q = em.createQuery("select u from ShoppingCartItem u WHERE u.shoppingCart = :shoppingCart and u.product = :product");
     	q.setParameter("shoppingCart", shoppingCartItem.getShoppingCart());
     	q.setParameter("product", shoppingCartItem.getProduct());
     	shoppingCartItem = new ShoppingCartItem();
@@ -78,18 +80,35 @@ public class CartItemDAO {
     }
     
     @SuppressWarnings("unchecked")
- 	public static List<ShoppingCartItem> getShoppingCartItemList() {
-     	em = factory.createEntityManager();
-     	Query q = em.createQuery("SELECT u FROM ShoppingCartItem u WHERE u.active=true");
-     	List<ShoppingCartItem> shoppingCartItemList2 = new ArrayList<ShoppingCartItem>();
-     	try {
-     	    List<ShoppingCartItem> shoppingCartItemList = q.getResultList();
-         	for(ShoppingCartItem shoppingCartItem : shoppingCartItemList) {
-         		shoppingCartItemList2.add(shoppingCartItem);
-         	}
-     	} catch(NoResultException e) {
-     		System.out.println("No Results Exception");
-     	}
-     	return shoppingCartItemList2;
-     }
+  	public static List<ShoppingCartItem> getCartItems(ShoppingCart shoppingCart) {
+      	em = factory.createEntityManager();
+      	Query q = em.createQuery("SELECT u FROM ShoppingCartItem u WHERE u.shoppingCart = :shoppingCart AND u.active=true");
+      	List<ShoppingCartItem> shoppingCartItemList2 = new ArrayList<ShoppingCartItem>();
+      	q.setParameter("shoppingCart", shoppingCart);
+      	try {
+      	    List<ShoppingCartItem> shoppingCartItemList = q.getResultList();
+          	for(ShoppingCartItem shoppingCartItem : shoppingCartItemList) {
+          		shoppingCartItemList2.add(shoppingCartItem);
+          	}
+      	} catch(NoResultException e) {
+      		System.out.println("No Results Exception");
+      	}
+      	return shoppingCartItemList2;
+      }
+    
+    @SuppressWarnings("unchecked")
+  	public static List<ShoppingCartItem> getShoppingCartItemList() {
+      	em = factory.createEntityManager();
+      	Query q = em.createQuery("SELECT u FROM ShoppingCartItem u WHERE u.active=true");
+      	List<ShoppingCartItem> shoppingCartItemList2 = new ArrayList<ShoppingCartItem>();
+      	try {
+      	    List<ShoppingCartItem> shoppingCartItemList = q.getResultList();
+          	for(ShoppingCartItem shoppingCartItem : shoppingCartItemList) {
+          		shoppingCartItemList2.add(shoppingCartItem);
+          	}
+      	} catch(NoResultException e) {
+      		System.out.println("No Results Exception");
+      	}
+      	return shoppingCartItemList2;
+      }
 }

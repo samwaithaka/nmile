@@ -2597,3 +2597,11 @@ h3,h4,h5 {
     background:#fff;
     color:#f7a723;
 }
+
+.border-bottom {
+	border-bottom:solid 2px #aaa;
+}
+
+.border-top {
+	border-top:solid 2px #aaa;
+}

@@ -17,13 +17,27 @@
 			<div>
 			    <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}">
 			    <div class="col-sm-12" style="color:#58ad07;"><i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b></div>
+				   <div class="col-xs-6 bold border-bottom">Product</div>
+	               <div class="col-xs-2 bold border-bottom">Qty</div>
+	               <div class="col-xs-2 amount bold border-bottom">Price</div>
+	               <div class="col-xs-2 bold border-bottom">&nbsp;</div>
 				<ui:repeat var="cartItem" value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
-	               <div class="col-xs-7 border">#{cartItem.product.productName}</div>
-	               <div class="col-xs-2 border">#{cartItem.quantity}</div>
-	               <div class="col-xs-3 amount border">#{cartItem.product.price}</div>
+	               <div class="col-xs-6">#{cartItem.product.productName}</div>
+	               <div class="col-xs-2">#{cartItem.quantity}</div>
+	               <div class="col-xs-2 amount">#{cartItem.product.price * cartItem.quantity} </div>
+	               <div class="col-xs-2">
+                     <p:commandLink class="custom-btn1 red bold" value="X"
+						action="#{shoppingCartController.removeItem}"
+						update="@all">
+						<f:setPropertyActionListener
+							value="#{cartItem}"
+							target="#{shoppingCartController.shoppingCartItem}" />
+					 </p:commandLink>
+                   </div>
 	            </ui:repeat>
-	            <div class="col-xs-9 border bold">Total</div>
-	            <div class="col-xs-3 border amount bold">#{shoppingCartController.shoppingCart.total}</div>
+	            <div class="col-xs-8 bold border-top">Total</div>
+	            <div class="col-xs-2 amount bold border-top">#{shoppingCartController.shoppingCart.total}</div>
+	            <div class="col-xs-2 bold border-bottom" />
 	            </h:panelGroup>
 	            <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id eq 0}" class="col-sm-12">
 	              <div class="col-sm-8" style="color:#58ad07;">

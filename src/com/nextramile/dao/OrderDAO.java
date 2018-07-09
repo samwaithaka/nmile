@@ -102,8 +102,8 @@ public class OrderDAO {
     
     public static CustomerOrder findOrder(CustomerOrder customerOrder) {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("select u from CustomerOrder u WHERE u.customer = :customer and u.product = :product and u.checkout = false");
-    	q.setParameter("customer", customerOrder.getShoppingCart().getCustomer());
+    	Query q = em.createQuery("select u from CustomerOrder u WHERE u.shoppingCart = :shoppingCart and u.checkout = false");
+    	q.setParameter("shoppingCart", customerOrder.getShoppingCart());
     	try {
     	    customerOrder = (CustomerOrder) q.getSingleResult();
     	} catch(NoResultException e) {

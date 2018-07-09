@@ -80,7 +80,6 @@ public class CustomerController {
 	}
 
 	public String createCustomer() {
-		System.out.println(customer);
 		customer.setReferer(CustomerDAO.find(refId));
 		CustomerDAO.addCustomer(customer);
 		return "home.xhtml?faces-redirect=true";
@@ -103,7 +102,6 @@ public class CustomerController {
 			shoppingCartItem.setShoppingCart(shoppingCart);
 			shoppingCartItem.setProduct(product);
 			shoppingCartItem.setQuantity(quantity);
-			System.out.println("shoppingCartItem: " + shoppingCartItem);
 			CartItemDAO.addShoppingCartItem(shoppingCartItem);
 		}
 	}
@@ -126,7 +124,7 @@ public class CustomerController {
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		String url;
 		try {
-			url = "http://localhost:8080/hcare/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+			url = "http://localhost:8080/nextramile/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
 			String subject = "Password Reset";
 			String salutation = null;
 			if(customer.getCustomerName() != null) {

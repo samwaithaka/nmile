@@ -109,6 +109,14 @@
 											value="#{address.deliveryAddress}"
 											target="#{orderController.deliveryAddress}" />
 									</p:commandLink>
+									&nbsp;
+									<p:commandLink class="custom-btn1 red bold" value="X"
+										action="#{orderController.deleteAddress}"
+										name="initializeAddress" update="@all">
+										<f:setPropertyActionListener
+											value="#{address.deliveryAddress}"
+											target="#{orderController.deliveryAddress}" />
+									</p:commandLink>
 								</div>
 							</div>
 						</div>
@@ -128,6 +136,7 @@
 						action="#{orderController.updateOrder}" ajax="false" />
 					<div class="col-sm-12 border">
 						<p:commandLink class="btn btn-default" value="Complete Checkout"
+						    action="#{orderController.completePurchase}"
 							name="checkout" id="checkout">
 							<f:setPropertyActionListener
 								value="#{shoppingCartController.shoppingCart}"

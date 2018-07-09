@@ -34,18 +34,29 @@
 							<h2>#{productController.product.productName}</h2>
 							<p>#{productController.product.shortDescription}</p>
 							<h:form>
+							<h:panelGroup id="addToCart" rendered="#{shoppingCartController.itemAdded eq 'false'}">
 							<span>
 								<span>KES.#{productController.product.price}</span> 
 								<label>Quantity:</label> 
 								<h:inputText id="quantity" name="quantity"
-						            value="#{shoppingCartController.quantity}" />
-								<p:commandLink class="fa fa-shopping-cart btn btn-default" value=" Add to Cart" name="add-submit" id="add-submit"
+						            value="#{shoppingCartController.shoppingCartItem.quantity}" />
+								<p:commandLink class="fa fa-shopping-cart btn btn-default" value=" Add to Cart" name="add-to-cart" id="add-to-cart"
+							        update="side-menu"
 							        rendered="#{productController.product.id > 0}"
 								    action="#{shoppingCartController.addToShoppingCart}" ajax="true">
 								<f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
-								<f:setPropertyActionListener value="#{shoppingCartController.quantity}" target="#{customerController.quantity}" />
+								<f:setPropertyActionListener value="#{shoppingCartController.shoppingCartItem.quantity}" target="#{customerController.quantity}" />
 							</p:commandLink>
 							</span>
+							</h:panelGroup>
+							</h:form>
+							<h:form>
+							<h:panelGroup id="proceed-btn" rendered="#{shoppingCartController.itemAdded eq 'true'}">
+							    <p:commandLink class="fa fa-shopping-cart btn btn-default" 
+							        action="#{shoppingCartController.proceed}"
+							        value=" Proceed to Checkout" name="checkout" id="checkout-btn" ajax="false"
+							        />
+							</h:panelGroup>
 							</h:form>
 						</div>
 						<!--/product-information-->
