@@ -13,7 +13,7 @@
 	</ui:define>
 	<ui:define name="content">
 		<div class="row">
-		<h:form>
+		    <h:form>
 				<f:metadata>
 					<f:event type="preRenderView"
 						listener="#{productController.refresh}" />
@@ -37,16 +37,23 @@
 							<h:panelGroup id="addToCart" rendered="#{shoppingCartController.itemAdded eq 'false'}">
 							<span>
 								<span>KES.#{productController.product.price}</span> 
-								<label>Quantity:</label> 
+								<label>Qty:</label>
 								<h:inputText id="quantity" name="quantity"
 						            value="#{shoppingCartController.shoppingCartItem.quantity}" />
-								<p:commandLink class="fa fa-shopping-cart btn btn-default" value=" Add to Cart" name="add-to-cart" id="add-to-cart"
-							        update="side-menu"
+								<p:commandLink class="fa fa-shopping-cart btn btn-default" value="&nbsp;Buy" name="addtocart" id="addtocart"
+							        update="@all"
 							        rendered="#{productController.product.id > 0}"
 								    action="#{shoppingCartController.addToShoppingCart}" ajax="true">
-								<f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
-								<f:setPropertyActionListener value="#{shoppingCartController.shoppingCartItem.quantity}" target="#{customerController.quantity}" />
-							</p:commandLink>
+								  <f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
+								  <f:setPropertyActionListener value="#{shoppingCartController.shoppingCartItem}" target="#{customerController.shoppingCartItem}" />
+							    </p:commandLink>
+							    <p:commandLink class="fa fa-save btn btn-default" value="&nbsp;Save" name="save" id="save"
+							        update="@all"
+							        rendered="#{productController.product.id > 0}"
+								    action="#{wishListController.addToWishList}" ajax="true">
+								  <f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
+								  <f:setPropertyActionListener value="#{wishListController.wishListItem}" target="#{customerController.wishListItem}" />
+							    </p:commandLink>
 							</span>
 							</h:panelGroup>
 							</h:form>

@@ -5,18 +5,18 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
-import com.nextramile.dao.CartDAO;
-import com.nextramile.dao.CartItemDAO;
+import com.nextramile.dao.WishListDAO;
+import com.nextramile.dao.WishListItemDAO;
 import com.nextramile.models.Customer;
-import com.nextramile.models.ShoppingCart;
-import com.nextramile.models.ShoppingCartItem;
+import com.nextramile.models.WishList;
+import com.nextramile.models.WishListItem;
 
-@ManagedBean(name = "shoppingCartController", eager = true)
+@ManagedBean(name = "wishListController", eager = true)
 @SessionScoped
-public class ShoppingCartController {
+public class WishListController {
     
-	private ShoppingCart shoppingCart;
-	private ShoppingCartItem shoppingCartItem;
+	private WishList wishList;
+	private WishListItem wishListItem;
 	private boolean itemAdded = false;
 	
 	@ManagedProperty(value = "#{productController}")
@@ -28,18 +28,18 @@ public class ShoppingCartController {
 	
 	@PostConstruct
 	public void init() {
-		shoppingCartItem = new ShoppingCartItem();
 	}
 	
-	public ShoppingCartController() {
+	public WishListController() {
+		wishListItem = new WishListItem();
 	}
 	
 	public void refresh() {
-		shoppingCart = CartDAO.findPendingShoppingCart(customerController.getCustomer());
-		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+		wishList = WishListDAO.findPendingWishList(customerController.getCustomer());
+		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));
 	}
 	
-	public String addToShoppingCart() {
+	public String addToWishList() {
 		Customer customer = customerController.getCustomer();
 		if(customer.getId() == 0) {
 			//FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong Password", "Username/Password failed. Please try again");
@@ -47,33 +47,32 @@ public class ShoppingCartController {
 			return "user.xhtml?faces-redirect=true";
 		}
 		
-		if(shoppingCart.getId() == 0) {
-			shoppingCart.setCustomer(customer);
-			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
-			shoppingCart.getShoppingCartItems();
+		if(wishList.getId() == 0) {
+			wishList.setCustomer(customer);
+			wishList = WishListDAO.addWishList(wishList);
+			wishList.getWishListItems();
 		}
-
-		shoppingCartItem.setShoppingCart(shoppingCart);
-		shoppingCartItem.setProduct(productController.getProduct());
-		CartItemDAO.addShoppingCartItem(shoppingCartItem);
-		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+		wishListItem.setWishList(wishList);
+		wishListItem.setProduct(productController.getProduct());
+		WishListItemDAO.addWishListItem(wishListItem);
+		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));
 		itemAdded = true;
 		return null;
 	}
 	
 	public String removeItem() {
-		if(shoppingCartItem.getId() > 0) {
-			shoppingCartItem.setActive(false);
-	        CartItemDAO.updateShoppingCartItem(shoppingCartItem);
+		if(wishListItem.getId() > 0) {
+			wishListItem.setActive(false);
+	        WishListItemDAO.updateWishListItem(wishListItem);
 		}
-		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));
 		return "checkout.xhtml?faces-redirect=true";
 	}
 	
 	public String remove() {
-		if(shoppingCart.getId() > 0) {
-			shoppingCart.setActive(false);
-	        CartDAO.updateShoppingCart(shoppingCart);
+		if(wishList.getId() > 0) {
+			wishList.setActive(false);
+	        WishListDAO.updateWishList(wishList);
 		}
 		return "home.xhtml?faces-redirect=true";
 	}
@@ -83,20 +82,20 @@ public class ShoppingCartController {
 		return "checkout.xhtml?faces-redirect=true";
 	}
 
-	public ShoppingCart getShoppingCart() {
-		return shoppingCart;
+	public WishList getWishList() {
+		return wishList;
 	}
 
-	public void setShoppingCart(ShoppingCart shoppingCart) {
-		this.shoppingCart = shoppingCart;
+	public void setWishList(WishList wishList) {
+		this.wishList = wishList;
 	}
 
-	public ShoppingCartItem getShoppingCartItem() {
-		return shoppingCartItem;
+	public WishListItem getWishListItem() {
+		return wishListItem;
 	}
 
-	public void setShoppingCartItem(ShoppingCartItem shoppingCartItem) {
-		this.shoppingCartItem = shoppingCartItem;
+	public void setWishListItem(WishListItem wishListItem) {
+		this.wishListItem = wishListItem;
 	}
 
 	public ProductController getProductController() {

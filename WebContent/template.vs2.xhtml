@@ -30,6 +30,9 @@
 
 <body>
 	<header id="header">
+	<h:form>
+	  <p:growl id="growl" showDetail="true" sticky="true" />
+	</h:form>
 		<!--header-->
 		<div class="header_top">
 			<!--header_top-->
@@ -72,14 +75,19 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
+								<h:panelGroup rendered="#{customerController.customer.id > 0}">
 								<li><a href=""><i class="fa fa-user"></i> Account</a></li>
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.xhtml"><i class="fa fa-crosshairs"></i>
 										Checkout</a></li>
 								<li><a href="checkout.xhtml"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
-								<li><a href="login.xhtml"><i class="fa fa-lock"></i>
-										Login</a></li>
+								<li><a href="logout.xhtml"><i class="fa fa-sign-out"></i> Logout</a></li>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{customerController.customer.id eq 0}">
+								<li><a href="login.xhtml"><i class="fa fa-sign-in"></i>Login</a></li>
+								<li><a href="profile.xhtml"><i class="fa fa-user"></i>Signup</a></li>
+								</h:panelGroup>
 							</ul>
 						</div>
 					</div>

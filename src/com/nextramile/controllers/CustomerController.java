@@ -1,5 +1,6 @@
 package com.nextramile.controllers;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -19,11 +20,15 @@ import javax.faces.context.FacesContext;
 import com.nextramile.dao.CartDAO;
 import com.nextramile.dao.CartItemDAO;
 import com.nextramile.dao.CustomerDAO;
+import com.nextramile.dao.WishListDAO;
+import com.nextramile.dao.WishListItemDAO;
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.Product;
 import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
+import com.nextramile.models.WishList;
+import com.nextramile.models.WishListItem;
 import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "customerController", eager = true)
@@ -31,9 +36,12 @@ import com.nextramile.util.Emailer;
 public class CustomerController {
 
 	private Customer customer;
+	private ShoppingCart shoppingCart;
+	private ShoppingCartItem shoppingCartItem;
+	private WishList wishList;
+	private WishListItem wishListItem;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
-	private int quantity;
 	private String form = "check";
 	private int refId = 0;
 
@@ -41,6 +49,10 @@ public class CustomerController {
 	public void init() {
 		customer = new Customer();
 		product = new Product();
+		shoppingCart = new ShoppingCart();
+		shoppingCartItem = new ShoppingCartItem();
+		wishList = new WishList();
+		wishListItem = new WishListItem();
 	}
 
 	public CustomerController() {
@@ -86,7 +98,7 @@ public class CustomerController {
 	}
 
 	public void queryCustomerEmail() {		
-		customer = CustomerDAO.findByEmail(customer.getEmail());		
+		customer = CustomerDAO.findByEmail(customer.getEmail());	
 		if(customer.getId() > 0) {	
 			form = "login";
 		} else {
@@ -94,56 +106,95 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			form = "signup";
 		}
+		System.out.println(shoppingCartItem);
+		System.out.println(wishListItem);
 		if(product.getId() > 0) {
-			ShoppingCart shoppingCart = new ShoppingCart();
-			shoppingCart.setCustomer(customer);
-			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
-			ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-			shoppingCartItem.setShoppingCart(shoppingCart);
-			shoppingCartItem.setProduct(product);
-			shoppingCartItem.setQuantity(quantity);
-			CartItemDAO.addShoppingCartItem(shoppingCartItem);
+			if(shoppingCartItem.getQuantity() > 0) {
+				shoppingCart.setCustomer(customer);
+				shoppingCart = CartDAO.addShoppingCart(shoppingCart);
+				shoppingCartItem.setShoppingCart(shoppingCart);
+				shoppingCartItem.setProduct(product);
+				CartItemDAO.addShoppingCartItem(shoppingCartItem);
+			}
+			
+			if(wishListItem.getQuantity() > 0) {
+				wishList.setCustomer(customer);
+				wishList = WishListDAO.addWishList(wishList);
+				wishListItem.setWishList(wishList);
+				wishListItem.setProduct(product);
+				WishListItemDAO.addWishListItem(wishListItem);
+			}
 		}
 	}
 
 	public String updateCustomer() {
 		CustomerDAO.updateCustomer(customer);
-		return "home.xhtml?faces-redirect=true";
+		return redirectUser();
 	}
 
 	public String login() {
+		String page = null;
+		String email = customer.getEmail();
 		customer = CustomerDAO.login(customer);
 		if(customer.getId() > 0) {
-			return "home.xhtml?faces-redirect=true";
+			page = redirectUser();
 		} else {
-			return null;
+			customer.setEmail(email);
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username/Password Error","Username and password used do not match");
+			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+		return page;
+	}
+    
+	public void logout() throws IOException {
+	    customer = new Customer();
+	    form = "login";
+	    FacesContext.getCurrentInstance().getExternalContext().redirect("user.xhtml");
+	}
+	
+	public String redirectUser() {
+		String page = null;
+		shoppingCart = CartDAO.findPendingShoppingCart(customer);
+		if(shoppingCart.getId() > 0) {
+			shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
+			page =  "checkout.xhtml?faces-redirect=true";
+		}
+		return page;
 	}
 
 	public void generatePasswordResetToken() {
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		String url;
-		try {
-			url = "http://localhost:8080/nextramile/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
-			String subject = "Password Reset";
-			String salutation = null;
-			if(customer.getCustomerName() != null) {
-				salutation = "Hello " + customer.getCustomerName() + ",\n\n";
+		FacesMessage fm = null;
+		String email = customer.getEmail();
+		customer = CustomerDAO.findByEmail(email);
+		if(email == null) {
+			fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email Required","Someone forgot to specify email ;-)");
+		} else if(customer.getId() == 0) {
+			fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email Not Found","The email address is not recognized.");
+		} else {
+			Timestamp ts = new Timestamp(System.currentTimeMillis());
+			String url;
+			try {
+				url = "http://localhost:8080/nextramile/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+				String subject = "Password Reset";
+				String salutation = null;
+				if(customer.getCustomerName() != null) {
+					salutation = "Hello " + customer.getCustomerName() + ",\n\n";
+				}
+				String message = salutation +
+						"You have requested to reset your password. Click on the link below "
+						+ "to proceed with reset. Incase you didn't initiate reset, just ignore the email.\n\n"
+						+ "Reset link: " + url;
+				customer.setPasswordResetToken(ts.toString());
+				CustomerDAO.updateCustomer(customer);
+				customer.setPasswordResetToken(null);
+				fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
+				Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			String message = salutation +
-					"You have requested to reset your password. Click on the link below "
-					+ "to proceed with reset. Incase you didn't initiate reset, just ignore the email.\n\n"
-					+ "Reset link: " + url;
-			customer.setPasswordResetToken(ts.toString());
-			CustomerDAO.updateCustomer(customer);
-			customer.setPasswordResetToken(null);
-			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
-			FacesContext.getCurrentInstance().addMessage(null, fm);
-			Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 	}
 
 	public void reset() {
@@ -212,12 +263,36 @@ public class CustomerController {
 		this.product = product;
 	}	
 	
-	public int getQuantity() {
-		return quantity;
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+
+	public ShoppingCartItem getShoppingCartItem() {
+		return shoppingCartItem;
+	}
+
+	public void setShoppingCartItem(ShoppingCartItem shoppingCartItem) {
+		this.shoppingCartItem = shoppingCartItem;
+	}
+
+	public WishList getWishList() {
+		return wishList;
+	}
+
+	public void setWishList(WishList wishList) {
+		this.wishList = wishList;
+	}
+
+	public WishListItem getWishListItem() {
+		return wishListItem;
+	}
+
+	public void setWishListItem(WishListItem wishListItem) {
+		this.wishListItem = wishListItem;
 	}
 
 	public List<CustomerOrder> getCustomerOrderList() {

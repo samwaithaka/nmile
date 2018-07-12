@@ -23,7 +23,8 @@ public class CustomerDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static Customer addCustomer(Customer customer) {
-    	if(checkExisting(customer) == false) {
+    	Customer existingCustomer = findByEmail(customer.getEmail());
+    	if(existingCustomer.getId() == 0) {
 	    	customer.setCreatedOn(new Timestamp(System.currentTimeMillis()));
 	    	customer.setEditedOn(new Timestamp(System.currentTimeMillis()));
 	    	customer.setCreatedBy(customer.getEditedBy());
@@ -34,6 +35,10 @@ public class CustomerDAO {
 	        em.persist(customer);
 	        em.getTransaction().commit();	
 	        em.close();
+    	} else {
+    		customer.setId(existingCustomer.getId());
+    		customer.setReferer(existingCustomer.getReferer());
+    		updateCustomer(customer);
     	}
     	//Get referrer details
     	Customer referer = customer.getReferer();

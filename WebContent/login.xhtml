@@ -15,12 +15,16 @@
 				<div class="form-group">
 					<label for="email">Email</label>
 					<h:inputText class="form-control" id="email" name="email"
-						value="#{customerController.customer.email}" />
+						value="#{customerController.customer.email}">
+					    <f:validateRequired />
+					</h:inputText>
 				</div>
 				<div class="form-group">
 					<label for="password">Password</label>
 					<h:inputSecret class="form-control" id="password" name="password"
-						value="#{customerController.customer.password}" />
+						value="#{customerController.customer.password}">
+						<f:validateRequired />
+					</h:inputSecret>
 				</div>
 				<div class="form-group">
 					<p:commandButton class="btn btn-default" id="edit-submit" value="Login"

@@ -130,10 +130,7 @@
 						<h4>Payment Details</h4>
 						<p>Prepare to pay upon delivery</p>
 					</div>
-
-					<p:commandButton class="btn btn-default" id="edit-submit"
-						value="Continue" rendered="#{orderController.order.id > 0}"
-						action="#{orderController.updateOrder}" ajax="false" />
+                    <h:form>
 					<div class="col-sm-12 border">
 						<p:commandLink class="btn btn-default" value="Complete Checkout"
 						    action="#{orderController.completePurchase}"
@@ -143,6 +140,7 @@
 								target="#{orderController.shoppingCart}" />
 						</p:commandLink>
 					</div>
+					</h:form>
 				</h:panelGroup>
 			</div>
 		</div>

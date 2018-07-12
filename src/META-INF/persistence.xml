@@ -19,6 +19,8 @@
 		<class>com.nextramile.models.Blog</class>
 		<class>com.nextramile.models.ShoppingCart</class>
 		<class>com.nextramile.models.ShoppingCartItem</class>
+		<class>com.nextramile.models.WishList</class>
+		<class>com.nextramile.models.WishListItem</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nextramile_db" />
