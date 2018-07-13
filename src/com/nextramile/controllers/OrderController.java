@@ -11,14 +11,20 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
+import com.nextramile.dao.CartDAO;
 import com.nextramile.dao.CustomerAddressDAO;
 import com.nextramile.dao.DeliveryAddressDAO;
 import com.nextramile.dao.OrderDAO;
+import com.nextramile.dao.WishListDAO;
+import com.nextramile.dao.WishListItemDAO;
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerAddress;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.DeliveryAddress;
 import com.nextramile.models.ShoppingCart;
+import com.nextramile.models.ShoppingCartItem;
+import com.nextramile.models.WishList;
+import com.nextramile.models.WishListItem;
 
 @ManagedBean(name = "orderController", eager = true)
 @SessionScoped
@@ -103,6 +109,21 @@ public class OrderController {
 		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
 		order.setCheckout(true);
 		OrderDAO.addOrder(order);
+		shoppingCart.setActive(false);
+		List<ShoppingCartItem> shoppingCartItemList = shoppingCart.getShoppingCartItems();
+		// Remove wishListItems for this customer product
+		for(ShoppingCartItem cartItem: shoppingCartItemList) {
+			WishListItem wishListItem = WishListItemDAO.getWishListItemByCustomerProduct(shoppingCart.getCustomer(), cartItem.getProduct());
+			wishListItem.setActive(false);
+			WishListItemDAO.updateWishListItem(wishListItem);
+		}
+		// If wishList is empty, remove it as well
+		WishList wishList = WishListDAO.findPendingWishList(shoppingCart.getCustomer());
+		if(wishList.getWishListItems().size() == 0) {
+			wishList.setActive(false);
+			WishListDAO.updateWishList(wishList);
+		}
+    	CartDAO.updateShoppingCart(shoppingCart);
 		return "successful.xhtml?faces-redirect=true";
 	}
 	

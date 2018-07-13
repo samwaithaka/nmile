@@ -43,6 +43,7 @@ public class CustomerController {
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
 	private String form = "check";
+	private String customerAction;
 	private int refId = 0;
 
 	@PostConstruct
@@ -106,18 +107,18 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			form = "signup";
 		}
-		System.out.println(shoppingCartItem);
-		System.out.println(wishListItem);
+		System.out.println(product);
+		System.out.println(customerAction);
 		if(product.getId() > 0) {
-			if(shoppingCartItem.getQuantity() > 0) {
+			if(customerAction.equalsIgnoreCase("shoppingCart")) {
+				System.out.println("shopping cart");
 				shoppingCart.setCustomer(customer);
 				shoppingCart = CartDAO.addShoppingCart(shoppingCart);
 				shoppingCartItem.setShoppingCart(shoppingCart);
 				shoppingCartItem.setProduct(product);
 				CartItemDAO.addShoppingCartItem(shoppingCartItem);
-			}
-			
-			if(wishListItem.getQuantity() > 0) {
+			} else if(customerAction.equalsIgnoreCase("wishList")) {
+				System.out.println("wish list");
 				wishList.setCustomer(customer);
 				wishList = WishListDAO.addWishList(wishList);
 				wishListItem.setWishList(wishList);
@@ -301,5 +302,13 @@ public class CustomerController {
 
 	public void setCustomerOrderList(List<CustomerOrder> customerOrderList) {
 		this.customerOrderList = customerOrderList;
+	}
+
+	public String getCustomerAction() {
+		return customerAction;
+	}
+
+	public void setCustomerAction(String customerAction) {
+		this.customerAction = customerAction;
 	}
 }

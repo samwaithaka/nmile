@@ -36,10 +36,7 @@ public class OrderDAO {
 	        em.close();
     	} else {
     		order = order2;
-    	}
-    	ShoppingCart shoppingCart = order.getShoppingCart();
-    	shoppingCart.setActive(false);
-    	CartDAO.updateShoppingCart(shoppingCart);
+    	}    	
         return order;
     }
     

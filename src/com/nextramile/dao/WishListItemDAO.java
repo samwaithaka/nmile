@@ -10,6 +10,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import com.nextramile.models.Customer;
+import com.nextramile.models.Product;
 import com.nextramile.models.WishList;
 import com.nextramile.models.WishListItem;
 
@@ -70,6 +72,23 @@ public class WishListItemDAO {
     	q.setParameter("wishList", wishListItem.getWishList());
     	q.setParameter("product", wishListItem.getProduct());
     	wishListItem = new WishListItem();
+    	try {
+    	    wishListItem = (WishListItem) q.getSingleResult();
+    	} catch(NoResultException e) {
+    		//
+    	}
+        em.close();
+        return wishListItem;
+    }
+    
+    public static WishListItem getWishListItemByCustomerProduct(Customer customer, Product product) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from WishListItem u WHERE u.wishList = :wishList and u.product = :product and u.active = true");
+    	WishList wishList = WishListDAO.findPendingWishList(customer);
+    	System.out.println("Line 88 " + wishList);
+    	q.setParameter("wishList", wishList);
+    	q.setParameter("product", product);
+    	WishListItem wishListItem = new WishListItem();
     	try {
     	    wishListItem = (WishListItem) q.getSingleResult();
     	} catch(NoResultException e) {

@@ -40,10 +40,13 @@ public class WishListController {
 	}
 	
 	public String addToWishList() {
+		System.out.println("Adding to wish list");
 		Customer customer = customerController.getCustomer();
+		customerController.setCustomerAction("wishList");
 		if(customer.getId() == 0) {
 			//FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong Password", "Username/Password failed. Please try again");
 			//FacesContext.getCurrentInstance().addMessage(null, fm);
+			customerController.setForm("check");
 			return "user.xhtml?faces-redirect=true";
 		}
 		

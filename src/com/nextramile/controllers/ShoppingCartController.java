@@ -40,7 +40,9 @@ public class ShoppingCartController {
 	}
 	
 	public String addToShoppingCart() {
+		System.out.println("Adding to shopping cart");
 		Customer customer = customerController.getCustomer();
+		customerController.setCustomerAction("shoppingCart");
 		if(customer.getId() == 0) {
 			//FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong Password", "Username/Password failed. Please try again");
 			//FacesContext.getCurrentInstance().addMessage(null, fm);
