@@ -2441,13 +2441,8 @@ h2.title {
 }
 
 .caption {
-	margin: 5px auto;
-	border: solid 1px #eee;
-	border-radius: 0px;
-	background: linear-gradient(#fff, #eee);
-	color: #58ad07;
-	color: #f7a723;
-	color: #777;
+	color: #888;
+	font-size:110%;
 	font-family: 'Galada', cursive;
 }
 
@@ -2517,4 +2512,8 @@ h3, h4, h5 {
 
 .border-top {
 	border-top: solid 2px #aaa;
+}
+
+.white {
+	color:#fff;
 }

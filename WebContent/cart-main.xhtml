@@ -35,7 +35,7 @@
 	               <td class="col-sm-1">#{cartItem.quantity}</td>
 	               <td class="amount col-sm-2">
 	                   <h:outputText value="#{cartItem.product.price * cartItem.quantity}">
-					     <f:convertNumber pattern="#0,000" />
+					     <f:convertNumber pattern="#,000" />
 				       </h:outputText>
 	               </td>
 	               <td>
@@ -53,7 +53,7 @@
 	            <td class="border-top" colspan="3">Total</td>
 	            <td class="amount bold border-top col-sm-2">
 	              <h:outputText value="#{shoppingCartController.shoppingCart.total}">
-				    <f:convertNumber pattern="#0,000" />
+				    <f:convertNumber pattern="#,000" />
 			      </h:outputText>
 	            </td>
 	            <td class="bold border-top">&nbsp;</td>

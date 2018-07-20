@@ -16,10 +16,11 @@
 	</h:form>
 	<h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}"
 		id="side-menu">
+		<div class="col-sm-12">
 		<div class="col-sm-12" style="color: #58ad07;">
 			<i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b>
 		</div>
-		<div class="col-sm-12 border">
+		<div class="col-sm-12">
 			<table class="cart">
 				<tr>
 					<td></td>
@@ -35,7 +36,7 @@
 						<td class="col-sm-2 amount right">
 						  <h:outputText value="#{cartItem.product.price *
 							cartItem.quantity}">
-						    <f:convertNumber pattern="#0,000" />
+						    <f:convertNumber pattern="#,000" />
 						  </h:outputText>
 						</td>
 					</tr>
@@ -44,16 +45,19 @@
 					<td colspan="2" class="col-sm-9 bold">Total</td>
 					<td class="col-sm-3 amount bold">
 					  <h:outputText value="#{shoppingCartController.shoppingCart.total}">
-				        <f:convertNumber pattern="#0,000" />
+				        <f:convertNumber pattern="#,000" />
 				      </h:outputText>
 					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="col-sm-12">
-			<p:commandLink class="btn btn-default" value="Checkout"
-				name="checkout" id="checkout" />
-		</div>
+				  </tr>
+				  <tr>
+				    <td colspan="3">
+					<p:commandLink class="btn btn-default" value="Checkout"
+						name="checkout" id="checkout" />
+					</td>
+				  </tr>
+				</table>
+				</div>
+				</div>
 	</h:panelGroup>
 	<h:panelGroup rendered="#{shoppingCartController.shoppingCart.id eq 0}"
 		class="col-sm-12">

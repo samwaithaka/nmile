@@ -85,6 +85,11 @@ public class ShoppingCartController {
 		return "checkout.xhtml?faces-redirect=true";
 	}
 
+	public String continueShopping() {
+		itemAdded = false;
+		return "shop.xhtml?faces-redirect=true";
+	}
+	
 	public ShoppingCart getShoppingCart() {
 		return shoppingCart;
 	}

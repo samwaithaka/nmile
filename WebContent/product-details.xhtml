@@ -59,6 +59,10 @@
 							</h:form>
 							<h:form>
 							<h:panelGroup id="proceed-btn" rendered="#{shoppingCartController.itemAdded eq 'true'}">
+							    <p:commandLink class="fa fa-hand-o-right btn btn-default white" 
+							        action="#{shoppingCartController.continueShopping}"
+							        value=" Continue Shopping" name="continue" id="continue-btn" ajax="false"
+							        />
 							    <p:commandLink class="fa fa-shopping-cart btn btn-default" 
 							        action="#{shoppingCartController.proceed}"
 							        value=" Proceed to Checkout" name="checkout" id="checkout-btn" ajax="false"
