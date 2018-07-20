@@ -8,37 +8,58 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
-			<h:form>
-				<f:metadata>
-					<f:event type="preRenderView"
-						listener="#{shoppingCartController.refresh}" />
-				</f:metadata>
-			</h:form>
-			<div>
-			    <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}"
-			        id="side-menu"
-			        class="col-sm-12">
-			    <div class="col-xs-12" style="color:#58ad07;"><i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b></div>
-				<ui:repeat var="cartItem" value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
-	               <div class="col-xs-12">
-	               <div class="col-xs-7 bottom-border">#{cartItem.product.productName}</div>
-	               <div class="col-xs-2">#{cartItem.quantity}</div>
-	               <div class="col-xs-3 amount">#{cartItem.product.price * cartItem.quantity}</div>
-	               </div>
-	            </ui:repeat>
-	            <div class="col-xs-12">
-	            <div class="col-xs-9 bold">Total</div>
-	            <div class="col-xs-3 amount bold">#{shoppingCartController.shoppingCart.total}</div>
-	            </div>
-	            <div class="col-sm-12">
-	                <p:commandLink class="btn btn-default" value="Checkout" name="checkout" id="checkout" />
-			    </div>
-	            </h:panelGroup>
-	            <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id eq 0}" class="col-sm-12">
-	              <div class="col-sm-8" style="color:#58ad07;">
-	              <i class="fa fa-shopping-cart"></i>&nbsp;Cart Empty
-	              </div>
-	            </h:panelGroup>      
-			</div>
+	<h:form>
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{shoppingCartController.refresh}" />
+		</f:metadata>
+	</h:form>
+	<h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}"
+		id="side-menu">
+		<div class="col-sm-12" style="color: #58ad07;">
+			<i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b>
+		</div>
+		<div class="col-sm-12 border">
+			<table class="cart">
+				<tr>
+					<td></td>
+					<td class="right bold">Qty</td>
+					<td class="col-sm-2 right bold">Price</td>
+				</tr>
+				<ui:repeat var="cartItem"
+					value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
+					<tr>
+						<td><p:graphicImage class=""
+								value="images/#{cartItem.product.fileName}" width="65" /></td>
+						<td class="right">#{cartItem.quantity}</td>
+						<td class="col-sm-2 amount right">
+						  <h:outputText value="#{cartItem.product.price *
+							cartItem.quantity}">
+						    <f:convertNumber pattern="#0,000" />
+						  </h:outputText>
+						</td>
+					</tr>
+				</ui:repeat>
+				<tr>
+					<td colspan="2" class="col-sm-9 bold">Total</td>
+					<td class="col-sm-3 amount bold">
+					  <h:outputText value="#{shoppingCartController.shoppingCart.total}">
+				        <f:convertNumber pattern="#0,000" />
+				      </h:outputText>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-sm-12">
+			<p:commandLink class="btn btn-default" value="Checkout"
+				name="checkout" id="checkout" />
+		</div>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{shoppingCartController.shoppingCart.id eq 0}"
+		class="col-sm-12">
+		<div class="col-sm-8" style="color: #58ad07;">
+			<i class="fa fa-shopping-cart"></i>&nbsp;Cart Empty
+		</div>
+	</h:panelGroup>
 </ui:composition>
 </html>

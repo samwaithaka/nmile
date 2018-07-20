@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.vs2.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+		<div class="col-sm-8 mb-4">
+			<ui:repeat var="product" value="#{productController.productList}">
+				<div class="col-sm-4">
+					<div class="product-image-wrapper">
+						<div class="single-products">
+							<div class="productinfo text-center">
+								<p:graphicImage class="img-responsive"
+									value="images/#{product.fileName}" width="450" />
+								<h2>KSH.#{product.price}</h2>
+								<p>#{product.productName}</p>
+								<!--a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a-->
+
+								<p:commandLink class="fa fa-shopping-cart btn btn-default"
+									value="&nbsp;Buy" name="addtocart" id="addtocart" update="@all"
+									rendered="#{product.id > 0}"
+									action="#{shoppingCartController.addToShoppingCart}"
+									ajax="true">
+									<f:setPropertyActionListener value="#{product}"
+										target="#{customerController.product}" />
+									<f:setPropertyActionListener
+										value="#{shoppingCartController.shoppingCartItem}"
+										target="#{customerController.shoppingCartItem}" />
+								</p:commandLink>
+								&nbsp;
+								<p:commandLink class="fa fa-save btn btn-default"
+									value="&nbsp;Save" name="save" id="save" update="@all"
+									rendered="#{product.id > 0}"
+									action="#{wishListController.addToWishList}" ajax="true">
+									<f:setPropertyActionListener value="#{product}"
+										target="#{customerController.product}" />
+									<f:setPropertyActionListener
+										value="#{wishListController.wishListItem}"
+										target="#{customerController.wishListItem}" />
+								</p:commandLink>
+
+							</div>
+							<div class="product-overlay">
+								<div class="overlay-content __web-inspector-hide-shortcut__">
+									<h2>KSH.#{product.price}</h2>
+									<p>#{product.productName}</p>
+									<p:commandLink class="fa fa-shopping-cart btn btn-default"
+										value="&nbsp;Buy" name="addtocart" id="addtocart2"
+										update="@all" rendered="#{product.id > 0}"
+										action="#{shoppingCartController.addToShoppingCart}"
+										ajax="true">
+										<f:setPropertyActionListener value="#{product}"
+											target="#{customerController.product}" />
+										<f:setPropertyActionListener
+											value="#{shoppingCartController.shoppingCartItem}"
+											target="#{customerController.shoppingCartItem}" />
+									</p:commandLink>
+									&nbsp;
+									<p:commandLink class="fa fa-save btn btn-default"
+										value="&nbsp;Save" name="save" id="save2" update="@all"
+										rendered="#{product.id > 0}"
+										action="#{wishListController.addToWishList}" ajax="true">
+										<f:setPropertyActionListener value="#{product}"
+											target="#{customerController.product}" />
+										<f:setPropertyActionListener
+											value="#{wishListController.wishListItem}"
+											target="#{customerController.wishListItem}" />
+									</p:commandLink>
+								</div>
+							</div>
+							<!-- img src="images/home/new.png" class="new" alt="" /-->
+						</div>
+						<div class="choose">
+							<ul class="nav nav-pills nav-justified">
+								<li><a href="product-details.xhtml?id=#{product.id}"><i
+										class="fa fa-plus-square"></i>More details</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</ui:repeat>
+		</div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

@@ -68,7 +68,7 @@ public class WishListDAO {
     	WishList wishList = new WishList();
     	try {
     	    wishList = (WishList) q.getSingleResult();
-    	    System.out.println(wishList);
+    	    //System.out.println(wishList);
     	    int total = 0;
     	    for(WishListItem wishListItem : WishListItemDAO.getWishListItems(wishList)) {
     	    	total += wishListItem.getQuantity() * wishListItem.getProduct().getPrice();

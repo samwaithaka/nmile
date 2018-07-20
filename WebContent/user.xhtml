@@ -10,6 +10,12 @@
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
+        <h:form>
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{customerController.refresh}" />
+			</f:metadata>
+		</h:form>
 		<div class="col-lg-5 mb-4">
 			<h:panelGroup id="check-user-form" rendered="#{customerController.form eq 'check'}">
 				<h:form>

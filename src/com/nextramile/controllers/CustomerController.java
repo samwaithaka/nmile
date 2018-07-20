@@ -69,6 +69,7 @@ public class CustomerController {
 
 		email = params.get("e");
 		token = params.get("t");
+		form = params.get("f") != null ? params.get("f") : "check";
 		try {
 			if(email != null) email = URLDecoder.decode(email, "UTF-8");
 			if(token != null) token = URLDecoder.decode(token, "UTF-8");
@@ -95,7 +96,7 @@ public class CustomerController {
 	public String createCustomer() {
 		customer.setReferer(CustomerDAO.find(refId));
 		CustomerDAO.addCustomer(customer);
-		return "home.xhtml?faces-redirect=true";
+		return "account.xhtml?faces-redirect=true";
 	}
 
 	public void queryCustomerEmail() {		
@@ -159,6 +160,8 @@ public class CustomerController {
 		if(shoppingCart.getId() > 0) {
 			shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
 			page =  "checkout.xhtml?faces-redirect=true";
+		} else {
+			page = "account.xhtml?faces-redirect=true";
 		}
 		return page;
 	}

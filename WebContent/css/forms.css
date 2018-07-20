@@ -31,3 +31,22 @@ input {
 .form-control {
 	height:40px;
 }
+
+.product-overlay {
+	background:#666;
+    opacity:0.7;
+}
+
+.right {
+	text-align:right;
+}
+
+.cart td {
+	border-top:solid 1px #ddd;
+	background:#fff;
+	color:#555;
+}
+
+table {
+	width:100%;
+}
