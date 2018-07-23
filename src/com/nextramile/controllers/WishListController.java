@@ -56,6 +56,7 @@ public class WishListController {
 			wishList.getWishListItems();
 		}
 		wishListItem.setWishList(wishList);
+		wishListItem.setQuantity(1);
 		wishListItem.setProduct(productController.getProduct());
 		WishListItemDAO.addWishListItem(wishListItem);
 		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));

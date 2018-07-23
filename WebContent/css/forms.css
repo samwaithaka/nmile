@@ -43,8 +43,9 @@ input {
 
 .cart td {
 	border-top:solid 1px #ddd;
-	background:#fff;
+	border-right:dotted 1px #eee;
 	color:#555;
+	vertical-align:top;
 }
 
 table {

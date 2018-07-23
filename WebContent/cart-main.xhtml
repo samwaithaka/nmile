@@ -21,24 +21,24 @@
 				   <tr>
 				     <td class="bold border-bottom">&nbsp;</td>
 				     <td class="bold border-bottom col-sm-6">Product</td>
-	                 <td class="col-sm-2 bold border-bottom">Qty</td>
-	                 <td class="amount bold border-bottom col-sm-2">Price</td>
+	                 <td class="col-sm-1 bold border-bottom">Qty</td>
+	                 <td class="amount bold border-bottom col-sm-2">Total</td>
 	                 <td class="bold border-bottom"></td>
 	               </tr>
 				<ui:repeat var="cartItem" value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
 				<tr>
-	               <td>
-                       <p:graphicImage class=""
-									value="images/#{cartItem.product.fileName}" width="65" />
+	               <td class="col-sm-1">
+                       <p:graphicImage class="img-responsives"
+									value="images/#{cartItem.product.fileName}" width="80" />
                    </td>
-	               <td class="col-sm-6">#{cartItem.product.productName}</td>
+	               <td class="col-sm-6">#{cartItem.product.productName} @#{cartItem.product.price}</td>
 	               <td class="col-sm-1">#{cartItem.quantity}</td>
-	               <td class="amount col-sm-2">
+	               <td class="amount col-sm-1">
 	                   <h:outputText value="#{cartItem.product.price * cartItem.quantity}">
 					     <f:convertNumber pattern="#,000" />
 				       </h:outputText>
 	               </td>
-	               <td>
+	               <td class="col-sm-1">&nbsp;
                      <p:commandLink class="custom-btn1 red bold" value="X"
 						action="#{shoppingCartController.removeItem}"
 						update="@all">
@@ -50,7 +50,8 @@
                    </tr>
 	            </ui:repeat>
 	            <tr>
-	            <td class="border-top" colspan="3">Total</td>
+	            <td class="border-top">&nbsp;</td>
+	            <td class="border-top bold" colspan="2">Cart Total</td>
 	            <td class="amount bold border-top col-sm-2">
 	              <h:outputText value="#{shoppingCartController.shoppingCart.total}">
 				    <f:convertNumber pattern="#,000" />

@@ -45,18 +45,20 @@ public class WishListItemDAO {
     
     public static WishListItem updateWishListItem(WishListItem wishListItem) {
     	em = factory.createEntityManager();
-        em.getTransaction().begin();
-        WishListItem wishListItem2 = em.find(WishListItem.class, wishListItem.getId());
-        wishListItem2.setEditedOn(new Timestamp(System.currentTimeMillis()));
-        wishListItem2.setEditedBy(wishListItem.getEditedBy());
-        wishListItem2.setWishList(wishListItem.getWishList());
-        wishListItem2.setProduct(wishListItem.getProduct());
-        wishListItem2.setQuantity(wishListItem.getQuantity());
-        wishListItem2.setActive(wishListItem.getActive());
-        em.persist(wishListItem2);
-        em.getTransaction().commit();
-        em.close();
-        return wishListItem2;
+    	em.getTransaction().begin();
+    	WishListItem wishListItem2 = em.find(WishListItem.class, wishListItem.getId());
+    	if(wishListItem2 != null) {
+    		wishListItem2.setEditedOn(new Timestamp(System.currentTimeMillis()));
+    		wishListItem2.setEditedBy(wishListItem.getEditedBy());
+    		wishListItem2.setWishList(wishListItem.getWishList());
+    		wishListItem2.setProduct(wishListItem.getProduct());
+    		wishListItem2.setQuantity(wishListItem.getQuantity());
+    		wishListItem2.setActive(wishListItem.getActive());
+    		em.persist(wishListItem2);
+    		em.getTransaction().commit();
+    	}
+    	em.close();
+    	return wishListItem2;
     }
     
     public static WishListItem find(int id) {

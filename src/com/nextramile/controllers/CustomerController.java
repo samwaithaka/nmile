@@ -69,7 +69,9 @@ public class CustomerController {
 
 		email = params.get("e");
 		token = params.get("t");
-		form = params.get("f") != null ? params.get("f") : "check";
+		if(params.get("f") != null) {
+			form = params.get("f");
+		}
 		try {
 			if(email != null) email = URLDecoder.decode(email, "UTF-8");
 			if(token != null) token = URLDecoder.decode(token, "UTF-8");
@@ -100,7 +102,7 @@ public class CustomerController {
 	}
 
 	public void queryCustomerEmail() {		
-		customer = CustomerDAO.findByEmail(customer.getEmail());	
+		customer = CustomerDAO.findByEmail(customer.getEmail());
 		if(customer.getId() > 0) {	
 			form = "login";
 		} else {
@@ -108,6 +110,8 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			form = "signup";
 		}
+		System.out.println(form);
+		System.out.println(customer);
 		System.out.println(product);
 		System.out.println(customerAction);
 		if(product.getId() > 0) {

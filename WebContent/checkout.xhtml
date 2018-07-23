@@ -133,7 +133,7 @@
                     <h:form>
 					<div class="col-sm-12 border">
 						<p:commandLink class="btn btn-default" value="Complete Checkout"
-						    action="#{orderController.completePurchase}"
+						    action="#{orderController.completePurchase}" ajax="false"
 							name="checkout" id="checkout">
 							<f:setPropertyActionListener
 								value="#{shoppingCartController.shoppingCart}"

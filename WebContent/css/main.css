@@ -1266,11 +1266,15 @@ h2.title {
 }
 
 .cart, .btn-default {
-	background: #f7a723;
+	/*background: #f7a723; Sam changed */ 
 	border: 0 none;
 	border-radius: 0;
 	color: #FFFFFF;
 	font-size: 15px;
+}
+
+.btn-default {
+	background: #f7a723; /* Sam changed */ 
 }
 
 .product-information .fa-save {

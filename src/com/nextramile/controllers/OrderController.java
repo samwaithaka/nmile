@@ -106,25 +106,32 @@ public class OrderController {
 	
 	public String completePurchase() {
 		order.setShoppingCart(shoppingCart);
-		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
-		order.setCheckout(true);
-		OrderDAO.addOrder(order);
-		shoppingCart.setActive(false);
-		List<ShoppingCartItem> shoppingCartItemList = shoppingCart.getShoppingCartItems();
-		// Remove wishListItems for this customer product
-		for(ShoppingCartItem cartItem: shoppingCartItemList) {
-			WishListItem wishListItem = WishListItemDAO.getWishListItemByCustomerProduct(shoppingCart.getCustomer(), cartItem.getProduct());
-			wishListItem.setActive(false);
-			WishListItemDAO.updateWishListItem(wishListItem);
+		if(customerAddress.getId() > 0) {
+			order.setDeliveryAddress(customerAddress.getDeliveryAddress());
+			order.setCheckout(true);
+			OrderDAO.addOrder(order);
+			shoppingCart.setActive(false);
+			List<ShoppingCartItem> shoppingCartItemList = shoppingCart.getShoppingCartItems();
+			// Remove wishListItems for this customer product
+			for(ShoppingCartItem cartItem: shoppingCartItemList) {
+				WishListItem wishListItem = WishListItemDAO.getWishListItemByCustomerProduct(shoppingCart.getCustomer(), cartItem.getProduct());
+				wishListItem.setActive(false);
+				WishListItemDAO.updateWishListItem(wishListItem);
+			}
+			// If wishList is empty, remove it as well
+			WishList wishList = WishListDAO.findPendingWishList(shoppingCart.getCustomer());
+			if(wishList.getWishListItems().size() == 0) {
+				wishList.setActive(false);
+				WishListDAO.updateWishList(wishList);
+			}
+			CartDAO.updateShoppingCart(shoppingCart);
+			return "successful.xhtml?faces-redirect=true";
+		} else {
+			System.out.println("No address");
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Address", "There's No Address to deliver to! Kindly add your address");
+			FacesContext.getCurrentInstance().addMessage(null, fm);
+            return null;
 		}
-		// If wishList is empty, remove it as well
-		WishList wishList = WishListDAO.findPendingWishList(shoppingCart.getCustomer());
-		if(wishList.getWishListItems().size() == 0) {
-			wishList.setActive(false);
-			WishListDAO.updateWishList(wishList);
-		}
-    	CartDAO.updateShoppingCart(shoppingCart);
-		return "successful.xhtml?faces-redirect=true";
 	}
 	
 	public String makeOrder() {
