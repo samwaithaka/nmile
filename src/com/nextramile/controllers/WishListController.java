@@ -42,7 +42,6 @@ public class WishListController {
 	}
 	
 	public String addToWishList() {
-		System.out.println("Adding to wish list");
 		Customer customer = customerController.getCustomer();
 		customerController.setCustomerAction("wishList");
 		if(customer.getId() == 0) {

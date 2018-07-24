@@ -13,7 +13,6 @@
 		<class>com.nextramile.models.Delivery</class>
 		<class>com.nextramile.models.DeliveryAddress</class>
 		<class>com.nextramile.models.CustomerAddress</class>
-		<class>com.nextramile.models.FutureOrder</class>
 		<class>com.nextramile.models.Inventory</class>
 		<class>com.nextramile.models.BlogCategory</class>
 		<class>com.nextramile.models.Blog</class>

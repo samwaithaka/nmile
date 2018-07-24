@@ -2,11 +2,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>hcare</groupId>
-	<artifactId>hcare</artifactId>
+	<groupId>nextramile</groupId>
+	<artifactId>nextramile</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>hcare</name>
+	<name>nextramile</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
@@ -34,7 +34,6 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.2</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>

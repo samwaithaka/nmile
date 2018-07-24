@@ -17,13 +17,13 @@
 			<div>
 			    <h:panelGroup rendered="#{shoppingCartController.shoppingCart.id > 0}">
 			    <div class="col-sm-12" style="color:#58ad07;"><i class="fa fa-shopping-cart"></i><b>&nbsp;Shopping Cart</b></div>
-				  <table class="cart border">
+				  <table class="cart border col-sm-12">
 				   <tr>
-				     <td class="bold border-bottom">&nbsp;</td>
+				     <td class="bold border-bottom col-sm-1">&nbsp;</td>
 				     <td class="bold border-bottom col-sm-6">Product</td>
 	                 <td class="col-sm-1 bold border-bottom">Qty</td>
 	                 <td class="amount bold border-bottom col-sm-2">Total</td>
-	                 <td class="bold border-bottom"></td>
+	                 <td class="bold border-bottom col-sm-1"></td>
 	               </tr>
 				<ui:repeat var="cartItem" value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
 				<tr>

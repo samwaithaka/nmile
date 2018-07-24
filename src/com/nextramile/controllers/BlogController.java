@@ -16,9 +16,11 @@ import javax.faces.context.FacesContext;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import com.nextramile.dao.BlogCategoryDAO;
 import com.nextramile.dao.BlogDAO;
 import com.nextramile.dao.CustomerDAO;
 import com.nextramile.models.Blog;
+import com.nextramile.models.BlogCategory;
 import com.nextramile.models.Customer;
 
 @ManagedBean(name = "blogController", eager = true)
@@ -38,6 +40,7 @@ public class BlogController {
 	@PostConstruct
 	public void init() {
 		blog = new Blog();
+		blog.setBlogCategory(new BlogCategory());
 	}
 
 	public BlogController() {
@@ -75,16 +78,18 @@ public class BlogController {
 	
 	public String createBlog() {
 		String slug = blog.getTitle().replace(" ", "-").toLowerCase();
+		blog.setBlogCategory(BlogCategoryDAO.find(blog.getBlogCategory().getId()));
 		blog.setSlug(slug);
+		System.out.println(blog);
 	    BlogDAO.addBlog(blog);
 	    blogList = BlogDAO.getBlogList();
-		return "blog-list.xhtml";
+		return "admin-blog-list.xhtml";
 	}
 	
 	public String updateBlog() {
 		BlogDAO.updateBlog(blog);
 		blogList = BlogDAO.getBlogList();
-		return "blog-list.xhtml";
+		return "admin-blog-list.xhtml";
 	}
 
 	public Blog getBlog() {

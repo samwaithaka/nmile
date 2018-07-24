@@ -88,7 +88,12 @@ public class BlogDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Blog u WHERE u.slug = :slug");
         q.setParameter("slug", slug);
-     	Blog blog = (Blog) q.getSingleResult();
+        Blog blog = new Blog();
+        try {
+     	    blog = (Blog) q.getSingleResult();
+        } catch(NoResultException e) {
+        	//No blog object found
+        }
      	em.close();
      	return blog;
     }

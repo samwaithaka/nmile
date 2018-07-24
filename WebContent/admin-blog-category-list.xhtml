@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+	  <div class="col-lg-8 mb-4">
+	    <h:form>
+	      <h:commandLink action="blog-category" value="Create Blog Category" />
+	    </h:form>
+		<p:dataTable var="blogCategory" value="#{blogCategoryController.blogCategoryList}" tableStyle="width:auto">
+		  <p:column headerText="Category">
+		    <h:outputText value="#{blogCategory.blogCategoryName}" />
+		  </p:column>
+		  <p:column headerText="">
+		    <p:commandLink value="Edit" action="blog-category">
+		        <f:setPropertyActionListener value="#{blogCategory}" target="#{blogCategoryController.blogCategory}" />
+		    </p:commandLink>
+		  </p:column>
+		</p:dataTable>
+   	  </div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

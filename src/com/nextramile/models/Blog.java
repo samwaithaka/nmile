@@ -32,7 +32,7 @@ public class Blog {
 	private String keywordsMeta;
 	@Column(name = "short_text")
 	private String shortText;
-	@Column(name = "long_text")
+	@Column(name = "long_text",length=2097152)
 	private String longText;
 	@Column(name = "imageFile_name")
 	private String imageFileName;

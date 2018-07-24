@@ -10,7 +10,7 @@
 <ui:composition template="template.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
-	<div class="col-lg-8 mb-4">
+	<div class="col-lg-8 blog">
 		<h:form>
 		    <div class="form-group">
 			  <label for="title">Blog Title</label>
@@ -19,26 +19,22 @@
 			      value="#{blogController.blog.title}" />
 			</div>
 			<div class="form-group">
-			  <label for="shortText">Short Text</label>
-			  <p:inputTextarea class="col-ls-4 form-control" id="shortText" placeholder=""
-			      name="shortText" 
-			      value="#{blogController.blog.shortText}" />
+			  <label for="title">Blog Category</label>
+			  <p:selectOneMenu class="col-ls-4 form-control" value="#{blogController.blog.blogCategory.id}">
+			      <f:selectItems value="#{blogCategoryController.blogCategoryList}" var="category"
+			          itemLabel="#{category.blogCategoryName}" itemValue="#{category.id}" />
+			  </p:selectOneMenu>
 			</div>
 			<div class="form-group">
-			  <label for="longText">Content</label>
-			  <p:textEditor height="300" class="col-ls-4 form-control" id="longText" placeholder=""
-			      name="longText" 
-			      value="#{blogController.blog.longText}" />
-			</div>
-			<div class="form-group">
+			    <label class="col-sm-12" for="file">Image</label>
 			    <p:fileUpload value="#{blogController.file}" id="file" mode="simple" skinSimple="true"/>
 			</div>
-			<div class="form-group">
+			<!--div class="form-group">
 			  <label for="keywordsMeta">Key Words</label>
 			  <p:inputText class="col-ls-4 form-control" id="keywordsMeta" placeholder=""
 			      name="keywordsMeta" 
 			      value="#{blogController.blog.keywordsMeta}" />
-			</div>
+			</div-->
 			
 			<div class="form-group">
 			  <label for="descriptionMeta">Description Meta</label>
@@ -46,13 +42,26 @@
 			      name="descriptionMeta" 
 			      value="#{blogController.blog.descriptionMeta}" />
 			</div>
-			<p:commandButton id="add-submit" value="Submit" 
+			<!--div class="form-group">
+			  <label for="shortText">Short Text</label>
+			  <p:inputTextarea class="col-ls-4 form-control" id="shortText" placeholder=""
+			      name="shortText" 
+			      value="#{blogController.blog.shortText}" />
+			</div-->
+			<div class="form-group editor">
+			  <label for="longText">Content</label>
+			  <p:textEditor class="col-ls-4" id="longText" placeholder=""
+			      name="longText" 
+			      value="#{blogController.blog.longText}" />
+			</div>
+			<div class="form-group">
+			<p:commandButton class="btn btn-default" id="add-submit" value="Submit" 
                 rendered="#{blogController.blog.id eq '' or blogController.blog.id eq 0}"
                 action="#{blogController.createBlog}" ajax="false" />
-            <p:commandButton id="edit-submit" value="Update" 
+            <p:commandButton class="btn btn-default" id="edit-submit" value="Update" 
                 rendered="#{blogController.blog.id > 0}"
                 action="#{blogController.createBlog}" ajax="false" />
-                
+            </div> 
    		</h:form>
    		</div>
 	</ui:define>

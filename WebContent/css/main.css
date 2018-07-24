@@ -2445,8 +2445,8 @@ h2.title {
 }
 
 .caption {
-	color: #888;
-	font-size:110%;
+	color: #595;
+	font-size:105%;
 	font-family: 'Galada', cursive;
 }
 
@@ -2520,4 +2520,8 @@ h3, h4, h5 {
 
 .white {
 	color:#fff;
+}
+
+.blog .editor {
+	height:500px;
 }
