@@ -1,9 +1,11 @@
 package com.nextramile.controllers;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import com.nextramile.dao.WishListDAO;
 import com.nextramile.dao.WishListItemDAO;
@@ -57,10 +59,13 @@ public class WishListController {
 		}
 		wishListItem.setWishList(wishList);
 		wishListItem.setQuantity(1);
-		wishListItem.setProduct(productController.getProduct());
+		wishListItem.setProduct(customerController.getProduct());
 		WishListItemDAO.addWishListItem(wishListItem);
 		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));
-		itemAdded = true;
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Added to Collection", "You have successfully saved the item to your collection. "
+				+ "You can come later and add it to your cart");
+		FacesContext.getCurrentInstance().addMessage(null, fm);
+		//itemAdded = true;
 		return null;
 	}
 	
@@ -70,7 +75,7 @@ public class WishListController {
 	        WishListItemDAO.updateWishListItem(wishListItem);
 		}
 		wishList.setWishListItems(WishListItemDAO.getWishListItems(wishList));
-		return "checkout.xhtml?faces-redirect=true";
+		return "collection.xhtml?faces-redirect=true";
 	}
 	
 	public String remove() {

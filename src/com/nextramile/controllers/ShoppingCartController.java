@@ -59,6 +59,9 @@ public class ShoppingCartController {
 		shoppingCartItem.setShoppingCart(shoppingCart);
 		shoppingCartItem.setProduct(customerController.getProduct());
 		CartItemDAO.addShoppingCartItem(shoppingCartItem);
+		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Added to Cart", "You have successfully added " + shoppingCartItem.getProduct().getProductName() + " to cart. "
+				+ "You can click on the cart to checkout, or you can continue shopping");
+		FacesContext.getCurrentInstance().addMessage(null, fm);
 		shoppingCartItem.setQuantity(1);
 		shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
 		itemAdded = true;

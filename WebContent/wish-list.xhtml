@@ -17,36 +17,53 @@
 			<div>
 			    <h:panelGroup rendered="#{wishListController.wishList.id > 0}">
 			    <div class="col-sm-12" style="color:#58ad07;"><i class="fa fa-th-list"></i><b>&nbsp;Collection</b></div>
-				   <div class="col-xs-6 bold border-bottom">Product</div>
-	               <div class="col-xs-2 bold border-bottom">Qty</div>
-	               <div class="col-xs-2 amount bold border-bottom">Price</div>
-	               <div class="col-xs-2 bold border-bottom">&nbsp;</div>
-				<ui:repeat var="wishListItem" value="#{wishListController.wishList.wishListItems}">
-	               <div class="col-xs-5">#{wishListItem.product.productName}</div>
-	               <div class="col-xs-1">#{wishListItem.quantity}</div>
-	               <div class="col-xs-2 amount">#{wishListItem.product.price * wishListItem.quantity} </div>
-	               <div class="col-xs-4">
+				  <table class="cart border">
+				   <tr>
+				     <td class="bold border-bottom">&nbsp;</td>
+				     <td class="bold border-bottom col-sm-6">Product</td>
+	                 <td class="col-sm-1 bold border-bottom">Qty</td>
+	                 <td class="amount bold border-bottom col-sm-2">Total</td>
+	                 <td class="bold border-bottom"></td>
+	               </tr>
+				<ui:repeat var="item" value="#{wishListController.wishList.wishListItems}">
+				<tr>
+	               <td class="col-sm-1">
+                       <p:graphicImage class="img-responsives"
+									value="images/#{item.product.fileName}" width="80" />
+                   </td>
+	               <td class="col-sm-6">#{item.product.productName} @#{item.product.price}</td>
+	               <td class="col-sm-1">#{item.quantity}</td>
+	               <td class="amount col-sm-1">
+	                   <h:outputText value="#{item.product.price * item.quantity}">
+					     <f:convertNumber pattern="#,000" />
+				       </h:outputText>
+	               </td>
+	               <td class="col-sm-1">&nbsp;
                      <p:commandLink class="custom-btn1 red bold" value="X"
 						action="#{wishListController.removeItem}"
 						update="@all">
 						<f:setPropertyActionListener
-							value="#{wishListItem}"
+							value="#{item}"
 							target="#{wishListController.wishListItem}" />
 					 </p:commandLink>
-					 &nbsp;
-					  <p:commandLink class="custom-btn1" value="Buy Now"
-					      action="product-details.xhtml?faces-redirect=true">
-					      <f:setPropertyActionListener value="#{wishListItem.product}" target="#{productController.product}" />
-					 </p:commandLink>
-                   </div>
+                   </td>
+                   </tr>
 	            </ui:repeat>
-	            <div class="col-xs-6 bold border-top">Total</div>
-	            <div class="col-xs-2 amount bold border-top">#{wishListController.wishList.total}</div>
-	            <div class="col-xs-4 bold border-bottom" />
+	            <tr>
+	            <td class="border-top">&nbsp;</td>
+	            <td class="border-top bold" colspan="2">List Total</td>
+	            <td class="amount bold border-top col-sm-2">
+	              <h:outputText value="#{wishListController.wishList.total}">
+				    <f:convertNumber pattern="#,000" />
+			      </h:outputText>
+	            </td>
+	            <td class="bold border-top">&nbsp;</td>
+	            </tr>
+	            </table>
 	            </h:panelGroup>
 	            <h:panelGroup rendered="#{wishListController.wishList.id eq 0}" class="col-sm-12">
 	              <div class="col-sm-8" style="color:#58ad07;">
-	              <i class="fa fa-shopping-cart"></i>&nbsp;Empty Collection
+	              <i class="fa fa-shopping-cart"></i>&nbsp;List Empty
 	              </div>
 	            </h:panelGroup>      
 			</div>
