@@ -12,14 +12,14 @@
 	<ui:define name="content">
 	  <div class="col-lg-8 mb-4">
 	    <h:form>
-	      <h:commandLink action="blog-category" value="Create Blog Category" />
+	      <h:commandLink action="admin-blog-category.xhtml?faces-redirect=true" value="Create Blog Category" />
 	    </h:form>
 		<p:dataTable var="blogCategory" value="#{blogCategoryController.blogCategoryList}" tableStyle="width:auto">
 		  <p:column headerText="Category">
 		    <h:outputText value="#{blogCategory.blogCategoryName}" />
 		  </p:column>
 		  <p:column headerText="">
-		    <p:commandLink value="Edit" action="blog-category">
+		    <p:commandLink value="Edit" action="admin-blog-category.xhtml?faces-redirect=true">
 		        <f:setPropertyActionListener value="#{blogCategory}" target="#{blogCategoryController.blogCategory}" />
 		    </p:commandLink>
 		  </p:column>

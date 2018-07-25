@@ -51,3 +51,8 @@ input {
 table {
 	width:100%;
 }
+
+.body img {
+	float:left;
+	margin:7px;
+}

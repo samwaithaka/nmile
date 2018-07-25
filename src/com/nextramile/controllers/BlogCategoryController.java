@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import com.nextramile.dao.BlogCategoryDAO;
+import com.nextramile.models.Blog;
 import com.nextramile.models.BlogCategory;
 
 @ManagedBean(name = "blogCategoryController", eager = true)
@@ -29,13 +30,15 @@ public class BlogCategoryController {
 	    BlogCategoryDAO.addBlogCategory(blogCategory);
 	    blogCategory = new BlogCategory();
 	    blogCategoryList = BlogCategoryDAO.getBlogCategoryList();
-		return "admin-blog-category-list.xhtml";
+	    blogCategory = new BlogCategory();
+		return "admin-blog-category-list.xhtml?faces-redirect=true";
 	}
 	
 	public String updateBlogCategory() {
 		BlogCategoryDAO.updateBlogCategory(blogCategory);
 		blogCategoryList = BlogCategoryDAO.getBlogCategoryList();
-		return "admin-blog-category-list.xhtml";
+		blogCategory = new BlogCategory();
+		return "admin-blog-category-list.xhtml?faces-redirect=true";
 	}
 
 	public BlogCategory getBlogCategory() {

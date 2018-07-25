@@ -2525,3 +2525,8 @@ h3, h4, h5 {
 .blog .editor {
 	height:500px;
 }
+
+.body img {
+	float:left;
+	margin:7px;
+}

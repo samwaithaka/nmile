@@ -80,16 +80,17 @@ public class BlogController {
 		String slug = blog.getTitle().replace(" ", "-").toLowerCase();
 		blog.setBlogCategory(BlogCategoryDAO.find(blog.getBlogCategory().getId()));
 		blog.setSlug(slug);
-		System.out.println(blog);
 	    BlogDAO.addBlog(blog);
 	    blogList = BlogDAO.getBlogList();
-		return "admin-blog-list.xhtml";
+	    blog = new Blog();
+		return "admin-blog-list.xhtml?faces-redirect=true";
 	}
 	
 	public String updateBlog() {
 		BlogDAO.updateBlog(blog);
 		blogList = BlogDAO.getBlogList();
-		return "admin-blog-list.xhtml";
+		blog = new Blog();
+		return "admin-blog-list.xhtml?faces-redirect=true";
 	}
 
 	public Blog getBlog() {
