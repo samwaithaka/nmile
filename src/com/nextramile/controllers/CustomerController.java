@@ -110,10 +110,7 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			form = "signup";
 		}
-		System.out.println(form);
-		System.out.println(customer);
-		System.out.println(product);
-		System.out.println(customerAction);
+		
 		if(product.getId() > 0) {
 			if(customerAction.equalsIgnoreCase("shoppingCart")) {
 				System.out.println("shopping cart");
@@ -182,7 +179,7 @@ public class CustomerController {
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
 			String url;
 			try {
-				url = "http://localhost:8080/nextramile/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+				url = "https://www.nextramile.com/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
 				String subject = "Password Reset";
 				String salutation = null;
 				if(customer.getCustomerName() != null) {
@@ -196,7 +193,7 @@ public class CustomerController {
 				CustomerDAO.updateCustomer(customer);
 				customer.setPasswordResetToken(null);
 				fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
-				Emailer.send("samwaithaka@gmail.com", customer.getEmail(), subject, message);
+				Emailer.send("noreply@nextramile.com", customer.getEmail(), subject, message);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

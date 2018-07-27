@@ -68,14 +68,16 @@ public class ProductController {
 	    product = ProductDAO.addProduct(product);
 	    upload();
 	    productList = ProductDAO.getProductList();
-		return "admin-product-list.xhtml";
+	    product = new Product();
+		return "admin-product-list.xhtml?faces-redirect=true";
 	}
 	
 	public String updateProduct() {
 		upload();
 		ProductDAO.updateProduct(product);
 		productList = ProductDAO.getProductList();
-		return "admin-product-list.xhtml";
+		product = new Product();
+		return "admin-product-list.xhtml?faces-redirect=true";
 	}
 	
 	public void upload() {

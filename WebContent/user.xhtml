@@ -47,7 +47,7 @@
 					<div class="form-group">
 						<label for="password">Password</label>
 						<h:inputSecret class="form-control" id="password" name="password"
-							value="#{customerController.customer.password}" required="true">
+							value="#{customerController.customer.password}">
 						</h:inputSecret>
 						<h:message for="password" style="color:red" />
 					</div>
@@ -55,7 +55,7 @@
 						<p:commandButton class="btn btn-default" id="login-submit"
 							value="Login" action="#{customerController.login}" ajax="false" />
 						<label for="reset">Forgot password?&nbsp;</label>
-						<p:commandLink id="reset" value="Click Here" ajax="false"
+						<p:commandLink id="reset" value="Click Here" ajax="false" immediate="false"
 							action="#{customerController.generatePasswordResetToken}" />
 					</div>
 				</h:form>

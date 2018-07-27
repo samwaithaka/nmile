@@ -25,6 +25,7 @@ import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
 import com.nextramile.models.WishList;
 import com.nextramile.models.WishListItem;
+import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "orderController", eager = true)
 @SessionScoped
@@ -115,8 +116,10 @@ public class OrderController {
 			// Remove wishListItems for this customer product
 			for(ShoppingCartItem cartItem: shoppingCartItemList) {
 				WishListItem wishListItem = WishListItemDAO.getWishListItemByCustomerProduct(shoppingCart.getCustomer(), cartItem.getProduct());
-				wishListItem.setActive(false);
-				WishListItemDAO.updateWishListItem(wishListItem);
+				if(wishListItem != null) {
+				    wishListItem.setActive(false);
+				    WishListItemDAO.updateWishListItem(wishListItem);
+				}
 			}
 			// If wishList is empty, remove it as well
 			WishList wishList = WishListDAO.findPendingWishList(shoppingCart.getCustomer());
@@ -125,6 +128,21 @@ public class OrderController {
 				WishListDAO.updateWishList(wishList);
 			}
 			CartDAO.updateShoppingCart(shoppingCart);
+			Customer customer = customerController.getCustomer();
+			String subject = "Nextramile Order Placed";
+			StringBuilder builder = new StringBuilder();
+			builder.append("You have successfully ordered the following items: <br />");
+			builder.append("<table>");
+			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
+				builder.append("<tr>");
+				builder.append("<td style='width:55%;'>" + item.getProduct().getProductName() + "</td>");
+				builder.append("<td style='width:10%;'>" + item.getQuantity() + "</td>");
+				builder.append("<td style='width:15%;'>" + item.getProduct().getPrice() + "</td>");
+				builder.append("<td style='width:20%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
+				builder.append("</tr>");
+			}
+			builder.append("</table>");
+			Emailer.send("noreply@nextramile.com", customer.getEmail(), subject, builder.toString());
 			return "successful.xhtml?faces-redirect=true";
 		} else {
 			System.out.println("No address");
