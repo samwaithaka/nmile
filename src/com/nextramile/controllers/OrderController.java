@@ -132,7 +132,7 @@ public class OrderController {
 			String subject = "Nextramile Order Placed";
 			StringBuilder builder = new StringBuilder();
 			builder.append("You have successfully ordered the following items: <br />");
-			builder.append("<table>");
+			builder.append("<table style='width:100%;'>");
 			int total = 0;
 			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
 				total += item.getProduct().getPrice() * item.getQuantity();
