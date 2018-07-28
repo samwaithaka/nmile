@@ -46,7 +46,7 @@ public class Emailer
 	   builder.append("</tr>");
 	   builder.append("</table>");
 	   builder.append("</div>");
-	   builder.append("<div><table><tr><td><div style=\"padding:25px 0 25px 0;\">" + body + "</div></td></tr></table></div>");
+	   builder.append("<div><table><tr><td><div style=\"padding:10px 0 25px 0;\">" + body + "</div></td></tr></table></div>");
 	   builder.append("<div style=\"border-top:solid 1px #999;\">");
 	   builder.append("<p>Nextramile &copy;&nbsp;2018 |&nbsp;<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com\">www.nextramile.com</a> |&nbsp;+254 720 317929</p>");
 	   builder.append("</div>");

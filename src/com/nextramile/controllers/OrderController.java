@@ -131,6 +131,7 @@ public class OrderController {
 			Customer customer = customerController.getCustomer();
 			String subject = "Nextramile Order Placed";
 			StringBuilder builder = new StringBuilder();
+			builder.append("<p>Dear " + customer.getCustomerName() + ",</p>");
 			builder.append("You have successfully ordered the following items: <br />");
 			builder.append("<table style='width:100%;'>");
 			int total = 0;
@@ -145,11 +146,14 @@ public class OrderController {
 				builder.append("</tr>");
 			}
 			builder.append("<tr>");
-			builder.append("<td colspan='4' style='border-top:solid 1px #555;'>Total</td>");
-			builder.append("<td colspan='4' style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
+			builder.append("<td>&nbsp;</td>");
+			builder.append("<td colspan='3' style='border-top:solid 1px #555;'>Total</td>");
+			builder.append("<td style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
 			builder.append("</tr>");
 			builder.append("</table>");
-			Emailer.send("noreply@nextramile.com", customer.getEmail(), subject, builder.toString());
+			Emailer.send("'Nextramile Customer Service'<noreply@nextramile.com>", 
+					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
+					subject, builder.toString());
 			return "successful.xhtml?faces-redirect=true";
 		} else {
 			System.out.println("No address");
