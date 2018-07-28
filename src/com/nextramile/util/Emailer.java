@@ -13,12 +13,7 @@ public class Emailer
       properties.setProperty("mail.smtp.host", host);  
       Session session = Session.getDefaultInstance(properties, null);
       
-      body = 
-    		  "________________________________________________________________________________________________\n\n" 
-      + subject + 
-      "\n________________________________________________________________________________________________\n" +
-      body +
-      "\n\n***************************************************************************************************************************";
+      body = "<h3>" + subject + "</h3>" + body;
       
       try {  
          MimeMessage message = new MimeMessage(session);  
@@ -37,9 +32,25 @@ public class Emailer
  
    private static String getMailHTML(String body) {
 	   StringBuilder builder = new StringBuilder();
-	   builder.append("<div style=\"background:#eee;\"><table><tr><td><img src=\"https://nextramile.com/images/home/nm-logo.png\" width=\"100\"></td>"
-	   		+ "<td><h3>Nextramile</h3>We Go the Extra Mile to Help You and Make You Happy</td></tr></table></div>");
-	   builder.append("<div style=\"background:#eee;min-height:300px;\"><table><tr><td>" + body + "</td></tr></table></div>");
+	   builder.append("<div style=\"border:solid 2px #777; border-radius:5px;padding:10px; font-family:Arial;color:#555;\">");
+	   builder.append("<div style=\"border-bottom:solid 1px #999;\">");
+	   builder.append("<table style=\"width:100%;\">");
+	   builder.append("<tr><td><img src=\"https://nextramile.com/images/home/nm-logo.png\" width=\"100\"></td>");
+	   builder.append("<td><div style=\"text-align:center;\">We Go the Extra Mile to Bring You Happiness</div></td>");
+	   builder.append("<td><div style=\"text-align:center;\">");
+	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com/home.xhtml\">Home</a>&nbsp;|&nbsp;");
+	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com/shop.xhtml\">Shop</a>&nbsp;|&nbsp;");
+	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com/blog.xhtml\">Blog</a>&nbsp;|&nbsp;");
+	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com/about.xhtml\">About Us</a>");
+	   builder.append("</div></td>");
+	   builder.append("</tr>");
+	   builder.append("</table>");
+	   builder.append("</div>");
+	   builder.append("<div><table><tr><td><div style=\"padding:25px 0 25px 0;\">" + body + "</div></td></tr></table></div>");
+	   builder.append("<div style=\"border-top:solid 1px #999;\">");
+	   builder.append("<p>Nextramile &copy;&nbsp;2018 |&nbsp;<a style=\"text-decoration:none;color:#070;\" href=\"www.nextramile.com\">www.nextramile.com</a> |&nbsp;+254 720 317929</p>");
+	   builder.append("</div>");
+	   builder.append("</div>");
 	   return builder.toString();
    }
 }  

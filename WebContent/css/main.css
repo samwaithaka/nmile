@@ -2444,10 +2444,10 @@ h2.title {
 	width: 180px;
 }
 
-.caption {
-	color: #595;
-	font-size:105%;
-	font-family: 'Galada', cursive;
+.caption p {
+	color: #777;
+	font-size:1.4em;
+	font-weight:bold;
 }
 
 .border {

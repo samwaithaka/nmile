@@ -113,14 +113,12 @@ public class CustomerController {
 		
 		if(product.getId() > 0) {
 			if(customerAction.equalsIgnoreCase("shoppingCart")) {
-				System.out.println("shopping cart");
 				shoppingCart.setCustomer(customer);
 				shoppingCart = CartDAO.addShoppingCart(shoppingCart);
 				shoppingCartItem.setShoppingCart(shoppingCart);
 				shoppingCartItem.setProduct(product);
 				CartItemDAO.addShoppingCartItem(shoppingCartItem);
 			} else if(customerAction.equalsIgnoreCase("wishList")) {
-				System.out.println("wish list");
 				wishList.setCustomer(customer);
 				wishList = WishListDAO.addWishList(wishList);
 				wishListItem.setWishList(wishList);
@@ -128,6 +126,7 @@ public class CustomerController {
 				WishListItemDAO.addWishListItem(wishListItem);
 			}
 		}
+		customer.setId(0);
 	}
 
 	public String updateCustomer() {
@@ -231,7 +230,6 @@ public class CustomerController {
 
 	public String changePassword() {
 		String view = null;
-		System.out.println(customer);
 		if(customer.getPassword().equals(customer.getPasswordConfirm())) {
 			CustomerDAO.changePassword(customer);
 			view = "home.xhtml?faces-redirect=true";

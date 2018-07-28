@@ -7,7 +7,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import com.nextramile.dao.CartDAO;
+import com.nextramile.dao.*;
 import com.nextramile.dao.CartItemDAO;
 import com.nextramile.models.Customer;
 import com.nextramile.models.ShoppingCart;

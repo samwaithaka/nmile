@@ -133,14 +133,21 @@ public class OrderController {
 			StringBuilder builder = new StringBuilder();
 			builder.append("You have successfully ordered the following items: <br />");
 			builder.append("<table>");
+			int total = 0;
 			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
+				total += item.getProduct().getPrice() * item.getQuantity();
 				builder.append("<tr>");
-				builder.append("<td style='width:55%;'>" + item.getProduct().getProductName() + "</td>");
-				builder.append("<td style='width:10%;'>" + item.getQuantity() + "</td>");
-				builder.append("<td style='width:15%;'>" + item.getProduct().getPrice() + "</td>");
-				builder.append("<td style='width:20%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
+				builder.append("<td style='width:14%;'><img src='https://www.nextramile.com/images/" + item.getProduct().getFileName() + "' style='width:55px;' alt='" + item.getProduct().getProductName() + "'/></td>");
+				builder.append("<td style='width:50%;'>" + item.getProduct().getProductName() + "</td>");
+				builder.append("<td style='width:8%;'>" + item.getQuantity() + "</td>");
+				builder.append("<td style='width:14%;'>" + item.getProduct().getPrice() + "</td>");
+				builder.append("<td style='width:14%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
 				builder.append("</tr>");
 			}
+			builder.append("<tr>");
+			builder.append("<td colspan='4' style='border-top:solid 1px #555;'>Total</td>");
+			builder.append("<td colspan='4' style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
+			builder.append("</tr>");
 			builder.append("</table>");
 			Emailer.send("noreply@nextramile.com", customer.getEmail(), subject, builder.toString());
 			return "successful.xhtml?faces-redirect=true";
