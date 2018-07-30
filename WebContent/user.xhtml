@@ -16,7 +16,7 @@
 					listener="#{customerController.refresh}" />
 			</f:metadata>
 		</h:form>
-		<div class="col-lg-5 mb-4">
+		<div class="col-sm-5">
 			<h:panelGroup id="check-user-form" rendered="#{customerController.form eq 'check'}">
 				<h:form>
 					<div class="form-group">
@@ -62,19 +62,9 @@
 			</h:panelGroup>
 			<h:panelGroup id="signup-form" rendered="#{customerController.form eq 'signup'}">
 				<h:form id="profile">
-		Referer: #{customerController.customer.referer.customerName}<br />
 					<div class="form-group">
-						<label for="customerName">Customer Name</label>
-						<h:inputText class="col-ls-4 form-control" id="customerName"
-							name="customerName" required="true"
-							value="#{customerController.customer.customerName}">
-							<f:validateRequired />
-						</h:inputText>
-						<h:message for="customerName" style="color:red" />
-					</div>
-					<div class="form-group">
-						<label for="email">Email</label>
-						<h:inputText class="form-control" id="email" name="email" required="true"
+						<label for="email">Your Email</label>
+						<h:outputText class="form-control" id="email" name="email" required="true"
 							value="#{customerController.customer.email}" />
 					</div>
 
@@ -82,6 +72,15 @@
 						<label for="password">Password</label>
 						<h:inputSecret class="form-control" id="password" name="password" required="true"
 							value="#{customerController.customer.password}" />
+					</div>
+					<div class="form-group">
+						<label for="customerName">Your Name</label>
+						<h:inputText class="col-ls-4 form-control" id="customerName"
+							name="customerName" required="true"
+							value="#{customerController.customer.customerName}">
+							<f:validateRequired />
+						</h:inputText>
+						<h:message for="customerName" style="color:red" />
 					</div>
 					<div class="form-group">
 						<label for="phone">Phone</label>

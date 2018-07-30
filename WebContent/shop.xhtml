@@ -10,7 +10,7 @@
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
-		<div class="col-sm-8 mb-4">
+		<div class="col-sm-8 block">
 			<ui:repeat var="product" value="#{productController.productList}">
 				<div class="col-sm-4">
 					<div class="product-image-wrapper">
@@ -90,11 +90,11 @@
 				</div>
 			</ui:repeat>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-4 block">
 				<div class="left-sidebar">
 				     <ui:include src="cart-side.xhtml" />
 				</div>
-			</div>
+		</div>
 	</ui:define>
 	<ui:define name="footer" />
 </ui:composition>

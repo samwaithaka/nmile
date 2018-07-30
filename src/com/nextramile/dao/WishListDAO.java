@@ -66,9 +66,10 @@ public class WishListDAO {
     	Query q = em.createQuery("select u from WishList u WHERE u.customer = :customer and u.active = true");
     	q.setParameter("customer", customer);
     	WishList wishList = new WishList();
+    	List<WishListItem> itemList = new ArrayList<WishListItem>();
+    	wishList.setWishListItems(itemList);
     	try {
     	    wishList = (WishList) q.getSingleResult();
-    	    //System.out.println(wishList);
     	    int total = 0;
     	    for(WishListItem wishListItem : WishListItemDAO.getWishListItems(wishList)) {
     	    	total += wishListItem.getQuantity() * wishListItem.getProduct().getPrice();

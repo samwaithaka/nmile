@@ -2530,3 +2530,10 @@ h3, h4, h5 {
 	float:left;
 	margin:7px;
 }
+
+.block {
+	border:solid 3px #F0F0E9;
+	padding:10px 0 10px 0;
+	border-radius:10px;
+	min-height:;
+}

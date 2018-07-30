@@ -10,8 +10,9 @@
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
 	<ui:define name="content">
-	<div class="col-lg-5 mb-4">
-		<h4>Successful!</h4>
+	    <div class="col-lg-5 mb-4">
+		  <h4>Successful!</h4>
+		  <h:outputText value="#{customerController.message}" escape="false" />
    		</div>
 	</ui:define>
 	<ui:define name="footer" />

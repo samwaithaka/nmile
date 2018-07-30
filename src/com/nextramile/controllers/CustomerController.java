@@ -44,6 +44,7 @@ public class CustomerController {
 	private Product product;
 	private String form = "check";
 	private String customerAction;
+	private String message;
 	private int refId = 0;
 
 	@PostConstruct
@@ -90,15 +91,22 @@ public class CustomerController {
 		if(ref != null) {
 			refId = Integer.parseInt(ref);
 		}
-		if(customer.getId() > 0) {
-			//customerOrderList = OrderDAO.getCustomerOrderList(customer);
-		}
 	}
 
 	public String createCustomer() {
 		customer.setReferer(CustomerDAO.find(refId));
-		CustomerDAO.addCustomer(customer);
-		return "account.xhtml?faces-redirect=true";
+		customer = CustomerDAO.addCustomer(customer);
+		StringBuilder builder = new StringBuilder();
+		builder.append("<p>An email has already been sent to you, kindly confirm it by doing the following:</p>");
+		builder.append("<ol><li>Go to your inbox, check for an email from Nextramile Admin ");
+		builder.append("<b>Please Note: </b> If can't find the email, check your spam folder first, open it and then click on the button <b>not spam</b></li>");
+		builder.append("<li>On the email, click on the confirmation link</li><ol>");
+		
+		//url = "https://www.nextramile.com/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+		customer = new Customer();
+		message = builder.toString();
+		form = "check";
+		return "successful.xhtml?faces-redirect=true";
 	}
 
 	public void queryCustomerEmail() {		
@@ -110,7 +118,6 @@ public class CustomerController {
 			customer = CustomerDAO.addCustomer(customer);
 			form = "signup";
 		}
-		
 		if(product.getId() > 0) {
 			if(customerAction.equalsIgnoreCase("shoppingCart")) {
 				shoppingCart.setCustomer(customer);
@@ -192,7 +199,9 @@ public class CustomerController {
 				CustomerDAO.updateCustomer(customer);
 				customer.setPasswordResetToken(null);
 				fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
-				Emailer.send("noreply@nextramile.com", customer.getEmail(), subject, message);
+				Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
+						"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
+						subject, message);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -232,7 +241,7 @@ public class CustomerController {
 		String view = null;
 		if(customer.getPassword().equals(customer.getPasswordConfirm())) {
 			CustomerDAO.changePassword(customer);
-			view = "home.xhtml?faces-redirect=true";
+			view = "shop.xhtml?faces-redirect=true";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful","Password Successully changed");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
@@ -312,5 +321,13 @@ public class CustomerController {
 
 	public void setCustomerAction(String customerAction) {
 		this.customerAction = customerAction;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

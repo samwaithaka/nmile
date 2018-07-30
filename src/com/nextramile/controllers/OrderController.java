@@ -123,9 +123,11 @@ public class OrderController {
 			}
 			// If wishList is empty, remove it as well
 			WishList wishList = WishListDAO.findPendingWishList(shoppingCart.getCustomer());
-			if(wishList.getWishListItems().size() == 0) {
-				wishList.setActive(false);
-				WishListDAO.updateWishList(wishList);
+			if(wishList.getId() > 0) {
+				if(wishList.getWishListItems().size() == 0) {
+					wishList.setActive(false);
+					WishListDAO.updateWishList(wishList);
+				}
 			}
 			CartDAO.updateShoppingCart(shoppingCart);
 			Customer customer = customerController.getCustomer();
@@ -134,6 +136,13 @@ public class OrderController {
 			builder.append("<p>Dear " + customer.getCustomerName() + ",</p>");
 			builder.append("You have successfully ordered the following items: <br />");
 			builder.append("<table style='width:100%;'>");
+			builder.append("<tr>");
+			builder.append("<td>&nbsp;</td>");
+			builder.append("<td>Product Name</td>");
+			builder.append("<td>Qty</td>");
+			builder.append("<td>Price</td>");
+			builder.append("<td>Total</td>");
+			builder.append("</tr>");
 			int total = 0;
 			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
 				total += item.getProduct().getPrice() * item.getQuantity();
@@ -147,11 +156,11 @@ public class OrderController {
 			}
 			builder.append("<tr>");
 			builder.append("<td>&nbsp;</td>");
-			builder.append("<td colspan='3' style='border-top:solid 1px #555;'>Total</td>");
+			builder.append("<td colspan='3' style='border-top:solid 1px #555;'>Grand Total</td>");
 			builder.append("<td style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
 			builder.append("</tr>");
 			builder.append("</table>");
-			Emailer.send("'Nextramile Customer Service'<noreply@nextramile.com>", 
+			Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
 					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
 					subject, builder.toString());
 			return "successful.xhtml?faces-redirect=true";

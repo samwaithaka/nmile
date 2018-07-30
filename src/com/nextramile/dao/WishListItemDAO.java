@@ -87,7 +87,6 @@ public class WishListItemDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from WishListItem u WHERE u.wishList = :wishList and u.product = :product and u.active = true");
     	WishList wishList = WishListDAO.findPendingWishList(customer);
-    	System.out.println("Line 88 " + wishList);
     	q.setParameter("wishList", wishList);
     	q.setParameter("product", product);
     	WishListItem wishListItem = new WishListItem();
