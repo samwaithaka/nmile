@@ -79,12 +79,12 @@ public class UserController {
 			String subject = Configs.getConfig("systemname") + " User Account Creation";
 			String body = 
 					"Dear " + user.getFirstName() + ", " +
-					"\n\nYour user account on has been successfully created. Use the following " +
-					"credentials: " +
-					"\n\nUsername: " + user.getUsername() +
-					"\nPassword: " + clearPassword +
-					"\n\nYou can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") +
-					"\n\nSystem Admin";
+					"<p>Your user account on has been successfully created. Use the following " +
+					"credentials: </p>" +
+					"Username: " + user.getUsername() +
+					"<br />Password: " + clearPassword +
+					"<p>You can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") +
+					"</p>System Admin";
 			Emailer.send(from, to, subject, body);
 		} else {
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -155,12 +155,12 @@ public class UserController {
 		String subject = Configs.getConfig("systemname") + " Password Reset";
 		String body = "" +
 				"Dear " + user.getFirstName() + ", " +
-				"\n\nYour password has been reset. Use the following " +
-				"credentials, and then change your password as prompted: " +
-				"\n\nUsername: " + user.getUsername() +
-				"\nPassword: " + newPassword +
-				"\n\nYou can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
-				"\n\nSystem Admin";
+				"<p>Your password has been reset. Use the following " +
+				"credentials, and then change your password as prompted: </p>" +
+				"Username: " + user.getUsername() +
+				"<br />Password: " + newPassword +
+				"<p>You can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
+				"</p>System Admin";
 		Emailer.send(from, to, subject, body);
 		
 		FacesContext fc = FacesContext.getCurrentInstance();

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+</head>
+<body>
+	<ui:composition template="admin-template.vs1.xhtml">
+		<ui:param name="title" value="Install" />
+		<ui:define name="content">
+			<h:form>
+			<div class="row">
+				<div class="form-group col-sm-3">
+					<label for="title">Admin Username</label>
+					<p:inputText class="col-ls-4 form-control" id="username"
+						placeholder="" name="username"
+						value="#{installController.adminUser}" />
+				</div>
+				<div class="form-group col-sm-6">
+					<label for="title">Admin Email</label>
+					<p:inputText class="col-ls-4 form-control" id="email"
+						placeholder="" name="email"
+						value="#{installController.adminEmail}" />
+				</div>
+				<div class="form-group col-sm-12">
+					<p:commandButton  class="btn btn-default" value="Install" action="#{installController.install}" ajax="false" />
+				</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

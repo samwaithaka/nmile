@@ -12,22 +12,21 @@
 			<h:commandLink action="admin-user" value="Add User" actionListener="#{userController.init}" />
 		</h:form>
 		<br />
-		<h:dataTable value="#{userController.userAccountList}" var="user"
-			styleClass="order-table" headerClass="order-table-header"
-			rowClasses="order-table-odd-row,order-table-even-row">
-		    <h:column>
+		<p:dataTable value="#{userController.userAccountList}" var="user"
+			tableStyle="width:auto;">
+		    <p:column>
 			<!-- column header -->
 			<f:facet name="header">Username</f:facet>
 			<!-- row record -->
   				#{user.username}
-  			</h:column>
-  			<h:column>
+  			</p:column>
+  			<p:column>
 			<!-- column header -->
 			<f:facet name="header">Email</f:facet>
 			<!-- row record -->
   				#{user.emailAddress}
-  			</h:column>
-			<h:column>
+  			</p:column>
+			<p:column>
 				<f:facet name="header"></f:facet>
 				<h:form>
 					<h:commandLink action="admin-user" value="Edit">
@@ -43,8 +42,8 @@
                        <f:setPropertyActionListener target="#{userController.userAccount}" value="#{user}" />
                     </h:commandLink>
 				</h:form>
-			</h:column>
-			</h:dataTable>
+			</p:column>
+			</p:dataTable>
 	</ui:define>
 </ui:composition>
 </html>

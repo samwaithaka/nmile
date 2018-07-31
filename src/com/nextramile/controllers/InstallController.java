@@ -15,6 +15,7 @@ import com.nextramile.models.UserRole;
 import com.nextramile.util.Configs;
 import com.nextramile.util.Emailer;
 //import com.nextramile.util.PasswordEncryptor;
+import com.nextramile.util.PasswordEncrypter;
 
 @ManagedBean(name="installController", eager=true)
 @SessionScoped
@@ -41,7 +42,7 @@ public class InstallController {
 			user.setUsername(adminUser);
 			user.setEmailAddress(adminEmail);
 			String password = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
-			//user.setPassword(PasswordEncryptor.encryptPassword(password));
+			user.setPassword(PasswordEncrypter.encryptPassword(password));
 			user.setActive(true);
 			user.setResetFlag(true);
 			user.setCreatedBy("process");
@@ -63,12 +64,12 @@ public class InstallController {
 				String subject = Configs.getConfig("systemname") + " Installation";
 				String body = "" +
 						"Hello  Admin!" +
-						"\n\nYou have successfully installed " + Configs.getConfig("systemname") + ". Use the following " +
-						"credentials to login, and then change your password as prompted: " +
-						"\n\nUsername: " + user.getUsername() +
-						"\nPassword: " + password +
-						"\n\nAccess the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
-						"\n\nSystem Admin";
+						"<p>You have successfully installed " + Configs.getConfig("systemname") + ". Use the following " +
+						"credentials to login, and then change your password as prompted: </p>" +
+						"Username: " + user.getUsername() +
+						"<br />Password: " + password +
+						"<p>Access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
+						"</p>System Admin";
 				
 				    //Create necessary directories
 				    String appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
@@ -84,7 +85,7 @@ public class InstallController {
 				return "";
 			}
 		} else {
-			return "index.xhtml?faces-redirect=true";
+			return "login.xhtml?faces-redirect=true";
 		}
 	}
 

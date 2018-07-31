@@ -12,16 +12,14 @@
 			<h:commandLink action="admin-role" value="Add Role" />
 		</h:form>
 		<br />
-		<h:dataTable value="#{roleController.roleList}" var="role"
-			styleClass="order-table" headerClass="order-table-header"
-			rowClasses="order-table-odd-row,order-table-even-row" style="width:50%;">
-			<h:column>
+		<p:dataTable value="#{roleController.roleList}" var="role" tableStyle="width:auto;">
+			<p:column>
 				<!-- column header -->
 				<f:facet name="header">Role Name</f:facet>
 				<!-- row record -->
    				#{role.roleName}
-   			</h:column>
-			<h:column>
+   			</p:column>
+			<p:column>
 				<f:facet name="header"></f:facet>
 				<h:form>
 					<h:commandLink action="admin-role" value="Edit">
@@ -29,8 +27,8 @@
 							value="#{role}" />
 					</h:commandLink>
 				</h:form>
-			</h:column>
-			</h:dataTable>
+			</p:column>
+			</p:dataTable>
 	</ui:define>
 </ui:composition>
 </html>
