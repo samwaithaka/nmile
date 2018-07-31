@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="admin-template.vs1.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+		<div class="col-lg-8 mb-4">
+			<h:form enctype="multipart/form-data">
+				<p:growl id="messages" showDetail="true" />
+				<div class="form-group">
+					<label for="slideName">Slide Title</label>
+					<h:inputText class="col-ls-4 form-control" id="slideTitle" name="slideTitle"
+						value="#{slideController.slide.slideTitle}">
+						<f:validateRequired />
+					</h:inputText>
+				</div>
+				<div class="form-group">
+					<label for="slideText">Slide Text</label>
+					<h:inputText class="col-ls-4 form-control" id="slideText"
+						name="slideText"
+						value="#{slideController.slide.slideText}">
+						<f:validateRequired />
+					</h:inputText>
+				</div>
+				<div id="pic" class="form-group">
+				    <p:graphicImage class="img-responsive" 
+				        value="slides/#{slideController.slide.slidePhoto}" width="70" />
+					<p:fileUpload class="form-control" value="#{slideController.file}" id="file"
+						mode="simple" skinSimple="true" />
+				</div>
+				<div class="form-group">
+					<p:commandButton class="btn btn-default" id="add-submit" value="Submit"
+						rendered="#{slideController.slide.id eq '' or slideController.slide.id eq 0}"
+						action="#{slideController.createSlide}" ajax="false" />
+					<p:commandButton class="btn btn-default" id="edit-submit" value="Update"
+						rendered="#{slideController.slide.id > 0}"
+						action="#{slideController.updateSlide}" ajax="false" />
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

@@ -20,6 +20,8 @@ import org.primefaces.model.UploadedFile;
 
 import com.nextramile.dao.ProductDAO;
 import com.nextramile.models.Product;
+import com.nextramile.util.Configs;
+import com.nextramile.util.FileOperations;
 
 @ManagedBean(name = "productController", eager = true)
 @SessionScoped
@@ -28,21 +30,24 @@ public class ProductController {
 	private Product product;
 	private List<Product> productList;
 	private UploadedFile file;
-	private String resourcePath;
+	private String appDataDirectory;
 	private String webResourcePath;
 	private StreamedContent image;
 	
 	@PostConstruct
 	public void init() {
 		product = new Product();
-		productList = ProductDAO.getProductList();
 	}
 
 	public ProductController() {
-		resourcePath = new File(ProductController.class.getClassLoader()
-				.getResource(".").getFile()).getAbsolutePath();
+		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
+		productList = ProductDAO.getProductList();
+		for(Product prod : productList) {
+			FileOperations.copyFile(appDataDirectory + "images/" + prod.getFileName(), 
+					webResourcePath + "/images/" + prod.getFileName());
+		}
 	}
 	
 	public void refresh() {
@@ -54,7 +59,7 @@ public class ProductController {
 			int productId = Integer.parseInt(idValue);
 			product = ProductDAO.find(productId);
 			if(product != null) {
-				File imageFile = new File(resourcePath + "/images/" + product.getFileName());
+				File imageFile = new File(appDataDirectory + "/images/" + product.getFileName());
 				try {
 					image = new DefaultStreamedContent(new FileInputStream(imageFile),"image/jpeg");
 				} catch (FileNotFoundException e) {
@@ -66,14 +71,18 @@ public class ProductController {
 	
 	public String createProduct() {
 	    product = ProductDAO.addProduct(product);
-	    upload();
+	    if(file.getFileName() != null && file.getSize() > 0) {
+		    upload();
+		}
 	    productList = ProductDAO.getProductList();
 	    product = new Product();
 		return "admin-product-list.xhtml?faces-redirect=true";
 	}
 	
 	public String updateProduct() {
-		upload();
+		if(file.getFileName() != null && file.getSize() > 0) {
+		    upload();
+		}
 		ProductDAO.updateProduct(product);
 		productList = ProductDAO.getProductList();
 		product = new Product();
@@ -96,7 +105,7 @@ public class ProductController {
         		byte[] buffer = new byte[file.getInputstream().available()];
         		file.getInputstream().read(buffer);
         		fileName = fileName.replace(fileExtension, "");
-        		File fileUpload = new File(resourcePath + "/images/" + fileName + product.getId() + fileExtension);
+        		File fileUpload = new File(appDataDirectory + "/images/" + fileName + product.getId() + fileExtension);
         		File webFileUpload = new File(webResourcePath + "/images/" + fileName + product.getId() + fileExtension);
         		FileOutputStream out = new FileOutputStream(fileUpload);
         		FileOutputStream out2 = new FileOutputStream(webFileUpload);

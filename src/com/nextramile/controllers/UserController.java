@@ -83,7 +83,7 @@ public class UserController {
 					"credentials: </p>" +
 					"Username: " + user.getUsername() +
 					"<br />Password: " + clearPassword +
-					"<p>You can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") +
+					"<p>You can access the system from this link: " + Configs.getConfig("appurl") +
 					"</p>System Admin";
 			Emailer.send(from, to, subject, body);
 		} else {
@@ -145,9 +145,10 @@ public class UserController {
 	public void resetPassword() throws UnsupportedEncodingException {
 		String newPassword = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
 		user.setResetFlag(true);
-		user.setEditedBy(loggedInUser.getUsername());
+		//user.setEditedBy(loggedInUser.getUsername());
+		user.setEditedBy("User");
 		user.setPassword(encryptPassword(newPassword));
-		user.setActive(false);
+		//user.setActive(false);
 		UserDAO.updateUserPassword(user);
 		
 		String from = Configs.getConfig("adminemail");
@@ -159,7 +160,7 @@ public class UserController {
 				"credentials, and then change your password as prompted: </p>" +
 				"Username: " + user.getUsername() +
 				"<br />Password: " + newPassword +
-				"<p>You can access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
+				"<p>You can access the system from this link: " + Configs.getConfig("appurl") + 
 				"</p>System Admin";
 		Emailer.send(from, to, subject, body);
 		

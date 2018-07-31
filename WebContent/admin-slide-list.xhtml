@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="admin-template.vs1.xhtml">
+	<ui:define name="header" />
+	<ui:define name="content">
+	<div class="col-lg-8 mb-4">
+	  <h:form>
+	    <p:commandLink value="Add Slide" 
+	        action="admin-slide.xhtml?faces-redirect=true"
+	        ajax="false" />
+	  </h:form>
+	  </div>
+	  <div class="col-lg-8 mb-4">
+	  <p:dataTable value="#{slideController.slideList}" var="slide"
+	      tableStyle="width:auto">
+	    <p:column>
+	      <f:facet name="header">Slide Title</f:facet>
+	      #{slide.slideTitle}
+	    </p:column>
+	    <p:column>
+	      <f:facet name="header" />
+	      <h:form>
+	      <p:commandLink value="Edit" 
+	        action="admin-slide.xhtml?faces-redirect=true"
+	        ajax="false">
+	        <f:setPropertyActionListener value="#{slide}" target="#{slideController.slide}" />
+	      </p:commandLink>
+	      </h:form>
+	    </p:column>
+	  </p:dataTable>
+   	  </div>
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>

@@ -20,23 +20,23 @@ import com.nextramile.util.PasswordEncrypter;
 @ManagedBean(name="installController", eager=true)
 @SessionScoped
 public class InstallController {
-	
+
 	private UserAccount user;
 	private Role role;
 	private UserRole userRole;
 	private String adminEmail;
 	private String adminUser;
-	
+
 	@PostConstruct
 	public void init() {
 		user = new UserAccount();
 		role = new Role();
 		userRole = new UserRole();
 	}
-	
+
 	public InstallController() {
 	}
-	
+
 	public String install() {
 		if(UserDAO.getUserList().size() == 0) {
 			user.setUsername(adminUser);
@@ -48,17 +48,17 @@ public class InstallController {
 			user.setCreatedBy("process");
 			user.setEditedBy("process");
 			user = UserDAO.addUser(user);
-					
+
 			role.setActive(true);
 			role.setRoleName("Admin");
 			role = RoleDAO.addRole(role);
-			
+
 			userRole.setUserAccount(user);
 			userRole.setRole(role);
-			
+
 			userRole = UserRoleDAO.addUserRole(userRole);
 			if(userRole.getId() > 0) {
-				
+
 				String from = Configs.getConfig("adminemail");
 				String to = user.getEmailAddress();
 				String subject = Configs.getConfig("systemname") + " Installation";
@@ -70,16 +70,22 @@ public class InstallController {
 						"<br />Password: " + password +
 						"<p>Access the system from this link: " + Configs.getConfig("appurl") + Configs.getConfig("uri") + 
 						"</p>System Admin";
-				
-				    //Create necessary directories
-				    String appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
-					String logsDirectory = appDataDirectory + "logs/";
-					File directory1 = new File(appDataDirectory);
-					File directory2 = new File(logsDirectory);
-					directory1.mkdirs();
-					directory2.mkdirs();
+
+				//Create necessary directories
+				String appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
+				String logsDirectory = appDataDirectory + "logs/";
+				String imagesDirectory = appDataDirectory + "images/";
+				String slidesDirectory = appDataDirectory + "slides/";
+				File directory1 = new File(appDataDirectory);
+				File directory2 = new File(logsDirectory);
+				File directory3 = new File(imagesDirectory);
+				File directory4 = new File(slidesDirectory);
+				directory1.mkdirs();
+				directory2.mkdirs();
+				directory3.mkdirs();
+				directory4.mkdirs();
 				Emailer.send(from, to, subject, body);
-				
+
 				return "install-complete.xhtml?faces-redirect=true";
 			} else {
 				return "";
