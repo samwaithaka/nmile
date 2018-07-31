@@ -20,6 +20,9 @@
 		<class>com.nextramile.models.ShoppingCartItem</class>
 		<class>com.nextramile.models.WishList</class>
 		<class>com.nextramile.models.WishListItem</class>
+		<class>com.nextramile.models.UserAccount</class>
+		<class>com.nextramile.models.Role</class>
+		<class>com.nextramile.models.UserRole</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nextramile_db" />

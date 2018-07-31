@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+</head>
+<body>
+	<ui:composition template="admin-template.vs1.xhtml">
+		<ui:param name="title" value="User Roles - #{userRoleController.userAccount.firstName}" />
+		<ui:define name="content">
+			<h:form>
+				<h:panelGrid columns="3" style="width:50%;">
+					<h:outputText styleClass="heading-3" value="Available"></h:outputText>
+					<h:outputText value=""></h:outputText>
+					<h:outputText styleClass="heading-3" value="Assigned"></h:outputText>
+
+					<h:selectManyListbox styleClass="roles-list-box" id="assign" validatorMessage="required"
+						value="#{userRoleController.userListOption}">
+						<f:selectItems value="#{userRoleController.inActiveRoles}"
+							var="option" itemLabel="#{option.roleName}"
+							itemValue="#{option.id}" />
+					</h:selectManyListbox>
+
+					<h:panelGrid columns="1">
+						<h:commandButton class="btn btn-default user-roles-button" value="Assign" 
+						action="#{userRoleController.assign}">
+							<f:setPropertyActionListener
+								target="#{userRoleController.userRoleAction}" value="assign" />
+							<f:ajax execute="assign" render="assign remove" />
+						</h:commandButton>
+						<h:commandButton class="btn btn-default user-roles-button" value="Remove"
+						action="#{userRoleController.remove}">
+							<f:setPropertyActionListener
+								target="#{userRoleController.userRoleAction}" value="remove" />
+							<f:ajax execute="remove" render="assign remove" />
+						</h:commandButton>
+					</h:panelGrid>
+
+					<h:selectManyListbox styleClass="roles-list-box" id="remove" validatorMessage="required"
+						value="#{userRoleController.userListOption}">
+						<f:selectItems value="#{userRoleController.activeRoles}"
+							var="option" itemLabel="#{option.roleName}"
+							itemValue="#{option.id}" />
+					</h:selectManyListbox>
+
+				</h:panelGrid>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

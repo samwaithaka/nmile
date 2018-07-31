@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="admin-template.vs1.xhtml">
+	<ui:param name="title" value="Roles" />
+	<ui:define name="content">
+		<h:form>
+			<h:commandLink action="admin-role" value="Add Role" />
+		</h:form>
+		<br />
+		<h:dataTable value="#{roleController.roleList}" var="role"
+			styleClass="order-table" headerClass="order-table-header"
+			rowClasses="order-table-odd-row,order-table-even-row" style="width:50%;">
+			<h:column>
+				<!-- column header -->
+				<f:facet name="header">Role Name</f:facet>
+				<!-- row record -->
+   				#{role.roleName}
+   			</h:column>
+			<h:column>
+				<f:facet name="header"></f:facet>
+				<h:form>
+					<h:commandLink action="admin-role" value="Edit">
+						<f:setPropertyActionListener target="#{roleController.role}"
+							value="#{role}" />
+					</h:commandLink>
+				</h:form>
+			</h:column>
+			</h:dataTable>
+	</ui:define>
+</ui:composition>
+</html>

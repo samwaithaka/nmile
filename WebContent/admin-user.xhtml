@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+</head>
+<body>
+	<ui:composition template="admin-template.vs1.xhtml">
+		<ui:param name="title" value="Add User" />
+		<ui:define name="content">
+			<h:form>
+			    <h:inputHidden id="id" name="id" value="#{userController.userAccount.id}" />
+				<h:panelGrid columns="3" style="width:50%;">
+					<h:outputText value="Username" />
+					<h:inputText class="form" id="username" name="username" label="Username"
+                        value="#{userController.userAccount.username}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="username" style="color:red" />
+					
+					<h:outputText value="First Name" />
+					<h:inputText class="form" id="firstName" name="firstName" label="First Name"
+                        value="#{userController.userAccount.firstName}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="firstName" style="color:red" />
+					
+					<h:outputText value="Last Name" />
+					<h:inputText class="form" id="lastName" name="lastName" label="Last Name"
+                        value="#{userController.userAccount.lastName}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="lastName" style="color:red" />
+					
+					<h:outputText value="Email Address" />
+					<h:inputText class="form" id="emailAddress" name="emailAddress" label="Email Address"
+                        value="#{userController.userAccount.emailAddress}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="emailAddress" style="color:red" />
+					
+				    <h:outputText value="" />
+		            <h:commandLink class="submit" rendered="#{userController.userAccount.id eq '' || userController.userAccount.id eq 0}"
+						action="#{userController.addUser}">
+				        <h:graphicImage value="templates/images/save-button.png" alt="Save" width="80" />
+				    </h:commandLink>
+					<h:commandLink class="submit" rendered="#{userController.userAccount.id > 0}"
+						action="#{userController.updateUser}">
+					    <h:graphicImage value="templates/images/update-button.png" alt="Update" width="80" />
+					</h:commandLink>
+					<h:outputText value="" />
+				</h:panelGrid>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>
