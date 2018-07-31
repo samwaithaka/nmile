@@ -29,6 +29,7 @@ import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
 import com.nextramile.models.WishList;
 import com.nextramile.models.WishListItem;
+import com.nextramile.util.Configs;
 import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "customerController", eager = true)
@@ -66,20 +67,23 @@ public class CustomerController {
 				.getRequestParameterMap();
 		String ref = params.get("ref");
 		String token = null;
+		String createdTime = null;
 		String email = null;
 
 		email = params.get("e");
 		token = params.get("t");
+		createdTime = params.get("ct");
 		if(params.get("f") != null) {
 			form = params.get("f");
 		}
 		try {
 			if(email != null) email = URLDecoder.decode(email, "UTF-8");
 			if(token != null) token = URLDecoder.decode(token, "UTF-8");
+			if(createdTime != null) createdTime = URLDecoder.decode(createdTime, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		if(email != null) {
 			customer = new Customer();
 			customer.setEmail(email);
@@ -88,6 +92,18 @@ public class CustomerController {
 			customer.setPasswordResetToken(token);
 			reset();
 		}
+
+		if(createdTime != null) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+			Date parsedDate;
+			try {
+				parsedDate = dateFormat.parse(createdTime);
+				Timestamp createdOn = new Timestamp(parsedDate.getTime());
+				customer.setCreatedOn(createdOn);
+				activate();
+			} catch (ParseException e) {}
+		}
+
 		if(ref != null) {
 			refId = Integer.parseInt(ref);
 		}
@@ -95,14 +111,32 @@ public class CustomerController {
 
 	public String createCustomer() {
 		customer.setReferer(CustomerDAO.find(refId));
+		customer.setActive(false);
 		customer = CustomerDAO.addCustomer(customer);
 		StringBuilder builder = new StringBuilder();
 		builder.append("<p>An email has already been sent to you, kindly confirm it by doing the following:</p>");
 		builder.append("<ol><li>Go to your inbox, check for an email from Nextramile Admin ");
 		builder.append("<b>Please Note: </b> If can't find the email, check your spam folder first, open it and then click on the button <b>not spam</b></li>");
 		builder.append("<li>On the email, click on the confirmation link</li><ol>");
-		
-		//url = "https://www.nextramile.com/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+		FacesMessage fm = null;
+		try {
+			String url = Configs.getConfig("appurl") + "confirm.xhtml?ct=" + 
+					URLEncoder.encode(customer.getCreatedOn().toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+			String subject = "Nextramile Account Confirmation";
+			String salutation = null;
+			if(customer.getCustomerName() != null) {
+				salutation = "Hello " + customer.getCustomerName() + ",\n\n";
+			}
+			String message = salutation +
+					"You have successfully signed up on Nextramile.com. Kindly click on the link below to complete your registration\n\n"
+					+ "Confirmation link: " + url;
+			fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
+			Emailer.send(Configs.getConfig("adminemail"), 
+					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
+					subject, message);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		customer = new Customer();
 		message = builder.toString();
 		form = "check";
@@ -154,13 +188,13 @@ public class CustomerController {
 		}
 		return page;
 	}
-    
+
 	public void logout() throws IOException {
-	    customer = new Customer();
-	    form = "login";
-	    FacesContext.getCurrentInstance().getExternalContext().redirect("user.xhtml");
+		customer = new Customer();
+		form = "login";
+		FacesContext.getCurrentInstance().getExternalContext().redirect("user.xhtml");
 	}
-	
+
 	public String redirectUser() {
 		String page = null;
 		shoppingCart = CartDAO.findPendingShoppingCart(customer);
@@ -185,7 +219,7 @@ public class CustomerController {
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
 			String url;
 			try {
-				url = "https://www.nextramile.com/reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
+				url = Configs.getConfig("appurl") + "reset.xhtml?t=" + URLEncoder.encode(ts.toString(), "UTF-8") + "&e=" + URLEncoder.encode(customer.getEmail(),"UTF-8");
 				String subject = "Password Reset";
 				String salutation = null;
 				if(customer.getCustomerName() != null) {
@@ -199,7 +233,7 @@ public class CustomerController {
 				CustomerDAO.updateCustomer(customer);
 				customer.setPasswordResetToken(null);
 				fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
-				Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
+				Emailer.send(Configs.getConfig("adminemail"), 
 						"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
 						subject, message);
 			} catch (UnsupportedEncodingException e) {
@@ -234,6 +268,25 @@ public class CustomerController {
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void activate() {
+		customer = CustomerDAO.getInvactiveCustomer(customer);
+		if(customer.getActive() == true) {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Already Active","Your account is already active");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else if(customer.getId() > 0) {
+			customer.setActive(true);
+			CustomerDAO.updateCustomer(customer);
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Account Activated","Your account has been successfully activated!");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else {
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error","Error Occured. Make sure you copied the right link from your email");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		if(customer.getId() > 0) {
+			redirectUser();
 		}
 	}
 
@@ -274,7 +327,7 @@ public class CustomerController {
 	public void setProduct(Product product) {
 		this.product = product;
 	}	
-	
+
 	public ShoppingCart getShoppingCart() {
 		return shoppingCart;
 	}

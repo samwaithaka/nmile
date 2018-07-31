@@ -129,6 +129,21 @@ public class CustomerDAO {
      	return customer;
     }
     
+    public static Customer getInvactiveCustomer(Customer customer) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.createdOn = :createdOn");
+    	q.setParameter("email", customer.getEmail());
+    	q.setParameter("createdOn", customer.getCreatedOn());
+        customer = new Customer();
+        try {
+     	    customer = (Customer) q.getSingleResult();
+        } catch(NoResultException e) {
+        	// No results
+        }
+     	em.close();
+     	return customer;
+    }
+
     public static Customer login(Customer customer) {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email and u.password = :password");
