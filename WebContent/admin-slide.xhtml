@@ -28,6 +28,13 @@
 						<f:validateRequired />
 					</h:inputText>
 				</div>
+				<div class="form-group">
+					<label for="slideText">Active</label>
+					<h:inputText class="col-ls-4 form-control" id="active"
+						name="slideText"
+						value="#{slideController.slide.active}">
+					</h:inputText>
+				</div>
 				<div id="pic" class="form-group">
 				    <p:graphicImage class="img-responsive" 
 				        value="slides/#{slideController.slide.slidePhoto}" width="70" />

@@ -1,4 +1,4 @@
-/**
+ /**
  * 
  */
 package com.nextramile.models;
@@ -41,7 +41,9 @@ public class Slide {
 	@Column(name = "edited_by", length=32)
 	private String editedBy;
 	@Column(name = "active")
-	private boolean active = true;
+	private String active;
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public int getId() {
 		return id;
@@ -91,10 +93,16 @@ public class Slide {
 	public void setEditedBy(String editedBy) {
 		this.editedBy = editedBy;
 	}
-	public boolean getActive() {
+	public String getActive() {
 		return active;
 	}
-	public void setActive(boolean active) {
+	public void setActive(String active) {
 		this.active = active;
+	}
+	public boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

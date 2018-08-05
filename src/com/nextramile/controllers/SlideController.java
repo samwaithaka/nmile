@@ -65,18 +65,17 @@ public class SlideController {
 			++i;
 		}
 		indexList.add(i);
-		System.out.println(indexList);
 	}
 	
 	public String createSlide() {
-		if(file.getFileName() != null && file.getSize() > 0) {
-		    upload();
-		}
 		//slide.setCreatedBy(user.getUsername());
 		slide.setCreatedBy("User");
-	    SlideDAO.addSlide(slide);
-	    slideList = SlideDAO.getSlideList();
+		slide = SlideDAO.addSlide(slide);
+	    if(file.getFileName() != null && file.getSize() > 0) {
+		    upload();
+		}
 	    slide = new Slide();
+	    slideList = SlideDAO.getSlideList();
 	    return "admin-slide-list.xhtml?faces-redirect=true";
 	}
 	
@@ -118,13 +117,11 @@ public class SlideController {
         		out2.close();
         		slide.setSlidePhoto(fileName + slide.getId() + fileExtension);
 				SlideDAO.updateSlide(slide);
-				System.out.println(file.getFileName() + " Photo uploaded");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
             message = new FacesMessage("Successful", file.getFileName() + " is uploaded.");
         } else {
-        	System.out.println("No photo");
         	message = new FacesMessage("Error", "Error occured!.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);

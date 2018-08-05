@@ -17,7 +17,7 @@
 						<div class="single-products">
 							<div class="productinfo text-center">
 								<p:graphicImage class="img-responsive"
-									value="images/#{product.fileName}" width="450" />
+									value="images/#{product.fileName}" />
 								<h2>KSH.#{product.price}</h2>
 								<p>#{product.productName}</p>
 								<!--a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a-->
@@ -81,10 +81,12 @@
 							<!-- img src="images/home/new.png" class="new" alt="" /-->
 						</div>
 						<div class="choose">
+						<h:form>
 							<ul class="nav nav-pills nav-justified">
-								<li><a href="product-details.xhtml?id=#{product.id}"><i
+								<li><a class="btn btn-default grey" href="product-details.xhtml?id=#{product.id}"><i
 										class="fa fa-plus-square"></i>More details</a></li>
 							</ul>
+							</h:form>
 						</div>
 					</div>
 				</div>

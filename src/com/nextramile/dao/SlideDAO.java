@@ -41,6 +41,7 @@ public class SlideDAO {
         slide2.setSlideTitle(slide.getSlideTitle());
         slide2.setSlideText(slide.getSlideText());
         slide2.setSlidePhoto(slide.getSlidePhoto());
+        slide2.setDeleted(slide.getDeleted());
         slide2.setActive(slide.getActive());
         em.persist(slide2);
         em.getTransaction().commit();
@@ -57,7 +58,7 @@ public class SlideDAO {
     @SuppressWarnings("unchecked")
 	public static List<Slide> getSlideList() {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("SELECT r FROM Slide r WHERE r.active=true");
+    	Query q = em.createQuery("SELECT r FROM Slide r WHERE r.deleted=false");
     	List<Slide> slideList = q.getResultList();
     	return slideList;
     }
