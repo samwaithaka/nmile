@@ -1,5 +1,6 @@
 package com.nextramile.controllers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
 
 import org.primefaces.model.UploadedFile;
 
@@ -24,6 +26,7 @@ import com.nextramile.models.UserAccount;
 //import com.nextramile.utils.SessionManager;
 import com.nextramile.util.Configs;
 import com.nextramile.util.FileOperations;
+import com.nextramile.util.ImageResizer;
 
 @ManagedBean(name="slideController", eager=true)
 @SessionScoped
@@ -45,9 +48,6 @@ public class SlideController {
 	
 	public SlideController() {
 		slideList = SlideDAO.getSlideList();
-		//CoreClass coreClass = new CoreClass();
-		//sessionManager = coreClass.sessionManager;
-		//String userId = sessionManager.getAttribute("userId");
 		String userId = null;
 		if(userId != null) {
 			user = UserDAO.find(Integer.parseInt(userId));
@@ -104,17 +104,11 @@ public class SlideController {
         		if (i > 0) {
         			fileExtension += file.getFileName().substring(i+1);
         		}
-        		byte[] buffer = new byte[file.getInputstream().available()];
-        		file.getInputstream().read(buffer);
+        		BufferedImage im = ImageIO.read(file.getInputstream());
+        		BufferedImage mainPhoto = ImageResizer.resize(im, 800, 400);
         		fileName = fileName.replace(fileExtension, "");
-        		File fileUpload = new File(appDataDirectory + "/slides/" + fileName + slide.getId() + fileExtension);
-        		File webFileUpload = new File(webResourcePath + "/slides/" + fileName + slide.getId() + fileExtension);
-        		FileOutputStream out = new FileOutputStream(fileUpload);
-        		FileOutputStream out2 = new FileOutputStream(webFileUpload);
-        		out.write(buffer);
-        		out2.write(buffer);
-        		out.close();
-        		out2.close();
+        		ImageIO.write(mainPhoto, "JPEG", new File(webResourcePath + "/slides/" + fileName + slide.getId() + fileExtension));
+        		ImageIO.write(mainPhoto, "JPEG", new File(appDataDirectory + "/slides/" + fileName + slide.getId() + fileExtension));
         		slide.setSlidePhoto(fileName + slide.getId() + fileExtension);
 				SlideDAO.updateSlide(slide);
 			} catch (IOException e) {

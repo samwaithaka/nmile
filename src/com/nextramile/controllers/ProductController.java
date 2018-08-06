@@ -1,5 +1,6 @@
 package com.nextramile.controllers;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -22,6 +24,7 @@ import com.nextramile.dao.ProductDAO;
 import com.nextramile.models.Product;
 import com.nextramile.util.Configs;
 import com.nextramile.util.FileOperations;
+import com.nextramile.util.ImageResizer;
 
 @ManagedBean(name = "productController", eager = true)
 @SessionScoped
@@ -47,6 +50,8 @@ public class ProductController {
 		for(Product prod : productList) {
 			FileOperations.copyFile(appDataDirectory + "images/" + prod.getFileName(), 
 					webResourcePath + "/images/" + prod.getFileName());
+			FileOperations.createThumbnails(appDataDirectory + "images/" + prod.getFileName(), 
+					webResourcePath + "/images/thumbnails/" + prod.getFileName());
 		}
 	}
 	
@@ -102,17 +107,14 @@ public class ProductController {
         		if (i > 0) {
         			fileExtension += file.getFileName().substring(i+1);
         		}
-        		byte[] buffer = new byte[file.getInputstream().available()];
-        		file.getInputstream().read(buffer);
+        		
+        		BufferedImage im = ImageIO.read(file.getInputstream());
+        		BufferedImage mainPhoto = ImageResizer.resize(im, 350, 350);
+        		BufferedImage thumbNail = ImageResizer.resize(im, 150, 150);
         		fileName = fileName.replace(fileExtension, "");
-        		File fileUpload = new File(appDataDirectory + "/images/" + fileName + product.getId() + fileExtension);
-        		File webFileUpload = new File(webResourcePath + "/images/" + fileName + product.getId() + fileExtension);
-        		FileOutputStream out = new FileOutputStream(fileUpload);
-        		FileOutputStream out2 = new FileOutputStream(webFileUpload);
-        		out.write(buffer);
-        		out2.write(buffer);
-        		out.close();
-        		out2.close();
+        		ImageIO.write(thumbNail, "JPEG", new File(webResourcePath + "/images/thumbnails/" + fileName + product.getId() + fileExtension));
+        		ImageIO.write(mainPhoto, "JPEG", new File(webResourcePath + "/images/" + fileName + product.getId() + fileExtension));
+        		ImageIO.write(mainPhoto, "JPEG", new File(appDataDirectory + "/images/" + fileName + product.getId() + fileExtension));
 				product.setFileName(fileName + product.getId() + fileExtension);
 				ProductDAO.updateProduct(product);
 				System.out.println(file.getFileName() + " Photo uploaded");

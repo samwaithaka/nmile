@@ -2549,7 +2549,6 @@ h3, h4, h5 {
 
 .item img.slide {
 	width:800px;
-	height:400px;
 }
 
 .carousel-inner .item {
@@ -2604,14 +2603,14 @@ li a.grey {
 	font-family: sans-serif;
 	font-size:1.1em;
 	color:#777;
-	height:400px;
+	height:375px;
 }
 
 .character {
 	background:url("../images/happy-businessman2.png") top right;
 	background-repeat: no-repeat;
-    background-size: 100px 200px;
-    height:200px;
+    background-size: 90px 180px;
+    height:180px;
 }
 
 .home-top-right .caption {
