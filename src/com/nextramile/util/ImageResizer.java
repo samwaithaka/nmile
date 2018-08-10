@@ -25,6 +25,9 @@ public class ImageResizer {
                 resized = cropImage(resized, widthAfter, heightAfter);
             }
             return resized;
+        } else if(img.getHeight() > heightAfter) {
+        	BufferedImage resized = cropImage(img, img.getWidth(), heightAfter);
+        	return resized;
         } else {
             return img;
         }

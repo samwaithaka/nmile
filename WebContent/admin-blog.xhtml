@@ -11,7 +11,7 @@
 	<ui:define name="header" />
 	<ui:define name="content">
 	<div class="col-lg-8 blog">
-		<h:form>
+		<h:form enctype="multipart/form-data">
 		    <div class="form-group">
 			  <label for="title">Blog Title</label>
 			  <p:inputText class="col-ls-4 form-control" id="title" placeholder=""
@@ -25,10 +25,10 @@
 			          itemLabel="#{category.blogCategoryName}" itemValue="#{category.id}" />
 			  </p:selectOneMenu>
 			</div>
-			<div class="form-group">
+			<!--div class="form-group">
 			    <label class="col-sm-12" for="file">Image</label>
 			    <p:fileUpload value="#{blogController.file}" id="file" mode="simple" skinSimple="true"/>
-			</div>
+			</div-->
 			<!--div class="form-group">
 			  <label for="keywordsMeta">Key Words</label>
 			  <p:inputText class="col-ls-4 form-control" id="keywordsMeta" placeholder=""
@@ -48,6 +48,12 @@
 			      name="shortText" 
 			      value="#{blogController.blog.shortText}" />
 			</div-->
+			<div id="pic" class="form-group">
+				    <p:graphicImage class="img-responsive" 
+				        value="blog/#{blogController.blog.imageFileName}" width="70" />
+					<p:fileUpload class="form-control" value="#{blogController.file}" id="file"
+						mode="simple" skinSimple="true" />
+			</div>
 			<div class="form-group editor">
 			  <label for="longText">Content</label>
 			  <p:textEditor class="col-ls-4" id="longText" placeholder=""

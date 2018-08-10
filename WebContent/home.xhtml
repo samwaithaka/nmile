@@ -10,7 +10,7 @@
 	<ui:define name="header" />
 	<ui:define name="content">
 		<div class="row">
-			<div class="col-lg-8 mb-4">
+			<div class="col-sm-8 mb-4">
 				<div id="myCarousel" class="carousel slide" data-ride="carousel">
 					<!-- Indicators -->
 					<ol class="carousel-indicators">
@@ -48,38 +48,51 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-4 mb-4 border tips home-top-right">
+			<div class="col-sm-4 home-top-right">
+			<div class="col-sm-12 border tips">
 			    <div class="col-sm-9 col-xs-9 caption">
 			    <h2>Our Admin is Happy!</h2>
 			      Our admin is excited to have you here, and wants to keep you posted on some upcoming developments.
 			     Subscribe below.
 			    </div>
 			    <div class="col-xs-3 col-sm-3 character">
-			    
 			    </div>
 			    <div class="col-sm-12">
-			    <h:form>
-			      <div class="form-group col-sm-12">
-			        <p:inputText class="form-control" name="email" 
-			            placeholder="Your Email"
-			            value="#{customerController.customer.email}" />
-			      </div>
-			      <div class="form-group col-sm-4">
-			          <h:commandLink action="here" class="btn btn-default" value="Submit" />
-			      </div>
-			      </h:form>
+				    <h:form>
+				        <p:inputText class="form-control" name="email" 
+				            placeholder="Your Email"
+				            value="#{customerController.customer.email}" />
+				          <h:commandLink action="here" class="btn btn-default" value="Submit" />
+				      </h:form>
 			      </div>
 			      <div class="col-sm-12">
-				      <div class="fb-like col-sm-6" 
-					    data-href="https://web.facebook.com/nextramile" 
-					    data-layout="standard" 
-					    data-action="like" 
-					    data-show-faces="true">
-					  </div>
-					  <div class="col-sm-6">
-					  <a href="https://twitter.com/nextramile?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @Nextramile</a>
-					  </div>
+				    <div class="fb-like" data-href="https://www.facebook.com/nextramile" data-width="250" 
+				    data-layout="standard" data-action="like" 
+				    data-size="small" data-show-faces="false" data-share="true"></div>
+				    <a href="https://twitter.com/nextramile?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @Nextramile</a>
 				  </div>
+				  </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 home-blocks">
+			    <div class="col-sm-4 block">
+			      <h3>Innovative Solutions</h3>
+			        <i class="icon fa fa-gift"></i>
+			      	<p>We provide solutions that improve people's lives. You can be sure of 
+			      	some or all of the following, inspiration, wellness, personal development. Our solutions 
+			      	also embrase social good.</p>
+			    </div>
+			    <div class="col-sm-4 block">
+			       <h3>Our Shop</h3>
+			       <i class="icon fa fa-shopping-cart"></i>
+			       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+			    </div>
+			    <div class="col-sm-4 block">
+			      <h3>Our Blog</h3>
+			        <i class="icon fa fa-align-justify"></i>
+			      	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+			    </div>
 			</div>
 		</div>
 	</ui:define>

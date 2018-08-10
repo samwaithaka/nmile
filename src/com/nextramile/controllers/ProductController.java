@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,8 @@ public class ProductController {
 	private String appDataDirectory;
 	private String webResourcePath;
 	private StreamedContent image;
+	private String url;
+	private String encodedUrl;
 	
 	@PostConstruct
 	public void init() {
@@ -43,7 +47,7 @@ public class ProductController {
 	}
 
 	public ProductController() {
-		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
+		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("dir");
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
 		productList = ProductDAO.getProductList();
@@ -61,6 +65,10 @@ public class ProductController {
 				.getRequestParameterMap();
 		String idValue = params.get("id");
 		if(idValue != null) {
+			url = Configs.getConfig("appurl") + "product-details.xhtml?id=" + idValue;
+			try {
+				encodedUrl = URLEncoder.encode(url, "UTF-8");
+			} catch (UnsupportedEncodingException e1) {}
 			int productId = Integer.parseInt(idValue);
 			product = ProductDAO.find(productId);
 			if(product != null) {
@@ -159,5 +167,21 @@ public class ProductController {
 
 	public void setFile(UploadedFile file) {
 		this.file = file;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getEncodedUrl() {
+		return encodedUrl;
+	}
+
+	public void setEncodedUrl(String encodedUrl) {
+		this.encodedUrl = encodedUrl;
 	}
 }

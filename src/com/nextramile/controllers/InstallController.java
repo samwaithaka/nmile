@@ -76,14 +76,17 @@ public class InstallController {
 				String logsDirectory = appDataDirectory + "logs/";
 				String imagesDirectory = appDataDirectory + "images/";
 				String slidesDirectory = appDataDirectory + "slides/";
+				String blogDirectory = appDataDirectory + "blog/";
 				File directory1 = new File(appDataDirectory);
 				File directory2 = new File(logsDirectory);
 				File directory3 = new File(imagesDirectory);
 				File directory4 = new File(slidesDirectory);
+				File directory5 = new File(blogDirectory);
 				directory1.mkdirs();
 				directory2.mkdirs();
 				directory3.mkdirs();
 				directory4.mkdirs();
+				directory5.mkdirs();
 				Emailer.send(from, to, subject, body);
 
 				return "install-complete.xhtml?faces-redirect=true";

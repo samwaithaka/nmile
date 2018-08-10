@@ -1,6 +1,7 @@
 <!DOCTYPE html [
     <!ENTITY nbsp "&#160;"> 
-]><html xmlns="http://www.w3.org/1999/xhtml"
+]>
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -8,12 +9,21 @@
 
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
+	<ui:param name="title" value="#{productController.product.productName}" />
+	<ui:param name="description"
+		value="#{productController.product.shortDescription}" />
+	<ui:param name="type" value="website" />
+	<ui:param name="url"
+		value="product-details.xhtml?id=#{productController.product.id}" />
+	<ui:param name="image"
+		value="images/#{productController.product.fileName}" />
+
 	<ui:define name="title">
 	    #{productController.product.productName} on Nextramile
 	</ui:define>
 	<ui:define name="content">
 		<div class="row">
-		    <h:form>
+			<h:form>
 				<f:metadata>
 					<f:event type="preRenderView"
 						listener="#{productController.refresh}" />
@@ -24,8 +34,8 @@
 					<!--product-details-->
 					<div class="col-sm-5">
 						<div class="view-product">
-							 <p:graphicImage class="img-responsive" 
-				                 value="images/#{productController.product.fileName}" width="450" />
+							<p:graphicImage class="img-responsive"
+								value="images/#{productController.product.fileName}" width="450" />
 						</div>
 					</div>
 					<div class="col-sm-7">
@@ -34,40 +44,49 @@
 							<h2>#{productController.product.productName}</h2>
 							<p>#{productController.product.shortDescription}</p>
 							<h:form>
-							<h:panelGroup id="addToCart" rendered="#{shoppingCartController.itemAdded eq 'false'}">
-							<span>
-								<span>KES.#{productController.product.price}</span> 
-								<label>Qty:</label>
-								<h:inputText id="quantity" name="quantity"
-						            value="#{shoppingCartController.shoppingCartItem.quantity}" />
-								<p:commandLink class="fa fa-shopping-cart btn btn-default" value="&nbsp;Buy" name="addtocart" id="addtocart"
-							        update="@all"
-							        rendered="#{productController.product.id > 0}"
-								    action="#{shoppingCartController.addToShoppingCart}" ajax="true">
-								  <f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
-								  <f:setPropertyActionListener value="#{shoppingCartController.shoppingCartItem}" target="#{customerController.shoppingCartItem}" />
-							    </p:commandLink>
-							    <p:commandLink class="fa fa-save btn btn-default" value="&nbsp;Save" name="save" id="save"
-							        update="@all"
-							        rendered="#{productController.product.id > 0}"
-								    action="#{wishListController.addToWishList}" ajax="true">
-								  <f:setPropertyActionListener value="#{productController.product}" target="#{customerController.product}" />
-								  <f:setPropertyActionListener value="#{wishListController.wishListItem}" target="#{customerController.wishListItem}" />
-							    </p:commandLink>
-							</span>
-							</h:panelGroup>
+								<h:panelGroup id="addToCart"
+									rendered="#{shoppingCartController.itemAdded eq 'false'}">
+									<span> <span>KES.#{productController.product.price}</span>
+										<label>Qty:</label> <h:inputText id="quantity" name="quantity"
+											value="#{shoppingCartController.shoppingCartItem.quantity}" />
+										<p:commandLink class="fa fa-shopping-cart btn btn-default"
+											value="&nbsp;Buy" name="addtocart" id="addtocart"
+											update="@all" rendered="#{productController.product.id > 0}"
+											action="#{shoppingCartController.addToShoppingCart}"
+											ajax="true">
+											<f:setPropertyActionListener
+												value="#{productController.product}"
+												target="#{customerController.product}" />
+											<f:setPropertyActionListener
+												value="#{shoppingCartController.shoppingCartItem}"
+												target="#{customerController.shoppingCartItem}" />
+										</p:commandLink> <p:commandLink class="fa fa-save btn btn-default"
+											value="&nbsp;Save" name="save" id="save" update="@all"
+											rendered="#{productController.product.id > 0}"
+											action="#{wishListController.addToWishList}" ajax="true">
+											<f:setPropertyActionListener
+												value="#{productController.product}"
+												target="#{customerController.product}" />
+											<f:setPropertyActionListener
+												value="#{wishListController.wishListItem}"
+												target="#{customerController.wishListItem}" />
+										</p:commandLink>
+									</span>
+                                    <div class="fb-share-button" data-href="#{productController.url}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=#{productController.encodedUrl}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>								
+                                </h:panelGroup>
 							</h:form>
 							<h:form>
-							<h:panelGroup id="proceed-btn" rendered="#{shoppingCartController.itemAdded eq 'true'}">
-							    <p:commandLink class="fa fa-hand-o-right btn btn-default white" 
-							        action="#{shoppingCartController.continueShopping}"
-							        value=" Continue Shopping" name="continue" id="continue-btn" ajax="false"
-							        />
-							    <p:commandLink class="fa fa-shopping-cart btn btn-default" 
-							        action="#{shoppingCartController.proceed}"
-							        value=" Proceed to Checkout" name="checkout" id="checkout-btn" ajax="false"
-							        />
-							</h:panelGroup>
+								<h:panelGroup id="proceed-btn"
+									rendered="#{shoppingCartController.itemAdded eq 'true'}">
+									<p:commandLink class="fa fa-hand-o-right btn btn-default white"
+										action="#{shoppingCartController.continueShopping}"
+										value=" Continue Shopping" name="continue" id="continue-btn"
+										ajax="false" />
+									<p:commandLink class="fa fa-shopping-cart btn btn-default"
+										action="#{shoppingCartController.proceed}"
+										value=" Proceed to Checkout" name="checkout" id="checkout-btn"
+										ajax="false" />
+								</h:panelGroup>
 							</h:form>
 						</div>
 						<!--/product-information-->
@@ -78,7 +97,7 @@
 			<!-- Category -->
 			<div class="col-sm-3 block">
 				<div class="left-sidebar">
-				     <ui:include src="cart-side.xhtml" />
+					<ui:include src="cart-side.xhtml" />
 				</div>
 			</div>
 		</div>

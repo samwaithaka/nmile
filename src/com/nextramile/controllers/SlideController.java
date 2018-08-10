@@ -53,7 +53,7 @@ public class SlideController {
 			user = UserDAO.find(Integer.parseInt(userId));
 		}
 		
-		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("uri");
+		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("dir");
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
 		int i = 0;
