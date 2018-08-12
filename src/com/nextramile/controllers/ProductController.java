@@ -22,7 +22,9 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import com.nextramile.dao.BlogDAO;
 import com.nextramile.dao.ProductDAO;
+import com.nextramile.models.Blog;
 import com.nextramile.models.Product;
 import com.nextramile.util.Configs;
 import com.nextramile.util.FileOperations;
@@ -44,6 +46,7 @@ public class ProductController {
 	@PostConstruct
 	public void init() {
 		product = new Product();
+		product.setRefBlogPost(new Blog());
 	}
 
 	public ProductController() {
@@ -84,6 +87,8 @@ public class ProductController {
 	
 	public String createProduct() {
 	    product = ProductDAO.addProduct(product);
+	    Blog refBlogPost = BlogDAO.find(product.getRefBlogPost().getId());
+	    product.setRefBlogPost(refBlogPost);
 	    if(file.getFileName() != null && file.getSize() > 0) {
 		    upload();
 		}
@@ -96,6 +101,8 @@ public class ProductController {
 		if(file.getFileName() != null && file.getSize() > 0) {
 		    upload();
 		}
+		Blog refBlogPost = BlogDAO.find(product.getRefBlogPost().getId());
+	    product.setRefBlogPost(refBlogPost);
 		ProductDAO.updateProduct(product);
 		productList = ProductDAO.getProductList();
 		product = new Product();

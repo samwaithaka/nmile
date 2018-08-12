@@ -1,5 +1,7 @@
 package com.nextramile.controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,10 +23,12 @@ import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerAddress;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.DeliveryAddress;
+import com.nextramile.models.Product;
 import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
 import com.nextramile.models.WishList;
 import com.nextramile.models.WishListItem;
+import com.nextramile.util.Configs;
 import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "orderController", eager = true)
@@ -36,6 +40,9 @@ public class OrderController {
 	private CustomerAddress customerAddress;
 	private List<CustomerAddress> customerAddressList;
 	private String addressText;
+	private Product mainProduct;
+	private String shareUrl;
+	private String encodedShareUrl;
 	private ShoppingCart shoppingCart;
 	private boolean showAddressForm;
 	
@@ -114,7 +121,10 @@ public class OrderController {
 			shoppingCart.setActive(false);
 			List<ShoppingCartItem> shoppingCartItemList = shoppingCart.getShoppingCartItems();
 			// Remove wishListItems for this customer product
+			mainProduct = new Product();
 			for(ShoppingCartItem cartItem: shoppingCartItemList) {
+				// This product will be used as primary for reference blog, sharing
+				mainProduct = mainProduct.getId() < 1 ? cartItem.getProduct() : mainProduct;
 				WishListItem wishListItem = WishListItemDAO.getWishListItemByCustomerProduct(shoppingCart.getCustomer(), cartItem.getProduct());
 				if(wishListItem != null) {
 				    wishListItem.setActive(false);
@@ -163,6 +173,13 @@ public class OrderController {
 			Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
 					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
 					subject, builder.toString());
+			
+			String queryString = "&ref=" + customer.getId();
+			shareUrl = Configs.getConfig("appurl") + "post.xhtml?id=" + mainProduct.getRefBlogPost().getSlug() + queryString;
+			try {
+				encodedShareUrl = URLEncoder.encode(shareUrl, "UTF-8");
+			} catch (UnsupportedEncodingException e1) {}
+			
 			return "successful.xhtml?faces-redirect=true";
 		} else {
 			System.out.println("No address");
@@ -312,6 +329,28 @@ public class OrderController {
 	public void setShoppingCart(ShoppingCart shoppingCart) {
 		this.shoppingCart = shoppingCart;
 	}
-	
-	
+
+	public Product getMainProduct() {
+		return mainProduct;
+	}
+
+	public void setMainProduct(Product mainProduct) {
+		this.mainProduct = mainProduct;
+	}
+
+	public String getShareUrl() {
+		return shareUrl;
+	}
+
+	public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
+	}
+
+	public String getEncodedShareUrl() {
+		return encodedShareUrl;
+	}
+
+	public void setEncodedShareUrl(String encodedShareUrl) {
+		this.encodedShareUrl = encodedShareUrl;
+	}
 }

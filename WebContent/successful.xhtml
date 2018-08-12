@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -9,10 +8,27 @@
 
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
+	<ui:param name="title" value="#{orderController.mainProduct.refBlogPost.title}" />
+	<ui:param name="description"
+		value="#{orderController.mainProduct.refBlogPost.descriptionMeta}" />
+	<ui:param name="type" value="website" />
+	<ui:param name="url"
+		value="post.xhtml?id=#{orderController.mainProduct.refBlogPost.slug}" />
+	<ui:param name="image"
+		value="blog/#{orderController.mainProduct.refBlogPost.imageFileName}" />
 	<ui:define name="content">
 	    <div class="col-lg-5 mb-4">
 		  <h4>Successful!</h4>
 		  <h:outputText value="#{customerController.message}" escape="false" />
+		  <h:outputText value="#{orderController.mainProduct.shareMessage}" escape="false" />
+		  
+		  <div class="fb-share-button" data-href="#{orderController.shareUrl}"
+						data-layout="button_count" data-size="small"
+						data-mobile-iframe="true">
+						<a target="_blank"
+							href="https://www.facebook.com/sharer/sharer.php?u=#{orderController.encodedShareUrl}&amp;src=sdkpreparse"
+							class="fb-xfbml-parse-ignore">Share</a>
+          </div>
    		</div>
 	</ui:define>
 	<ui:define name="footer" />

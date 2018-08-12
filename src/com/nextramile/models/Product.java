@@ -4,9 +4,12 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +30,8 @@ public class Product {
 	private String description;
 	@Column(name = "file_name")
 	private String fileName;
+	@Column(name = "share_message")
+	private String shareMessage;
 	@Column(name = "price")
 	private int price;
 	@Column(name = "created_on")
@@ -39,6 +44,10 @@ public class Product {
 	private String editedBy;
 	@Column(name = "active")
 	private boolean active = true;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="blog_id")
+    private Blog refBlogPost;
 	
 	public int getId() {
 		return id;
@@ -106,11 +115,24 @@ public class Product {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	public Blog getRefBlogPost() {
+		return refBlogPost;
+	}
+	public void setRefBlogPost(Blog refBlogPost) {
+		this.refBlogPost = refBlogPost;
+	}
+	
+	public String getShareMessage() {
+		return shareMessage;
+	}
+	public void setShareMessage(String shareMessage) {
+		this.shareMessage = shareMessage;
+	}
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", productName=" + productName + ", shortDescription=" + shortDescription
-				+ ", description=" + description + ", fileName=" + fileName + ", price=" + price + ", createdOn="
-				+ createdOn + ", createdBy=" + createdBy + ", editedOn=" + editedOn + ", editedBy=" + editedBy
-				+ ", active=" + active + "]";
+				+ ", description=" + description + ", fileName=" + fileName + ", shareMessage=" + shareMessage
+				+ ", price=" + price + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
+				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", refBlogPost=" + refBlogPost + "]";
 	}
 }

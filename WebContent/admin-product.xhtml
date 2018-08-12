@@ -50,6 +50,20 @@
 					</h:inputText>
 				</div>
 				<div class="form-group">
+			      <label for="title">Ref Blog Post</label>
+			        <p:selectOneMenu class="col-ls-4 form-control" value="#{productController.product.refBlogPost.id}">
+			        <f:selectItems value="#{blogController.blogList}" var="blog"
+			          itemLabel="#{blog.title}" itemValue="#{blog.id}" />
+			        </p:selectOneMenu>
+			    </div>
+			    <div class="form-group">
+					<label for="shareMessage">Share Message</label>
+					<h:inputTextarea class="col-ls-12 form-control" id="shareMessage" name="shareMessage"
+						value="#{productController.product.shareMessage}">
+						<f:validateRequired />
+					</h:inputTextarea>
+				</div>
+				<div class="form-group">
 					<p:commandButton class="btn btn-default" id="add-submit" value="Submit"
 						rendered="#{productController.product.id eq '' or productController.product.id eq 0}"
 						action="#{productController.createProduct}" ajax="false" />

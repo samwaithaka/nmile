@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import com.nextramile.models.Blog;
 import com.nextramile.models.Product;
 
 /**
@@ -43,6 +44,8 @@ public class ProductDAO {
         product2.setDescription(product.getDescription());
         product2.setFileName(product.getFileName());
         product2.setPrice(product.getPrice());
+        product2.setRefBlogPost(product.getRefBlogPost());
+        product2.setShareMessage(product.getShareMessage());
         product2.setActive(product.getActive());
         em.persist(product2);
         em.getTransaction().commit();
@@ -74,6 +77,7 @@ public class ProductDAO {
     	try {
     	    List<Product> productList = q.getResultList();
         	for(Product product : productList) {
+        		product.setRefBlogPost(new Blog());
         		productList2.add(product);
         	}
     	} catch(NoResultException e) {

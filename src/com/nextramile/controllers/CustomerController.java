@@ -15,7 +15,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.nextramile.dao.CartDAO;
 import com.nextramile.dao.CartItemDAO;
@@ -30,6 +34,7 @@ import com.nextramile.models.ShoppingCartItem;
 import com.nextramile.models.WishList;
 import com.nextramile.models.WishListItem;
 import com.nextramile.util.Configs;
+import com.nextramile.util.CookieManager;
 import com.nextramile.util.Emailer;
 
 @ManagedBean(name = "customerController", eager = true)
@@ -62,8 +67,9 @@ public class CustomerController {
 	}
 
 	public void refresh() {
-		Map<String, String> params = FacesContext.getCurrentInstance()
-				.getExternalContext()
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		Map<String, String> params = context
 				.getRequestParameterMap();
 		String ref = params.get("ref");
 		String token = null;
@@ -103,7 +109,12 @@ public class CustomerController {
 				activate();
 			} catch (ParseException e) {}
 		}
-
+        
+		if(ref != null) {
+			refId = Integer.parseInt(ref);
+		}
+		
+		ref = CookieManager.getCookie(context, "refId");
 		if(ref != null) {
 			refId = Integer.parseInt(ref);
 		}

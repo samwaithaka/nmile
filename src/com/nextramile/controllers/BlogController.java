@@ -15,8 +15,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 //import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -32,6 +36,7 @@ import com.nextramile.models.BlogCategory;
 import com.nextramile.models.Customer;
 import com.nextramile.models.Product;
 import com.nextramile.util.Configs;
+import com.nextramile.util.CookieManager;
 import com.nextramile.util.FileOperations;
 import com.nextramile.util.ImageResizer;
 
@@ -41,6 +46,8 @@ public class BlogController {
     
 	private Blog blog;
 	private List<Blog> blogList;
+	private BlogCategory blogCategory;
+	private List<BlogCategory> blogCategoryList;
 	private UploadedFile file;
 	private String appDataDirectory;
 	private String webResourcePath;
@@ -58,6 +65,7 @@ public class BlogController {
 	}
 
 	public BlogController() {
+		blogCategoryList = BlogCategoryDAO.getBlogCategoryList();
 		appDataDirectory = System.getProperty("user.home") + "/." + Configs.getConfig("dir");
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
@@ -69,12 +77,15 @@ public class BlogController {
 	}
 	
 	public void refresh() {
-		Map<String, String> params = FacesContext.getCurrentInstance()
-				.getExternalContext()
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		Map<String, String> params = context
 				.getRequestParameterMap();
 		String slug = params.get("id");
 		String ref = params.get("ref"); // article referer
+		
 		if(ref != null) {
+			CookieManager.addCookie(context, "refId", ref, 60 * 60 * 24);
 			int refId = Integer.parseInt(ref);
 			Customer customer = new Customer();
 			customer.setReferer(CustomerDAO.find(refId));
@@ -83,7 +94,7 @@ public class BlogController {
 		if(slug != null) {
 			int loggedId = customerController.getCustomer().getId();
 			String queryString = loggedId > 0 ? "&ref=" + loggedId : "";
-			url = Configs.getConfig("appurl") + "article.xhtml?id=" + slug + queryString;
+			url = Configs.getConfig("appurl") + "post.xhtml?id=" + slug + queryString;
 			try {
 				encodedUrl = URLEncoder.encode(url, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}
@@ -152,6 +163,12 @@ public class BlogController {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+	public String displayCategoryBlogs() {
+	    blogList = BlogDAO.getBlogListByCategory(blogCategory);	
+	    System.out.println(blogList);
+	    return "blog.xhtml?face-redirect=true";
+	}
+	
 	public Blog getBlog() {
 		return blog;
 	}
@@ -206,5 +223,21 @@ public class BlogController {
 
 	public void setCustomerController(CustomerController customerController) {
 		this.customerController = customerController;
+	}
+
+	public List<BlogCategory> getBlogCategoryList() {
+		return blogCategoryList;
+	}
+
+	public void setBlogCategoryList(List<BlogCategory> blogCategoryList) {
+		this.blogCategoryList = blogCategoryList;
+	}
+	
+	public BlogCategory getBlogCategory() {
+		return blogCategory;
+	}
+
+	public void setBlogCategory(BlogCategory blogCategory) {
+		this.blogCategory = blogCategory;
 	}
 }

@@ -12,6 +12,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import com.nextramile.models.Blog;
+import com.nextramile.models.BlogCategory;
 
 /**
  * @author Samuel
@@ -24,7 +25,6 @@ public class BlogDAO {
 
     public static Blog addBlog(Blog blog) {
     	String slug = createUniqueSlug(blog);
-    	System.out.println("27 " + slug);
     	blog.setSlug(slug);
     	blog.setCreatedOn(new Timestamp(System.currentTimeMillis()));
     	blog.setEditedOn(new Timestamp(System.currentTimeMillis()));
@@ -102,7 +102,7 @@ public class BlogDAO {
     @SuppressWarnings("unchecked")
 	public static List<Blog> getBlogList() {
     	em = factory.createEntityManager();
-    	Query q = em.createQuery("SELECT u FROM Blog u WHERE u.active=true");
+    	Query q = em.createQuery("SELECT u FROM Blog u WHERE u.active=true ORDER BY u.createdOn DESC");
     	List<Blog> blogList2 = new ArrayList<Blog>();
     	try {
     	    List<Blog> blogList = q.getResultList();
@@ -114,7 +114,25 @@ public class BlogDAO {
     	}
     	return blogList2;
     }
-    
+   
+    @SuppressWarnings("unchecked")
+	public static List<Blog> getBlogListByCategory(BlogCategory blogCategory) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("SELECT u FROM Blog u WHERE u.blogCategory = :blogCategory "
+    			+ "AND u.active=true ORDER BY u.createdOn DESC");
+    	q.setParameter("blogCategory", blogCategory);
+    	List<Blog> blogList2 = new ArrayList<Blog>();
+    	try {
+    	    List<Blog> blogList = q.getResultList();
+        	for(Blog blog : blogList) {
+        		blogList2.add(blog);
+        	}
+    	} catch(NoResultException e) {
+    		System.out.println("No Results Exception");
+    	}
+    	return blogList2;
+    }
+
     @SuppressWarnings("unchecked")
 	public static List<HashMap<String,String>> getNavigation() {
     	em = factory.createEntityManager();

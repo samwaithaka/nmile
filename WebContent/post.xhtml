@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="template.vs2.xhtml">
+	<ui:define name="header" />
+	<ui:param name="title" value="#{blogController.blog.title}" />
+	<ui:param name="description"
+		value="#{blogController.blog.descriptionMeta}" />
+	<ui:param name="type" value="website" />
+	<ui:param name="url"
+		value="article.xhtml?id=#{blogController.blog.slug}" />
+	<ui:param name="image"
+		value="blog/#{blogController.blog.imageFileName}" />
+	<ui:define name="title">
+	    #{blogController.blog.title} on Nextramile
+	</ui:define>
+	<ui:define name="content">
+		<h:form>
+			<f:metadata>
+				<f:event type="preRenderView" listener="#{blogController.refresh}" />
+			</f:metadata>
+		</h:form>
+		<div class="col-sm-3 side-menu">
+			<div class="row">
+				<div class="col-sm-12">
+					<h:form>
+						<ui:repeat value="#{blogController.blogCategoryList}"
+							var="blogCategory">
+							<div class="side-menu-item">
+								<h:commandLink action="#{blogController.displayCategoryBlogs}"
+									value="#{blogCategory.blogCategoryName}">
+									<f:setPropertyActionListener value="#{blogCategory}"
+										target="#{blogController.blogCategory}" />
+								</h:commandLink>
+							</div>
+						</ui:repeat>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-9">
+			<div class="row">
+				<div class="col-sm-12">
+					<p:graphicImage value="blog/#{blogController.blog.imageFileName}"
+						class="img-responsive" width="800" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<h1>#{blogController.blog.title}</h1>
+					<h:outputText class="body" id="text"
+						value="#{blogController.blog.longText}" escape="false" />
+					<div class="fb-share-button" data-href="#{blogController.url}"
+						data-layout="button_count" data-size="small"
+						data-mobile-iframe="true">
+						<a target="_blank"
+							href="https://www.facebook.com/sharer/sharer.php?u=#{blogController.encodedUrl}&amp;src=sdkpreparse"
+							class="fb-xfbml-parse-ignore">Share</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 space" />
+	</ui:define>
+	<ui:define name="footer" />
+</ui:composition>
+</html>
