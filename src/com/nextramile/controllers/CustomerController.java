@@ -1,4 +1,4 @@
-									package com.nextramile.controllers;
+package com.nextramile.controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,9 +23,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.nextramile.dao.CartDAO;
 import com.nextramile.dao.CartItemDAO;
+import com.nextramile.dao.ContactDAO;
 import com.nextramile.dao.CustomerDAO;
 import com.nextramile.dao.WishListDAO;
 import com.nextramile.dao.WishListItemDAO;
+import com.nextramile.models.Contact;
 import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.Product;
@@ -48,6 +50,7 @@ public class CustomerController {
 	private WishListItem wishListItem;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
+	private Contact contact;
 	private String form = "check";
 	private String customerAction;
 	private String message;
@@ -56,6 +59,7 @@ public class CustomerController {
 	@PostConstruct
 	public void init() {
 		customer = new Customer();
+		contact = new Contact();
 		product = new Product();
 		shoppingCart = new ShoppingCart();
 		shoppingCartItem = new ShoppingCartItem();
@@ -206,6 +210,14 @@ public class CustomerController {
 		FacesContext.getCurrentInstance().getExternalContext().redirect("user.xhtml");
 	}
 
+	public String subscribe() {
+		ContactDAO.addContact(contact);
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Subscribed","You are successfully subscribed. Thank you!");
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		contact = new Contact();
+		return null;
+	}
+	
 	public String redirectUser() {
 		String page = null;
 		shoppingCart = CartDAO.findPendingShoppingCart(customer);
@@ -213,7 +225,7 @@ public class CustomerController {
 			shoppingCart.setShoppingCartItems(CartItemDAO.getCartItems(shoppingCart));
 			page =  "checkout.xhtml?faces-redirect=true";
 		} else {
-			page = "account.xhtml?faces-redirect=true";
+			page = "home.xhtml?faces-redirect=true";
 		}
 		return page;
 	}
@@ -393,5 +405,13 @@ public class CustomerController {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Contact getContact() {
+		return contact;
+	}
+
+	public void setContact(Contact contact) {
+		this.contact = contact;
 	}
 }

@@ -170,59 +170,24 @@ public class OrderController {
 			builder.append("<td style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
 			builder.append("</tr>");
 			builder.append("</table>");
+			builder.append("<br />Delivery to your address is being processed, be ready to pay as soon as you recieve your delivery.");
+			String message = builder.toString();
 			Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
 					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
-					subject, builder.toString());
-			
+					subject, message);
 			String queryString = "&ref=" + customer.getId();
 			shareUrl = Configs.getConfig("appurl") + "post.xhtml?id=" + mainProduct.getRefBlogPost().getSlug() + queryString;
 			try {
 				encodedShareUrl = URLEncoder.encode(shareUrl, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}
 			
-			return "successful.xhtml?faces-redirect=true";
+			return "checkout-successful.xhtml?faces-redirect=true";
 		} else {
 			System.out.println("No address");
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Address", "There's No Address to deliver to! Kindly add your address");
 			FacesContext.getCurrentInstance().addMessage(null, fm);
             return null;
 		}
-	}
-	
-	public String makeOrder() {
-		Customer customer = customerController.getCustomer();
-		if(customer.getId() == 0) {
-			return "user.xhtml?faces-redirect=true";
-		}
-		
-		if(order.getId() == 0) {
-			//order.setCustomer(customer);
-			//order.setProduct(productController.getProduct());
-			order = OrderDAO.addOrder(order);
-		}
-		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
-		customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
-		if(customerAddressList.size() > 0) {
-			addressText = "Different Address?";
-		} else {
-			addressText = "Tell us where you are:";
-		}
-		return "order.xhtml?faces-redirect=true";
-	}
-	
-	public String updateOrder() {
-		Customer customer = customerController.getCustomer();
-		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
-		order.setDeliveryAddress(customerAddress.getDeliveryAddress());
-		OrderDAO.updateOrder(order);
-		return "checkout.xhtml";
-	}
-
-	public String checkout() {
-		order.setCheckout(true);
-		OrderDAO.updateOrder(order);
-		order = new CustomerOrder();
-		return "successful.xhtml";
 	}
 	
 	public String makeAddressCurrent() {
