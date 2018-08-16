@@ -23,12 +23,15 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import com.nextramile.dao.BlogDAO;
+import com.nextramile.dao.ProductCategoryDAO;
 import com.nextramile.dao.ProductDAO;
 import com.nextramile.models.Blog;
 import com.nextramile.models.Product;
+import com.nextramile.models.ProductCategory;
 import com.nextramile.util.Configs;
 import com.nextramile.util.FileOperations;
 import com.nextramile.util.ImageResizer;
+import com.nextramile.util.TextFileOperations;
 
 @ManagedBean(name = "productController", eager = true)
 @SessionScoped
@@ -47,6 +50,8 @@ public class ProductController {
 	public void init() {
 		product = new Product();
 		product.setRefBlogPost(new Blog());
+		product.setProductCategory(new ProductCategory());
+		System.out.println(product);
 	}
 
 	public ProductController() {
@@ -66,29 +71,33 @@ public class ProductController {
 		Map<String, String> params = FacesContext.getCurrentInstance()
 				.getExternalContext()
 				.getRequestParameterMap();
-		String idValue = params.get("id");
-		if(idValue != null) {
-			url = Configs.getConfig("appurl") + "product-details.xhtml?id=" + idValue;
+		String slug = params.get("id");
+		if(slug != null) {
+			url = Configs.getConfig("appurl") + "/product/" + slug;
 			try {
 				encodedUrl = URLEncoder.encode(url, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}
-			int productId = Integer.parseInt(idValue);
-			product = ProductDAO.find(productId);
+			product = ProductDAO.findBySlug(slug);
 			if(product != null) {
 				File imageFile = new File(appDataDirectory + "/images/" + product.getFileName());
-				try {
+				/*try {
 					image = new DefaultStreamedContent(new FileInputStream(imageFile),"image/jpeg");
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 		}
 	}
 	
 	public String createProduct() {
-	    product = ProductDAO.addProduct(product);
+		String slug = product.getProductName().replace(" ", "-").toLowerCase();
 	    Blog refBlogPost = BlogDAO.find(product.getRefBlogPost().getId());
+	    ProductCategory productCategory = ProductCategoryDAO.find(product.getProductCategory().getId());
+	    product.setSlug(slug);
 	    product.setRefBlogPost(refBlogPost);
+	    product.setProductCategory(productCategory);
+	    product = ProductDAO.addProduct(product);
+	    TextFileOperations.writePageUrl(webResourcePath + "sitemap.txt", "product/" + product.getSlug());
 	    if(file.getFileName() != null && file.getSize() > 0) {
 		    upload();
 		}

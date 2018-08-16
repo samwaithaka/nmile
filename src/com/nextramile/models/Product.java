@@ -24,6 +24,8 @@ public class Product {
 	private int id;
 	@Column(name = "product_name")
 	private String productName;
+	@Column(name = "slug")
+	private String slug;
 	@Column(name = "short_description")
 	private String shortDescription;
 	@Column(name = "description")
@@ -46,8 +48,12 @@ public class Product {
 	private boolean active = true;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="product_category_id")
+    private ProductCategory productCategory = new ProductCategory();
+	
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="blog_id")
-    private Blog refBlogPost;
+    private Blog refBlogPost = new Blog();
 	
 	public int getId() {
 		return id;
@@ -55,11 +61,23 @@ public class Product {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public ProductCategory getProductCategory() {
+		return productCategory;
+	}
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
+	}
 	public String getProductName() {
 		return productName;
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+	public String getSlug() {
+		return slug;
+	}
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 	public String getShortDescription() {
 		return shortDescription;
@@ -130,9 +148,10 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", productName=" + productName + ", shortDescription=" + shortDescription
-				+ ", description=" + description + ", fileName=" + fileName + ", shareMessage=" + shareMessage
-				+ ", price=" + price + ", createdOn=" + createdOn + ", createdBy=" + createdBy + ", editedOn="
-				+ editedOn + ", editedBy=" + editedBy + ", active=" + active + ", refBlogPost=" + refBlogPost + "]";
+		return "Product [id=" + id + ", productName=" + productName + ", slug=" + slug + ", shortDescription="
+				+ shortDescription + ", description=" + description + ", fileName=" + fileName + ", shareMessage="
+				+ shareMessage + ", price=" + price + ", createdOn=" + createdOn + ", createdBy=" + createdBy
+				+ ", editedOn=" + editedOn + ", editedBy=" + editedBy + ", active=" + active + ", refBlogPost="
+				+ refBlogPost + "]";
 	}
 }

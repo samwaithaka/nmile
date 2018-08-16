@@ -12,9 +12,9 @@
 		value="#{blogController.blog.descriptionMeta}" />
 	<ui:param name="type" value="website" />
 	<ui:param name="url"
-		value="article.xhtml?id=#{blogController.blog.slug}" />
+		value="/post/#{blogController.blog.slug}" />
 	<ui:param name="image"
-		value="blog/#{blogController.blog.imageFileName}" />
+		value="/blog/#{blogController.blog.imageFileName}" />
 	<ui:define name="title">
 	    #{blogController.blog.title} on Nextramile
 	</ui:define>
@@ -46,7 +46,7 @@
 				var="blog">
 				<div class="col-sm-12">
 					<h1>#{blog.title}</h1>
-					<p:graphicImage value="blog/#{blog.imageFileName}"
+					<p:graphicImage value="/blog/#{blog.imageFileName}"
 						class="img-responsive" width="400" />
 				</div>
 				<div class="col-sm-12">
@@ -56,7 +56,7 @@
 						data-layout="button_count" data-size="small"
 						data-mobile-iframe="true"></div-->
 					<div class="col-sm-12 border-bottom">
-						<a href="post.xhtml?id=#{blog.slug}">Read
+						<a href="/post/#{blog.slug}">Read
 							more...</a>
 					</div>
 				</div>

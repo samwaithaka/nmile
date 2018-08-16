@@ -49,7 +49,7 @@ public class Blog {
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="blog_category_id")
-    private BlogCategory blogCategory;
+    private BlogCategory blogCategory = new BlogCategory();
 
 	public int getId() {
 		return id;

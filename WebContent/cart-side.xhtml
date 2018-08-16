@@ -31,7 +31,7 @@
 					value="#{shoppingCartController.shoppingCart.shoppingCartItems}">
 					<tr>
 						<td><p:graphicImage class=""
-								value="images/#{cartItem.product.fileName}" width="65" /></td>
+								value="/images/#{cartItem.product.fileName}" width="65" /></td>
 						<td class="right">#{cartItem.quantity}</td>
 						<td class="col-sm-2 amount right">
 						  <h:outputText value="#{cartItem.product.price *

@@ -23,6 +23,8 @@ public class ProductDAO {
     private static EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
     public static Product addProduct(Product product) {
+    	String slug = createUniqueSlug(product);
+    	product.setSlug(slug);
     	product.setCreatedOn(new Timestamp(System.currentTimeMillis()));
     	product.setEditedOn(new Timestamp(System.currentTimeMillis()));
     	product.setCreatedBy(product.getEditedBy());
@@ -41,6 +43,7 @@ public class ProductDAO {
         product2.setEditedOn(new Timestamp(System.currentTimeMillis()));
         product2.setEditedBy(product.getEditedBy());
         product2.setProductName(product.getProductName());
+        product2.setSlug(product.getSlug());
         product2.setDescription(product.getDescription());
         product2.setFileName(product.getFileName());
         product2.setPrice(product.getPrice());
@@ -53,6 +56,36 @@ public class ProductDAO {
         return product2;
     }
     
+    private static String createUniqueSlug(Product product) {
+    	String slug = product.getSlug();
+    	product = findBySlug(slug);
+    	if(product.getId() > 0) {
+    		String suffix = slug.substring(slug.lastIndexOf("-")+1);
+        	String subSlug = slug.replace(suffix, "");
+        	try {
+        		int value = Integer.parseInt(suffix);
+        	    value = value + 1;
+        	    suffix = "" + value;
+        	} catch(NumberFormatException e) {
+        		suffix = suffix + "-1";
+        	}
+        	slug = subSlug + suffix;
+    	}
+    	return slug;
+    }
+    
+    public static Product findBySlug(String slug) {
+    	em = factory.createEntityManager();
+    	Query q = em.createQuery("select u from Product u WHERE u.slug = :slug");
+        q.setParameter("slug", slug);
+        Product product = new Product();
+        try {
+        	product = (Product) q.getSingleResult();
+        } catch(NoResultException e) {}
+     	em.close();
+     	return product;
+    }
+
     public static Product find(int id) {
      	em = factory.createEntityManager();
      	Product product = em.find(Product.class, id);

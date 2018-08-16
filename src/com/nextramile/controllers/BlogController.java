@@ -39,6 +39,7 @@ import com.nextramile.util.Configs;
 import com.nextramile.util.CookieManager;
 import com.nextramile.util.FileOperations;
 import com.nextramile.util.ImageResizer;
+import com.nextramile.util.TextFileOperations;
 
 @ManagedBean(name = "blogController", eager = true)
 @SessionScoped
@@ -94,19 +95,11 @@ public class BlogController {
 		if(slug != null) {
 			int loggedId = customerController.getCustomer().getId();
 			String queryString = loggedId > 0 ? "&ref=" + loggedId : "";
-			url = Configs.getConfig("appurl") + "post.xhtml?id=" + slug + queryString;
+			url = Configs.getConfig("appurl") + "/post/" + slug + queryString;
 			try {
 				encodedUrl = URLEncoder.encode(url, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}
 			blog = BlogDAO.findBySlug(slug);
-			/*if(product != null) {
-				File imageFile = new File(resourcePath + "/images/" + product.getFileName());
-				try {
-					image = new DefaultStreamedContent(new FileInputStream(imageFile),"image/jpeg");
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}*/
 		}
 	}
 	
@@ -118,6 +111,7 @@ public class BlogController {
 		if(file != null) {
 		    upload();
 		}
+		TextFileOperations.writePageUrl(webResourcePath + "sitemap.txt", "post/" + blog.getSlug());
 	    blogList = BlogDAO.getBlogList();
 	    blog = new Blog();
 		return "admin-blog-list.xhtml?faces-redirect=true";

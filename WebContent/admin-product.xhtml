@@ -14,6 +14,13 @@
 			<h:form enctype="multipart/form-data">
 				<p:growl id="messages" showDetail="true" />
 				<div class="form-group">
+			      <label for="title">Product Category</label>
+			        <p:selectOneMenu class="col-ls-4 form-control" value="#{productController.product.productCategory.id}">
+			        <f:selectItems value="#{productCategoryController.productCategoryList}" var="productCategory"
+			          itemLabel="#{productCategory.productCategoryName}" itemValue="#{productCategory.id}" />
+			        </p:selectOneMenu>
+			    </div>
+				<div class="form-group">
 					<label for="productName">Product Name</label>
 					<h:inputText class="col-ls-4 form-control" id="productName" name="productName"
 						value="#{productController.product.productName}">

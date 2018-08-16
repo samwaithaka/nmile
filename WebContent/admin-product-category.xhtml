@@ -16,14 +16,14 @@
 			  <label for="title">Category Title</label>
 			  <p:inputText class="col-ls-4 form-control" id="title" placeholder=""
 			      name="title" 
-			      value="#{blogCategoryController.blogCategory.blogCategoryName}" />
+			      value="#{productCategoryController.productCategory.productCategoryName}" />
 			</div>
 			<p:commandButton id="add-submit" value="Submit" 
-                rendered="#{blogCategoryController.blogCategory.id eq '' or blogCategoryController.blogCategory.id eq 0}"
-                action="#{blogCategoryController.createBlogCategory}" ajax="false" />
+                rendered="#{productCategoryController.productCategory.id eq '' or productCategoryController.productCategory.id eq 0}"
+                action="#{productCategoryController.createProductCategory}" ajax="false" />
             <p:commandButton id="edit-submit" value="Update" 
-                rendered="#{blogCategoryController.blogCategory.id > 0}"
-                action="#{blogCategoryController.updateBlogCategory}" ajax="false" />
+                rendered="#{productCategoryController.productCategory.id > 0}"
+                action="#{productCategoryController.updateProductCategory}" ajax="false" />
                 
    		</h:form>
    		</div>

@@ -9,6 +9,7 @@
 		<class>com.nextramile.models.Reward</class>
 		<class>com.nextramile.models.CustomerReward</class>
 		<class>com.nextramile.models.Product</class>
+		<class>com.nextramile.models.ProductCategory</class>
 		<class>com.nextramile.models.CustomerOrder</class>
 		<class>com.nextramile.models.Delivery</class>
 		<class>com.nextramile.models.DeliveryAddress</class>
