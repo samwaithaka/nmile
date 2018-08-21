@@ -6,12 +6,15 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.shiro.session.Session;
+
 import com.nextramile.dao.RoleDAO;
 import com.nextramile.dao.UserDAO;
 import com.nextramile.models.Role;
 import com.nextramile.models.UserAccount;
 //import com.nextramile.utils.CoreClass;
 //import com.nextramile.utils.SessionManager;
+import com.nextramile.util.AuthManager;
 
 @ManagedBean(name="roleController", eager=true)
 @SessionScoped
@@ -19,7 +22,6 @@ public class RoleController {
 	
 	private Role role;
 	private List<Role> roleList;
-	//private SessionManager sessionManager;
 	private UserAccount user;
 	
 	@PostConstruct
@@ -29,17 +31,12 @@ public class RoleController {
 	
 	public RoleController() {
 		roleList = RoleDAO.getRoleList();
-		//CoreClass coreClass = new CoreClass();
-		//sessionManager = coreClass.sessionManager;
-		//String userId = sessionManager.getAttribute("userId");
-		String userId = null;
-		if(userId != null) {
-			user = UserDAO.find(Integer.parseInt(userId));
-		}
+		Session session = AuthManager.getSession();
+        user = (UserAccount) session.getAttribute("user");
 	}
 	
 	public String addRole() {
-		//role.setCreatedBy(user.getUsername());
+		role.setCreatedBy(user.getUsername());
 		role.setCreatedBy("User");
 	    RoleDAO.addRole(role);
 	    roleList = RoleDAO.getRoleList();
@@ -48,7 +45,7 @@ public class RoleController {
 	}
 	
 	public String updateRole() {
-		//role.setEditedBy(user.getUsername());
+		role.setEditedBy(user.getUsername());
 		role.setEditedBy("User");
 	    RoleDAO.updateRole(role);
 	    roleList = RoleDAO.getRoleList();

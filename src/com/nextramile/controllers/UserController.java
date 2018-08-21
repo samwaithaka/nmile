@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
@@ -19,9 +20,11 @@ import javax.faces.component.UIInput;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.crypto.hash.DefaultHashService;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.session.Session;
 
 import com.nextramile.dao.UserDAO;
 import com.nextramile.models.UserAccount;
+import com.nextramile.util.AuthManager;
 import com.nextramile.util.Configs;
 import com.nextramile.util.Emailer;
 //import com.nextramile.util.SessionManager;
@@ -32,7 +35,7 @@ public class UserController {
 	
 	private UserAccount user, loggedInUser;
 	private List<UserAccount> userAccountList;
-	private String clearPassword;
+	private String clearPassword,message;
 	private UIComponent component;
 	//private SessionManager sessionManager;
 	
@@ -44,20 +47,6 @@ public class UserController {
 	
 	public UserController() {
 		userAccountList = UserDAO.getUserList();
-		//CoreClass coreClass = new CoreClass();
-		//sessionManager = coreClass.sessionManager;
-		//String userId = sessionManager.getAttribute("userId");
-		String userId = null;
-		if(userId != null) {
-		    //loggedInUser = UserDAO.find(Integer.parseInt(sessionManager.getAttribute("userId")));
-			//Check if branchCode has changed, if so, set update flat
-			boolean update = false;
-			if(update == true) {
-				//loggedInUser.setEditedBy(loggedInUser.getUsername());
-				loggedInUser.setEditedBy("User");
-				UserDAO.updateUser(loggedInUser);
-			}
-		}
 	}
 	
 	public void reset(ActionEvent event){
@@ -67,10 +56,8 @@ public class UserController {
 	public String addUser() {
 		clearPassword = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
 		user.setPassword(encryptPassword(clearPassword));
-		//user.setCreatedBy(loggedInUser.getUsername());
-		user.setCreatedBy("User");
-		//user.setEditedBy(loggedInUser.getUsername());
-		user.setEditedBy("User");
+		user.setCreatedBy(loggedInUser.getUsername());
+		user.setEditedBy(loggedInUser.getUsername());
 		user.setResetFlag(true);
 		if(UserDAO.checkExisting(user) == true) {
 			UserDAO.addUser(user);
@@ -106,16 +93,19 @@ public class UserController {
 	    return "admin-list-users.xhtml?faces-redirect=true";
 	}
 	
-	/**
-	 * @return the user
-	 */
+	public String login() {
+        ExternalContext eContext = FacesContext.getCurrentInstance().getExternalContext();  
+        String url = AuthManager.login(eContext, user.getUsername(),user.getPassword());
+        Session session = AuthManager.getSession();
+        message = (String) session.getAttribute("message");
+        loggedInUser = (UserAccount) session.getAttribute("user");
+        return url;
+    }
+
 	public UserAccount getUserAccount() {
 		return user;
 	}
 
-	/**
-	 * @param user the user to set
-	 */
 	public void setUserAccount(UserAccount user) {
 		this.user = user;
 	}
@@ -128,27 +118,19 @@ public class UserController {
 		this.loggedInUser = loggedInUser;
 	}
 
-	/**
-	 * @return the userList
-	 */
 	public List<UserAccount> getUserAccountList() {
 		return userAccountList;
 	}
 
-	/**
-	 * @param userList the userList to set
-	 */
 	public void setUserAccountList(List<UserAccount> userAccountList) {
 		this.userAccountList = userAccountList;
 	}
 	
-	public void resetPassword() throws UnsupportedEncodingException {
+	public String resetPassword() throws UnsupportedEncodingException {
 		String newPassword = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0,8);
 		user.setResetFlag(true);
 		//user.setEditedBy(loggedInUser.getUsername());
-		user.setEditedBy("User");
 		user.setPassword(encryptPassword(newPassword));
-		//user.setActive(false);
 		UserDAO.updateUserPassword(user);
 		
 		String from = Configs.getConfig("adminemail");
@@ -167,9 +149,9 @@ public class UserController {
 		FacesContext fc = FacesContext.getCurrentInstance();
 		FacesMessage msg = new FacesMessage("Reset Successfully","Password has been successfully reset and email sent to " + user.getFirstName() + " " + user.getLastName());
 		msg.setSeverity(FacesMessage.SEVERITY_INFO);
-		String iuAlertId = component.getClientId();
-    	fc.addMessage(iuAlertId, msg);
+    	fc.addMessage(null, msg);
     	fc.renderResponse();
+    	return null;
 	}
 	
 	public String changePassword() throws IOException {
@@ -237,8 +219,13 @@ public class UserController {
 	public UIComponent getComponent() {
 		return component;
 	}
-
 	public void setComponent(UIComponent component) {
 		this.component = component;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

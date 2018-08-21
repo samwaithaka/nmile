@@ -8,6 +8,7 @@ import javax.faces.bean.SessionScoped;
 
 import com.nextramile.dao.DeliveryAddressDAO;
 import com.nextramile.models.DeliveryAddress;
+import com.nextramile.models.Location;
 
 @ManagedBean(name = "deliveryAddressController", eager = true)
 @SessionScoped
@@ -19,6 +20,7 @@ public class DeliveryAddressController {
 	@PostConstruct
 	public void init() {
 		deliveryAddress = new DeliveryAddress();
+		deliveryAddress.setLocation(new Location());
 	}
 
 	public DeliveryAddressController() {

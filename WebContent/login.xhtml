@@ -17,22 +17,19 @@
     <h:form id="login">
         <h:panelGrid columns="2">
             <h:outputLabel for="username" value="Username" />
-            <h:inputText id="username" name="username"  value="#{username}" required="true" />
-
+            <h:inputText id="username" name="username" 
+                value="#{userController.userAccount.username}" 
+                required="true" />
             <h:outputLabel for="password" value="Password" />
-            <h:inputSecret id="password" name="password" required="true" />
+            <h:inputSecret id="password" name="password" 
+                value="#{userController.userAccount.password}"
+                required="true" />
             
             <h:outputLabel />
-            <h:commandButton value="Login" />
+            <h:commandButton action="#{userController.login}" value="Login" />
+            <h:outputLabel />
+            <h:outputText value="#{userController.message}" />
         </h:panelGrid>
-        <!-- Trimming friendly message from Shiro exception string (remove uncessary strings, create spaces) -->
-        <c:set var="error" value="#{fn:substring(shiroLoginFailure, 23, 100)}" />
-        <c:set var="error" value="#{fn:replace(error, 'Exception', '')}" /><!-- removed the word Exception -->
-        <c:set var="error" value="#{fn:replace(error, 'Account', ' Account')}" /><!-- Create space before word 'Account' -->
-        <c:set var="error" value="#{fn:replace(error, 'Credentials', ' Credentials')}" /><!-- Create  space before word 'Credentials' -->
-        <h:panelGroup styleClass="error" style="padding:0 0 0 10px; color:red" rendered="#{not facesContext.validationFailed}">
-                #{error}
-        </h:panelGroup>
     </h:form>
     </div>
     <div class="col-sm-3" />

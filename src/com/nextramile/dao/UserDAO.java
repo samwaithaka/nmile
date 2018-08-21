@@ -77,7 +77,10 @@ public class UserDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from UserAccount u WHERE u.username = :username");
         q.setParameter("username", username);
-     	UserAccount user = (UserAccount) q.getSingleResult();
+        UserAccount user = new UserAccount();
+        try {
+     	    user = (UserAccount) q.getSingleResult();
+        } catch(NoResultException e) {}
      	em.close();
      	return user;
     }

@@ -42,6 +42,7 @@ public class DeliveryAddressDAO {
         deliveryAddress2.setPhysicalAddress(deliveryAddress.getPhysicalAddress());
         deliveryAddress2.setDescription(deliveryAddress.getDescription());
         deliveryAddress2.setActive(deliveryAddress.getActive());
+        deliveryAddress2.setLocation(deliveryAddress.getLocation());
         em.persist(deliveryAddress2);
         em.getTransaction().commit();
         em.close();

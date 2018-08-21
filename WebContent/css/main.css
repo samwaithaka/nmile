@@ -2537,10 +2537,10 @@ h3, h4, h5 {
 }
 
 .block {
-	border:solid 3px #F0F0E9;
+	border:solid 2px #F0F0E9;
 	padding:10px 0 10px 0;
 	border-radius:10px;
-	min-height:;
+	min-height:280px;
 }
 
 .roles-list-box {
@@ -2675,4 +2675,12 @@ li a.grey {
 
 .space {
 	margin:40px;
+}
+
+.carousel-control.left {
+    background-image:none;
+}
+
+.carousel-control.right {
+    background-image:none;
 }

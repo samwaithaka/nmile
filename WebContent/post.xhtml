@@ -24,24 +24,6 @@
 				<f:event type="preRenderView" listener="#{blogController.refresh}" />
 			</f:metadata>
 		</h:form>
-		<div class="col-sm-3 side-menu">
-			<div class="row">
-				<div class="col-sm-12">
-					<h:form>
-						<ui:repeat value="#{blogController.blogCategoryList}"
-							var="blogCategory">
-							<div class="side-menu-item">
-								<h:commandLink action="#{blogController.displayCategoryBlogs}"
-									value="#{blogCategory.blogCategoryName}">
-									<f:setPropertyActionListener value="#{blogCategory}"
-										target="#{blogController.blogCategory}" />
-								</h:commandLink>
-							</div>
-						</ui:repeat>
-					</h:form>
-				</div>
-			</div>
-		</div>
 		<div class="col-sm-9">
 			<div class="row">
 				<div class="col-sm-12">
@@ -61,6 +43,24 @@
 							href="https://www.facebook.com/sharer/sharer.php?u=#{blogController.encodedUrl}&amp;src=sdkpreparse"
 							class="fb-xfbml-parse-ignore">Share</a>
 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3 side-menu">
+			<div class="row">
+				<div class="col-sm-12">
+					<h:form>
+						<ui:repeat value="#{blogController.blogCategoryList}"
+							var="blogCategory">
+							<div class="side-menu-item">
+								<h:commandLink action="#{blogController.displayCategoryBlogs}"
+									value="#{blogCategory.blogCategoryName}">
+									<f:setPropertyActionListener value="#{blogCategory}"
+										target="#{blogController.blogCategory}" />
+								</h:commandLink>
+							</div>
+						</ui:repeat>
+					</h:form>
 				</div>
 			</div>
 		</div>

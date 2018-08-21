@@ -60,7 +60,8 @@
 											<f:setPropertyActionListener
 												value="#{shoppingCartController.shoppingCartItem}"
 												target="#{customerController.shoppingCartItem}" />
-										</p:commandLink> <p:commandLink class="fa fa-save btn btn-default"
+										</p:commandLink> 
+										<p:commandLink class="fa fa-save btn btn-default"
 											value="&nbsp;Save" name="save" id="save" update="@all"
 											rendered="#{productController.product.id > 0}"
 											action="#{wishListController.addToWishList}" ajax="true">

@@ -42,14 +42,20 @@ public class ShoppingCartController {
 	}
 	
 	public String addToShoppingCart() {
+		System.out.println("Adding to cart...");
 		Customer customer = customerController.getCustomer();
 		customerController.setCustomerAction("shoppingCart");
 		if(customer.getId() == 0) {
+			customerController.setForm("check");
+			return "user.xhtml?faces-redirect=true";
+		}
+		
+		if(customer.getId() == 0 && customer.getEmail() != null) {
 			FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Wrong Password", "Username/Password failed. Please try again");
 			FacesContext.getCurrentInstance().addMessage(null, fm);
 			return "user.xhtml?faces-redirect=true";
 		}
-		
+
 		if(shoppingCart.getId() == 0) {
 			shoppingCart.setCustomer(customer);
 			shoppingCart = CartDAO.addShoppingCart(shoppingCart);
@@ -82,7 +88,7 @@ public class ShoppingCartController {
 			shoppingCart.setActive(false);
 	        CartDAO.updateShoppingCart(shoppingCart);
 		}
-		return "home.xhtml?faces-redirect=true";
+		return "checkout.xhtml?faces-redirect=true";
 	}
 
 	public String proceed() {

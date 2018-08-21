@@ -19,19 +19,11 @@
 		</h:form>
 		<div class="col-sm-9">
 			<div class="col-sm-12">
-				<h:panelGroup>
-					<ui:include src="cart-main.xhtml" />
-				</h:panelGroup>
-			</div>
-			<div class="col-sm-12">
-				&nbsp;
-				<!-- empty space -->
-			</div>
-			<div class="col-sm-12">
 				<h:panelGroup rendered="#{orderController.customerAddress.id > 0}">
 					<div class="border textbox">
 						<h4>Current Address</h4>
-						<b>#{orderController.customerAddress.deliveryAddress.physicalAddress}</b>
+						<b>#{orderController.customerAddress.deliveryAddress.location.locationName}, 
+						#{orderController.customerAddress.deliveryAddress.physicalAddress}</b>
 						<p>#{orderController.customerAddress.deliveryAddress.description}</p>
 					</div>
 				</h:panelGroup>
@@ -55,6 +47,13 @@
 				<h:panelGroup id="addressform"
 					rendered="#{orderController.showAddressForm eq 'true'}">
 					<h:form>
+						<div class="form-group">
+					      <label for="title">Location</label>
+					        <p:selectOneMenu class="col-ls-4 form-control" value="#{orderController.deliveryAddress.location.id}">
+					        <f:selectItems value="#{locationController.locationList}" var="location"
+					          itemLabel="#{location.locationName}" itemValue="#{location.id}" />
+					        </p:selectOneMenu>
+					    </div>
 						<div class="form-group">
 							<label for="physicalAddress">Your Physical Address</label>
 							<h:inputText class="col-ls-4 form-control" id="physicalAddress"
@@ -101,27 +100,39 @@
 									<h:outputText class="green" id="current" value="Current"
 										rendered="#{address.current eq true}" />
 								</div>
-								<div class="col-xs-4">
-									<p:commandLink class="custom-btn1" value="Edit"
+								<div class="col-xs-1">
+									<p:commandLink class=""
 										action="#{orderController.initializeAddress}"
 										name="initializeAddress" update="@all">
 										<f:setPropertyActionListener
 											value="#{address.deliveryAddress}"
 											target="#{orderController.deliveryAddress}" />
+										<i class="glyphicon glyphicon-edit"></i>											
 									</p:commandLink>
-									&nbsp;
-									<p:commandLink class="custom-btn1 red bold" value="X"
+									</div>
+									<div class="col-xs-1">
+									<p:commandLink class="red bold"
 										action="#{orderController.deleteAddress}"
 										name="initializeAddress" update="@all">
 										<f:setPropertyActionListener
 											value="#{address.deliveryAddress}"
 											target="#{orderController.deliveryAddress}" />
+											<i class="glyphicon glyphicon-remove red"></i>
 									</p:commandLink>
 								</div>
 							</div>
 						</div>
 						<div class="cols-sm-12">&nbsp;</div>
 					</ui:repeat>
+				</h:panelGroup>
+			</div>
+			<div class="col-sm-12">
+				&nbsp;
+				<!-- empty space -->
+			</div>
+			<div class="col-sm-12">
+				<h:panelGroup>
+					<ui:include src="cart-main.xhtml" />
 				</h:panelGroup>
 				<div class="cols-sm-12">&nbsp;</div>
 				<h:panelGroup

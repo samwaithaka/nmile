@@ -61,7 +61,9 @@
 				    <h:form>
 				        <p:inputText class="form-control" name="email" 
 				            placeholder="Your Email"
-				            value="#{customerController.contact.email}" />
+				            required="true"
+				            label="Your Email"
+				            value="#{customerController.customer.email}" />
 				          <h:commandLink action="#{customerController.subscribe}" class="btn btn-default" value="Submit" />
 				      </h:form>
 			      </div>

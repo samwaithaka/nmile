@@ -23,6 +23,7 @@ import com.nextramile.models.Customer;
 import com.nextramile.models.CustomerAddress;
 import com.nextramile.models.CustomerOrder;
 import com.nextramile.models.DeliveryAddress;
+import com.nextramile.models.Location;
 import com.nextramile.models.Product;
 import com.nextramile.models.ShoppingCart;
 import com.nextramile.models.ShoppingCartItem;
@@ -52,6 +53,16 @@ public class OrderController {
 	@ManagedProperty(value = "#{customerController}")
 	private CustomerController customerController;
 
+	public OrderController() {		
+	}
+	
+	@PostConstruct
+	public void init() {
+		order = new CustomerOrder();
+		deliveryAddress = new DeliveryAddress();
+		deliveryAddress.setLocation(new Location());
+	}
+	
 	public void refresh() {
 		Customer customer = customerController.getCustomer();
 		customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
@@ -63,13 +74,6 @@ public class OrderController {
 			addressText = "Tell us where you are:";
 		}
 	}
-	
-	@PostConstruct
-	public void init() {
-		order = new CustomerOrder();
-		deliveryAddress = new DeliveryAddress();
-		//customerAddress = new CustomerAddress();
-	}
 
 	public void clearForm() {
 		showAddressForm = true;
@@ -78,14 +82,6 @@ public class OrderController {
 	
 	public void initializeAddress() {
 		showAddressForm = true;
-		//Customer customer = customerController.getCustomer();
-		//customerAddress = CustomerAddressDAO.findCurrentCustomerAddress(customer);
-		//customerAddressList = CustomerAddressDAO.findAddressByCustomer(customer);
-		//if(customerAddressList.size() > 0) {
-		//	addressText = "New delivery Address?";
-		//} else {
-		//	addressText = "Tell us where you are:";
-		//}
   	}
 	
 	public void revertAddress() { 
@@ -107,9 +103,6 @@ public class OrderController {
 	
 	public void edit() {
 		PrimeFaces.current().ajax().update("addressform");
-	}
-	
-	public OrderController() {
 	}
 	
 	public String completePurchase() {
@@ -147,11 +140,11 @@ public class OrderController {
 			builder.append("You have successfully ordered the following items: <br />");
 			builder.append("<table style='width:100%;'>");
 			builder.append("<tr>");
-			builder.append("<td>&nbsp;</td>");
-			builder.append("<td>Product Name</td>");
-			builder.append("<td>Qty</td>");
-			builder.append("<td>Price</td>");
-			builder.append("<td>Total</td>");
+			builder.append("<th>&nbsp;</th>");
+			builder.append("<th>Product Name</th>");
+			builder.append("<th>Qty</th>");
+			builder.append("<th>Price</th>");
+			builder.append("<th>Total</th>");
 			builder.append("</tr>");
 			int total = 0;
 			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
@@ -164,6 +157,13 @@ public class OrderController {
 				builder.append("<td style='width:14%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
 				builder.append("</tr>");
 			}
+			builder.append("<tr>");
+			builder.append("<td>&nbsp;</td>");
+			builder.append("<td colspan='3'>Delivery Charge</td>");
+			int deliveryCharge = customerAddress.getDeliveryAddress().getLocation().getDeliveryFee();
+			total += deliveryCharge;
+			builder.append("<td>" + deliveryCharge + "</td>");
+			builder.append("</tr>");
 			builder.append("<tr>");
 			builder.append("<td>&nbsp;</td>");
 			builder.append("<td colspan='3' style='border-top:solid 1px #555;'>Grand Total</td>");

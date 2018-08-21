@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+</head>
+<body>
+	<ui:composition template="admin-template.vs1.xhtml">
+		<ui:param name="title" value="Add Location" />
+		<ui:define name="content">
+			<h:form>
+			    <h:inputHidden id="id" name="id" value="#{locationController.location.id}" />
+				<h:panelGrid columns="3" style="width:50%;">
+					<h:outputText value="Location Name" />
+					<h:inputText class="form" id="locationName" name="locationName" label="Location Name"
+                        value="#{locationController.location.locationName}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="locationName" style="color:red" />
+					
+					<h:outputText value="Delivery Fee" />
+					<h:inputText class="form" id="deliveryFee" name="deliveryFee" label="Delivery Fee"
+                        value="#{locationController.location.deliveryFee}">
+                        <f:validateRequired />
+                    </h:inputText> 
+					<h:message for="deliveryFee" style="color:red" />
+					
+				    <h:outputText value="" />
+		            <h:commandLink class="submit" rendered="#{locationController.location.id eq '' || locationController.location.id eq 0}"
+						action="#{locationController.addLocation}">
+				        <h:graphicImage value="templates/images/save-button.png" alt="Save" width="80" />
+				    </h:commandLink>
+					<h:commandLink class="submit" rendered="#{locationController.location.id > 0}"
+						action="#{locationController.updateLocation}">
+					    <h:graphicImage value="templates/images/update-button.png" alt="Update" width="80" />
+					</h:commandLink>
+					<h:outputText value="" />
+				</h:panelGrid>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -50,21 +50,21 @@ public class CustomerController {
 	private WishListItem wishListItem;
 	private List<CustomerOrder> customerOrderList;
 	private Product product;
-	private Contact contact;
 	private String form = "check";
 	private String customerAction;
 	private String message;
+	private String baseUrl;
 	private int refId = 0;
 
 	@PostConstruct
 	public void init() {
 		customer = new Customer();
-		contact = new Contact();
 		product = new Product();
 		shoppingCart = new ShoppingCart();
 		shoppingCartItem = new ShoppingCartItem();
 		wishList = new WishList();
 		wishListItem = new WishListItem();
+		baseUrl = Configs.getConfig("appurl");
 	}
 
 	public CustomerController() {
@@ -143,7 +143,7 @@ public class CustomerController {
 				salutation = "Hello " + customer.getCustomerName() + ",\n\n";
 			}
 			String message = salutation +
-					"You have successfully signed up on Nextramile.com. Kindly click on the link below to complete your registration\n\n"
+				 	"You have successfully signed up on Nextramile.com. Kindly click on the link below to complete your registration\n\n"
 					+ "Confirmation link: " + url;
 			fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Check Your Mail","A password reset link has been sent to " + customer.getEmail());
 			Emailer.send(Configs.getConfig("adminemail"), 
@@ -155,7 +155,7 @@ public class CustomerController {
 		customer = new Customer();
 		message = builder.toString();
 		form = "check";
-		return "successful.xhtml?faces-redirect=true";
+		return "/successful.xhtml?faces-redirect=true";
 	}
 
 	public void queryCustomerEmail() {		
@@ -165,6 +165,7 @@ public class CustomerController {
 		} else {
 			customer.setPassword("password");
 			customer = CustomerDAO.addCustomer(customer);
+			customer.setPassword("");
 			form = "signup";
 		}
 		if(product.getId() > 0) {
@@ -185,6 +186,21 @@ public class CustomerController {
 		customer.setId(0);
 	}
 
+	public String subscribe() {		
+		customer = CustomerDAO.findByEmail(customer.getEmail());
+		if(customer.getId() > 0) {	
+			form = "login";
+		} else {
+			customer.setPassword("password");
+			customer = CustomerDAO.addCustomer(customer);
+			customer.setPassword("");
+			form = "signup";
+		}
+		// Customer still not logged in, so set id back to 0
+		customer.setId(0);
+		return "user.xhtml";
+	}
+	
 	public String updateCustomer() {
 		CustomerDAO.updateCustomer(customer);
 		return redirectUser();
@@ -210,13 +226,13 @@ public class CustomerController {
 		FacesContext.getCurrentInstance().getExternalContext().redirect("user.xhtml");
 	}
 
-	public String subscribe() {
+/*	public String subscribe() {
 		ContactDAO.addContact(contact);
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Subscribed","You are successfully subscribed. Thank you!");
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		contact = new Contact();
 		return null;
-	}
+	}*/
 	
 	public String redirectUser() {
 		String page = null;
@@ -317,7 +333,7 @@ public class CustomerController {
 		String view = null;
 		if(customer.getPassword().equals(customer.getPasswordConfirm())) {
 			CustomerDAO.changePassword(customer);
-			view = "shop.xhtml?faces-redirect=true";
+			view = "/home.xhtml?faces-redirect=true";
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful","Password Successully changed");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
@@ -407,11 +423,11 @@ public class CustomerController {
 		this.message = message;
 	}
 
-	public Contact getContact() {
-		return contact;
+	public String getBaseUrl() {
+		return baseUrl;
 	}
 
-	public void setContact(Contact contact) {
-		this.contact = contact;
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 }

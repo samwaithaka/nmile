@@ -35,8 +35,8 @@ public class Emailer
 	   builder.append("<div style=\"border:solid 2px #777; border-radius:5px;padding:10px; font-family:Arial;color:#555;\">");
 	   builder.append("<div style=\"border-bottom:solid 1px #999;\">");
 	   builder.append("<table style=\"width:100%;\">");
-	   builder.append("<tr><td><img src=\"https://nextramile.com/images/home/nm-logo.png\" width=\"150\"></td>");
-	   builder.append("<td><div style=\"text-align:center;font-size:110%;font-weight:bold;\">We Go the Extra Mile</div></td>");
+	   builder.append("<tr><td><img src=\"https://www.nextramile.com/images/home/nm-logo.png\" width=\"150\"></td>");
+	   builder.append("<td><div style=\"text-align:center;font-size:110%;font-weight:bold;\">&nbsp;</div></td>");
 	   builder.append("<td><div style=\"text-align:center;font-weight:bold;\">");
 	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"https://www.nextramile.com/home.xhtml\">Home</a>&nbsp;|&nbsp;");
 	   builder.append("<a style=\"text-decoration:none;color:#070;\" href=\"https://www.nextramile.com/shop.xhtml\">Shop</a>&nbsp;|&nbsp;");

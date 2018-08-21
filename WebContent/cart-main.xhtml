@@ -1,6 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
->
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;"> 
+]>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -39,21 +39,34 @@
 				       </h:outputText>
 	               </td>
 	               <td class="col-sm-1">&nbsp;
-                     <p:commandLink class="custom-btn1 red bold" value="X"
+                     <p:commandLink class=""
 						action="#{shoppingCartController.removeItem}"
 						update="@all">
 						<f:setPropertyActionListener
 							value="#{cartItem}"
 							target="#{shoppingCartController.shoppingCartItem}" />
+						<i class="glyphicon glyphicon-remove red"></i>
 					 </p:commandLink>
                    </td>
                    </tr>
 	            </ui:repeat>
+	            <h:panelGroup rendered="#{orderController.customerAddress.deliveryAddress.location.deliveryFee > 0}">
+	            <tr>
+	              <td class="border-top">&nbsp;</td>
+		          <td class="col-sm-6 border-top" colspan="2">Delivery Charge</td>
+		          <td class="amount col-sm-2">
+		            <h:outputText value="#{orderController.customerAddress.deliveryAddress.location.deliveryFee}">
+				    <f:convertNumber pattern="#,000" />
+				    </h:outputText>
+		          </td>
+		          <td>&nbsp;</td> 
+	            </tr>
+	            </h:panelGroup>
 	            <tr>
 	            <td class="border-top">&nbsp;</td>
-	            <td class="border-top bold" colspan="2">Cart Total</td>
+	            <td class="col-sm-6 border-top bold" colspan="2">Total</td>
 	            <td class="amount bold border-top col-sm-2">
-	              <h:outputText value="#{shoppingCartController.shoppingCart.total}">
+	              <h:outputText value="#{shoppingCartController.shoppingCart.total + orderController.customerAddress.deliveryAddress.location.deliveryFee}">
 				    <f:convertNumber pattern="#,000" />
 			      </h:outputText>
 	            </td>
