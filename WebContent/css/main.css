@@ -2684,3 +2684,8 @@ li a.grey {
 .carousel-control.right {
     background-image:none;
 }
+
+.nav-pills i, .social-icons i {
+	font-size:1.2em;
+	color:#777;
+}

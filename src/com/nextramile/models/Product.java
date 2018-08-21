@@ -28,7 +28,7 @@ public class Product {
 	private String slug;
 	@Column(name = "short_description")
 	private String shortDescription;
-	@Column(name = "description")
+	@Column(name = "description", length=24000000)
 	private String description;
 	@Column(name = "file_name")
 	private String fileName;
