@@ -57,6 +57,7 @@ public class BlogController {
 	private CustomerController customerController;
 	private String url;
 	private String encodedUrl;
+	private int blogListSize;
 
 	
 	@PostConstruct
@@ -71,6 +72,7 @@ public class BlogController {
 		webResourcePath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/");
 		blogList = BlogDAO.getBlogList();
+		blogListSize = 1;
 		for(Blog blg : blogList) {
 			FileOperations.copyFile(appDataDirectory + "blog/" + blg.getImageFileName(), 
 					webResourcePath + "/blog/" + blg.getImageFileName());
@@ -78,15 +80,13 @@ public class BlogController {
 	}
 	
 	public void refresh() {
-		ExternalContext context = FacesContext.getCurrentInstance()
-				.getExternalContext();
-		Map<String, String> params = context
-				.getRequestParameterMap();
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+		Map<String, String> params = context.getRequestParameterMap();
 		String slug = params.get("id");
 		String ref = params.get("ref"); // article referer
 		
 		if(ref != null) {
-			CookieManager.addCookie(context, "refId", ref, 60 * 60 * 24);
+			CookieManager.setCookie(context, "refId", ref, 60 * 60 * 24);
 			int refId = Integer.parseInt(ref);
 			Customer customer = new Customer();
 			customer.setReferer(CustomerDAO.find(refId));
@@ -159,7 +159,7 @@ public class BlogController {
 
 	public String displayCategoryBlogs() {
 	    blogList = BlogDAO.getBlogListByCategory(blogCategory);	
-	    System.out.println(blogList);
+	    blogListSize = blogList.size();
 	    return "blog.xhtml?face-redirect=true";
 	}
 	
@@ -233,5 +233,13 @@ public class BlogController {
 
 	public void setBlogCategory(BlogCategory blogCategory) {
 		this.blogCategory = blogCategory;
+	}
+
+	public int getBlogListSize() {
+		return blogListSize;
+	}
+
+	public void setBlogListSize(int blogListSize) {
+		this.blogListSize = blogListSize;
 	}
 }

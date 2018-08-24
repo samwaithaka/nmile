@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CookieManager {
-    public static void addCookie(ExternalContext context, String name, String value, int maxAge) {
+    public static void setCookie(ExternalContext context, String name, String value, int maxAge) {
     	Cookie referer = new Cookie(name, value);
 		referer.setMaxAge(maxAge);
 		HttpServletResponse response = (HttpServletResponse) context.getResponse();

@@ -11,8 +11,7 @@
 	<ui:param name="description"
 		value="#{blogController.blog.descriptionMeta}" />
 	<ui:param name="type" value="website" />
-	<ui:param name="url"
-		value="/post/#{blogController.blog.slug}" />
+	<ui:param name="url" value="/post/#{blogController.blog.slug}" />
 	<ui:param name="image"
 		value="/blog/#{blogController.blog.imageFileName}" />
 	<ui:define name="title">
@@ -30,8 +29,6 @@
 					<p:graphicImage value="/blog/#{blogController.blog.imageFileName}"
 						class="img-responsive" width="800" />
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-sm-12">
 					<h1>#{blogController.blog.title}</h1>
 					<h:outputText class="body" id="text"
@@ -48,7 +45,7 @@
 		</div>
 		<div class="col-sm-3 side-menu">
 			<div class="row">
-				<div class="col-sm-12">
+				<div class="col-sm-12 category-menu">
 					<h:form>
 						<ui:repeat value="#{blogController.blogCategoryList}"
 							var="blogCategory">
@@ -62,6 +59,9 @@
 						</ui:repeat>
 					</h:form>
 				</div>
+				<div class="col-sm-12 block">
+					<ui:include src="subscribe.xhtml" />
+			    </div>
 			</div>
 		</div>
 		<div class="col-sm-12 space" />

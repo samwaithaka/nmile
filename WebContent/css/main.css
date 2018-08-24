@@ -2531,16 +2531,21 @@ h3, h4, h5 {
 	height:500px;
 }
 
+.body {
+    text-align:justify;	
+}
+
 .body img {
 	float:left;
 	margin:7px;
+	width:350px;
 }
 
 .block {
 	border:solid 2px #F0F0E9;
 	padding:10px 0 10px 0;
 	border-radius:10px;
-	min-height:280px;
+	min-height:290px;
 }
 
 .roles-list-box {
@@ -2622,7 +2627,7 @@ li a.grey {
 .home-top-right .caption {
 }
 
-.home-top-right .caption h2 {
+.home-top-right .caption h2, .subscribe h2 {
 	border:none;
     font-family: 'Kirang Haerang','Hanalei Fill', cursive;
     color:#383;
@@ -2688,4 +2693,15 @@ li a.grey {
 .nav-pills i, .social-icons i {
 	font-size:1.2em;
 	color:#777;
+}
+
+.category-menu {
+	min-height:430px;
+}
+
+#no-posts-message {
+    font-size:125%;
+    margin:25px;
+    color:#ccc;
+    font-weight:bold;
 }

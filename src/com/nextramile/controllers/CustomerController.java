@@ -55,6 +55,7 @@ public class CustomerController {
 	private String message;
 	private String baseUrl;
 	private int refId = 0;
+	private String refCheck;
 
 	@PostConstruct
 	public void init() {
@@ -71,15 +72,12 @@ public class CustomerController {
 	}
 
 	public void refresh() {
-		ExternalContext context = FacesContext.getCurrentInstance()
-				.getExternalContext();
-		Map<String, String> params = context
-				.getRequestParameterMap();
-		String ref = params.get("ref");
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+		Map<String, String> params = context.getRequestParameterMap();
 		String token = null;
 		String createdTime = null;
 		String email = null;
-
+		String ref = params.get("ref");
 		email = params.get("e");
 		token = params.get("t");
 		createdTime = params.get("ct");
@@ -102,7 +100,7 @@ public class CustomerController {
 			customer.setPasswordResetToken(token);
 			reset();
 		}
-
+		
 		if(createdTime != null) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 			Date parsedDate;
@@ -131,7 +129,7 @@ public class CustomerController {
 		StringBuilder builder = new StringBuilder();
 		builder.append("<p>An email has already been sent to you, kindly confirm it by doing the following:</p>");
 		builder.append("<ol><li>Go to your inbox, check for an email from Nextramile Admin ");
-		builder.append("<b>Please Note: </b> If can't find the email, check your spam folder first, open it and then click on the button <b>not spam</b></li>");
+		builder.append("<b>Please Note: </b> If you can't find the email, check your spam folder first, open it and then click on the button <b>not spam</b></li>");
 		builder.append("<li>On the email, click on the confirmation link</li><ol>");
 		FacesMessage fm = null;
 		try {
@@ -429,5 +427,13 @@ public class CustomerController {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
+	}
+
+	public String getRefCheck() {
+		return refCheck;
+	}
+
+	public void setRefCheck(String refCheck) {
+		this.refCheck = refCheck;
 	}
 }
