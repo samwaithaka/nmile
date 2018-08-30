@@ -37,7 +37,6 @@ public class CustomerDAO {
 	        em.close();
     	} else {
     		customer.setId(existingCustomer.getId());
-    		customer.setReferer(existingCustomer.getReferer());
     		updateCustomer(customer);
     	}
     	//Get referrer details
@@ -56,6 +55,19 @@ public class CustomerDAO {
 	    customer.setPath(customer.getId() + "_" + path);
 	    customer = updateCustomer(customer);
         return customer;
+    }
+    
+    public static Customer updateReferer(Customer customer) {
+    	em = factory.createEntityManager();
+        em.getTransaction().begin();
+        Customer customer2 = em.find(Customer.class, customer.getId());
+        customer2.setEditedOn(new Timestamp(System.currentTimeMillis()));
+        customer2.setEditedBy(customer.getEditedBy());
+        customer2.setReferer(customer.getReferer());
+        em.persist(customer2);
+        em.getTransaction().commit();
+        em.close();
+        return customer2;
     }
     
     public static Customer updateCustomer(Customer customer) {
@@ -107,9 +119,7 @@ public class CustomerDAO {
         customer.setEmail(email);
         try {
      	    customer = (Customer) q.getSingleResult();
-        } catch(NoResultException e) {
-        	// No results
-        }
+        } catch(NoResultException e) {}
      	em.close();
      	return customer;
     }
@@ -122,9 +132,7 @@ public class CustomerDAO {
         customer = new Customer();
         try {
      	    customer = (Customer) q.getSingleResult();
-        } catch(NoResultException e) {
-        	// No results
-        }
+        } catch(NoResultException e) {}
      	em.close();
      	return customer;
     }
@@ -137,9 +145,7 @@ public class CustomerDAO {
         customer = new Customer();
         try {
      	    customer = (Customer) q.getSingleResult();
-        } catch(NoResultException e) {
-        	// No results
-        }
+        } catch(NoResultException e) {}
      	em.close();
      	return customer;
     }
@@ -152,9 +158,7 @@ public class CustomerDAO {
         customer = new Customer();
         try {
      	    customer = (Customer) q.getSingleResult();
-        } catch(NoResultException e) {
-        	// No results
-        }
+        } catch(NoResultException e) {}
      	em.close();
      	return customer;
     }
@@ -163,10 +167,8 @@ public class CustomerDAO {
     	em = factory.createEntityManager();
     	Query q = em.createQuery("select u from Customer u WHERE u.email = :email");
     	q.setParameter("email", customer.getEmail());
-    	System.out.println(q.getResultList() + ": " + customer);
         boolean findCustomer = (q.getResultList().size() > 0);
         em.close();
-        System.out.println(findCustomer);
         return findCustomer;
     }
     
@@ -180,9 +182,7 @@ public class CustomerDAO {
         	for(Customer customer : customerList) {
         		customerList2.add(customer);
         	}
-    	} catch(NoResultException e) {
-    		System.out.println("No Results Exception");
-    	}
+    	} catch(NoResultException e) {}
     	return customerList2;
     }
 }

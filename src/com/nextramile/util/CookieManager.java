@@ -7,23 +7,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CookieManager {
-    public static void setCookie(ExternalContext context, String name, String value, int maxAge) {
-    	Cookie referer = new Cookie(name, value);
+	public static void setCookie(ExternalContext context, String name, String value, int maxAge) {
+		System.out.println("Cookie created: " + name + ": " + value);
+		Cookie referer = new Cookie(name, value);
+		referer.setDomain(Configs.getConfig("domain"));
+		referer.setPath("/");
 		referer.setMaxAge(maxAge);
 		HttpServletResponse response = (HttpServletResponse) context.getResponse();
 		response.addCookie(referer);
-    }
-    
-    public static String getCookie(ExternalContext context, String name) {
-    	HttpServletRequest request = (HttpServletRequest) context.getRequest();
-    	Cookie[] cookies = request.getCookies();
-    	String value = null;
-    	for(Cookie cookie : cookies) {
-    		if(cookie.getName().equals(name)) {
-    			value = cookie.getValue();
-    		}
-    		break;
-    	}
-    	return value;
-    }
+	}
+
+	public static String getCookie(ExternalContext context, String name) {
+		HttpServletRequest request = (HttpServletRequest) context.getRequest();
+		Cookie[] cookies = request.getCookies();
+		String value = null;
+		for(Cookie cookie : cookies) {
+			if(cookie.getName().equalsIgnoreCase(name)) {
+				value = cookie.getValue();
+				break;
+			}
+		}
+		System.out.println("Cookie: " + name + ": " + value);
+		return value;
+	}
 }

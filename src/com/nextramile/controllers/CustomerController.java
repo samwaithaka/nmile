@@ -123,7 +123,9 @@ public class CustomerController {
 	}
 
 	public String createCustomer() {
-		customer.setReferer(CustomerDAO.find(refId));
+		Customer referer = CustomerDAO.find(refId);
+		System.out.println("Referer: " + referer);
+		customer.setReferer(referer);
 		customer.setActive(false);
 		customer = CustomerDAO.addCustomer(customer);
 		StringBuilder builder = new StringBuilder();

@@ -84,9 +84,9 @@ public class BlogController {
 		Map<String, String> params = context.getRequestParameterMap();
 		String slug = params.get("id");
 		String ref = params.get("ref"); // article referer
-		
+		ref = ref == "" ? null : ref;
 		if(ref != null) {
-			CookieManager.setCookie(context, "refId", ref, 60 * 60 * 24);
+			CookieManager.setCookie(context, "refId", ref, 60 * 60 * 24 * 30);
 			int refId = Integer.parseInt(ref);
 			Customer customer = new Customer();
 			customer.setReferer(CustomerDAO.find(refId));
@@ -94,8 +94,8 @@ public class BlogController {
 		}
 		if(slug != null) {
 			int loggedId = customerController.getCustomer().getId();
-			String queryString = loggedId > 0 ? "&ref=" + loggedId : "";
-			url = Configs.getConfig("appurl") + "/post/" + slug + queryString;
+			String queryString = loggedId > 0 ? ";" + loggedId : "";
+			url = Configs.getConfig("appurl") + "post/" + slug + queryString;
 			try {
 				encodedUrl = URLEncoder.encode(url, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}

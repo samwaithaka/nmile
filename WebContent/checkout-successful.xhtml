@@ -8,7 +8,8 @@
 
 <ui:composition template="template.vs2.xhtml">
 	<ui:define name="header" />
-	<ui:param name="title" value="#{orderController.mainProduct.refBlogPost.title}" />
+	<ui:param name="title"
+		value="#{orderController.mainProduct.refBlogPost.title}" />
 	<ui:param name="description"
 		value="#{orderController.mainProduct.refBlogPost.descriptionMeta}" />
 	<ui:param name="type" value="website" />
@@ -17,20 +18,31 @@
 	<ui:param name="image"
 		value="blog/#{orderController.mainProduct.refBlogPost.imageFileName}" />
 	<ui:define name="content">
-	    <div class="col-lg-8 mb-4">
-		  <h4>Successful Purchase</h4>
-		  <p>Thanks a lot for being our customer. You mean a lot to us.</p>
-		  <h:outputText value="#{orderController.mainProduct.shareMessage}" escape="false" />
-		  <p>Did you like the post on #{orderController.mainProduct.refBlogPost.title}? Help share it (click on 'share' below)</p>
-		  <div class="fb-share-button" data-href="#{orderController.shareUrl}"
-						data-layout="button_count" data-size="small"
-						data-mobile-iframe="true">
-						<a target="_blank"
-							href="https://www.facebook.com/sharer/sharer.php?u=#{orderController.encodedShareUrl}&amp;src=sdkpreparse"
-							class="fb-xfbml-parse-ignore">Share</a>
-          </div>
-          <p>You accumulate credits every time someone signs up on following the link you've shared.</p>
-   		</div>
+		<div class="col-lg-8 mb-4">
+			<h4>Successful Purchase</h4>
+			<p>Thanks a lot for being our customer. You mean a lot to us.</p>
+			<h:outputText value="#{orderController.mainProduct.shareMessage}"
+				escape="false" />
+			<p>Did you like the post on
+				#{orderController.mainProduct.refBlogPost.title}? Help share it
+				(click on 'share' below)</p>
+			<div class="col-sm-12">
+				<div class="col-sm-2 fb-share-button" data-href="#{orderController.shareUrl}"
+					data-layout="button_count" data-size="small"
+					data-mobile-iframe="true">
+					<a target="_blank"
+						href="https://www.facebook.com/sharer/sharer.php?u=#{orderController.encodedShareUrl}&amp;src=sdkpreparse"
+						class="fb-xfbml-parse-ignore">Share</a>
+				</div>
+				<div class="col-sm-2">
+					<a class="twitter-share-button"
+						href="https://twitter.com/intent/tweet?text=#{orderController.mainProduct.refBlogPost.title}&amp;url=#{orderController.shareUrl}&amp;via=nextramile">
+						Tweet</a>
+				</div>
+			</div>
+			<p>You accumulate credits every time someone signs up on
+				following the link you've shared.</p>
+		</div>
 	</ui:define>
 	<ui:define name="footer" />
 </ui:composition>

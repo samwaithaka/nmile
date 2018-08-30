@@ -2634,8 +2634,8 @@ li a.grey {
 }
 
 .side-menu {
-    height:400px;
-    border-bottom:solid 2px #777;
+    height:100%;
+    border-top:solid 2px #777;
 }
 
 .side-menu .side-menu-item {

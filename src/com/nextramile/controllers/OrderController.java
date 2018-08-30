@@ -134,56 +134,63 @@ public class OrderController {
 			}
 			CartDAO.updateShoppingCart(shoppingCart);
 			Customer customer = customerController.getCustomer();
-			String subject = "Nextramile Order Placed";
+			String subject = "Nextramile Order for " + customer.getCustomerName();
 			StringBuilder builder = new StringBuilder();
 			builder.append("<p>Dear " + customer.getCustomerName() + ",</p>");
 			builder.append("You have successfully ordered the following items: <br />");
-			builder.append("<table style='width:100%;'>");
-			builder.append("<tr>");
-			builder.append("<th>&nbsp;</th>");
-			builder.append("<th>Product Name</th>");
-			builder.append("<th>Qty</th>");
-			builder.append("<th>Price</th>");
-			builder.append("<th>Total</th>");
-			builder.append("</tr>");
+			StringBuilder table = new StringBuilder();
+			table.append("<table style='width:100%;'>");
+			table.append("<tr>");
+			table.append("<th>&nbsp;</th>");
+			table.append("<th>Product Name</th>");
+			table.append("<th>Qty</th>");
+			table.append("<th>Price</th>");
+			table.append("<th>Total</th>");
+			table.append("</tr>");
 			int total = 0;
 			for(ShoppingCartItem item : shoppingCart.getShoppingCartItems()) {
 				total += item.getProduct().getPrice() * item.getQuantity();
-				builder.append("<tr>");
-				builder.append("<td style='width:14%;'><img src='https://www.nextramile.com/images/" + item.getProduct().getFileName() + "' style='width:55px;' alt='" + item.getProduct().getProductName() + "'/></td>");
-				builder.append("<td style='width:50%;'>" + item.getProduct().getProductName() + "</td>");
-				builder.append("<td style='width:8%;'>" + item.getQuantity() + "</td>");
-				builder.append("<td style='width:14%;'>" + item.getProduct().getPrice() + "</td>");
-				builder.append("<td style='width:14%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
-				builder.append("</tr>");
+				table.append("<tr>");
+				table.append("<td style='width:14%;'><img src='https://www.nextramile.com/images/" + item.getProduct().getFileName() + "' style='width:55px;' alt='" + item.getProduct().getProductName() + "'/></td>");
+				table.append("<td style='width:50%;'>" + item.getProduct().getProductName() + "</td>");
+				table.append("<td style='width:8%;'>" + item.getQuantity() + "</td>");
+				table.append("<td style='width:14%;'>" + item.getProduct().getPrice() + "</td>");
+				table.append("<td style='width:14%;'>" + item.getProduct().getPrice() * item.getQuantity() + "</td>");
+				table.append("</tr>");
 			}
-			builder.append("<tr>");
-			builder.append("<td>&nbsp;</td>");
-			builder.append("<td colspan='3'>Delivery Charge</td>");
+			table.append("<tr>");
+			table.append("<td>&nbsp;</td>");
+			table.append("<td colspan='3'>Delivery Charge</td>");
 			int deliveryCharge = customerAddress.getDeliveryAddress().getLocation().getDeliveryFee();
 			total += deliveryCharge;
-			builder.append("<td>" + deliveryCharge + "</td>");
-			builder.append("</tr>");
-			builder.append("<tr>");
-			builder.append("<td>&nbsp;</td>");
-			builder.append("<td colspan='3' style='border-top:solid 1px #555;'>Grand Total</td>");
-			builder.append("<td style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
-			builder.append("</tr>");
-			builder.append("</table>");
+			table.append("<td>" + deliveryCharge + "</td>");
+			table.append("</tr>");
+			table.append("<tr>");
+			table.append("<td>&nbsp;</td>");
+			table.append("<td colspan='3' style='border-top:solid 1px #555;'>Grand Total</td>");
+			table.append("<td style='border-top:solid 1px #555;'><b>" + total + "</b></td>");
+			table.append("</tr>");
+			table.append("</table>");
+			builder.append(table.toString());
 			builder.append("<br />Delivery to your address is being processed, be ready to pay as soon as you recieve your delivery.");
 			String message = builder.toString();
-			Emailer.send("'Nextramile Admin'<noreply@nextramile.com>", 
+			Emailer.send(Configs.getConfig("adminemail"), 
 					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
 					subject, message);
-			String queryString = "&ref=" + customer.getId();
-			shareUrl = Configs.getConfig("appurl") + "post.xhtml?id=" + mainProduct.getRefBlogPost().getSlug() + queryString;
+			String queryString = ";" + customer.getId();
+			shareUrl = Configs.getConfig("appurl") + "post/" + mainProduct.getRefBlogPost().getSlug() + queryString;
+			StringBuilder adminEmail = new StringBuilder(); 
+			adminEmail.append(customer.getCustomerName() + " has made the following order<br />");
+			adminEmail.append(table.toString());
+			Emailer.send(Configs.getConfig("salesemail"), 
+					"'" + customer.getCustomerName() + "'<" + customer.getEmail() + ">", 
+					subject, adminEmail.toString());
 			try {
 				encodedShareUrl = URLEncoder.encode(shareUrl, "UTF-8");
 			} catch (UnsupportedEncodingException e1) {}
 			
 			return "checkout-successful.xhtml?faces-redirect=true";
 		} else {
-			System.out.println("No address");
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No Address", "There's No Address to deliver to! Kindly add your address");
 			FacesContext.getCurrentInstance().addMessage(null, fm);
             return null;
