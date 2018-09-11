@@ -3,35 +3,35 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="nextramile" transaction-type="RESOURCE_LOCAL">
-		<class>com.nextramile.models.Segment</class>
-		<class>com.nextramile.models.Customer</class>
-		<class>com.nextramile.models.CustomerSegment</class>
-		<class>com.nextramile.models.Reward</class>
-		<class>com.nextramile.models.CustomerReward</class>
-		<class>com.nextramile.models.Product</class>
-		<class>com.nextramile.models.ProductCategory</class>
-		<class>com.nextramile.models.CustomerOrder</class>
-		<class>com.nextramile.models.Delivery</class>
-		<class>com.nextramile.models.DeliveryAddress</class>
-		<class>com.nextramile.models.CustomerAddress</class>
-		<class>com.nextramile.models.Inventory</class>
-		<class>com.nextramile.models.BlogCategory</class>
-		<class>com.nextramile.models.Blog</class>
-		<class>com.nextramile.models.ShoppingCart</class>
-		<class>com.nextramile.models.ShoppingCartItem</class>
-		<class>com.nextramile.models.WishList</class>
-		<class>com.nextramile.models.WishListItem</class>
-		<class>com.nextramile.models.UserAccount</class>
-		<class>com.nextramile.models.Role</class>
-		<class>com.nextramile.models.UserRole</class>
-		<class>com.nextramile.models.Slide</class>
-		<class>com.nextramile.models.Contact</class>
-		<class>com.nextramile.models.Location</class>
+		<class>com.example.models.Segment</class>
+		<class>com.example.models.Customer</class>
+		<class>com.example.models.CustomerSegment</class>
+		<class>com.example.models.Reward</class>
+		<class>com.example.models.CustomerReward</class>
+		<class>com.example.models.Product</class>
+		<class>com.example.models.ProductCategory</class>
+		<class>com.example.models.CustomerOrder</class>
+		<class>com.example.models.Delivery</class>
+		<class>com.example.models.DeliveryAddress</class>
+		<class>com.example.models.CustomerAddress</class>
+		<class>com.example.models.Inventory</class>
+		<class>com.example.models.BlogCategory</class>
+		<class>com.example.models.Blog</class>
+		<class>com.example.models.ShoppingCart</class>
+		<class>com.example.models.ShoppingCartItem</class>
+		<class>com.example.models.WishList</class>
+		<class>com.example.models.WishListItem</class>
+		<class>com.example.models.UserAccount</class>
+		<class>com.example.models.Role</class>
+		<class>com.example.models.UserRole</class>
+		<class>com.example.models.Slide</class>
+		<class>com.example.models.Contact</class>
+		<class>com.example.models.Location</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/nextramile_db" />
-			<property name="javax.persistence.jdbc.user" value="nextramile_user" />
-			<property name="javax.persistence.jdbc.password" value="@uToma7ically" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/example_db" />
+			<property name="javax.persistence.jdbc.user" value="" />
+			<property name="javax.persistence.jdbc.password" value="" />
 			<!-- EclipseLink should create the database schema automatically -->
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
